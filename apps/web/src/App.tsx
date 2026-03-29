@@ -9,9 +9,8 @@ function App() {
       <h1>Component Library</h1>
       <p>Count: {count}</p>
       <button onClick={() => setCount(count + 1)}>Increment</button>
-      <Button label='here' onPress={() => setCount(count - 1)} size='lg' variant='solid'/>
+      <Button label='Text' variant='solid' size='lg' onPress={()=>{console.log("here")}}/>
     </div>
-      
   )
 }
 
