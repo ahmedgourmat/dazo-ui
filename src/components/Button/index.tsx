@@ -1,12 +1,12 @@
 import {
   Pressable, Text, ActivityIndicator,
-  StyleSheet, type StyleProp, type ViewStyle, type TextStyle
+  StyleSheet
 } from 'react-native'
 import { useMemo } from 'react'
 import { useTheme } from '../../Providers'
 import type { ButtonProps } from './button.type'
 
-const Button = ({
+export const Button = ({
   label,
   onPress,
   disabled  = false,
@@ -19,7 +19,7 @@ const Button = ({
 
   const theme = useTheme()
 
-  
+
   const computed = useMemo(() => {
     const sizeStyles = {
       sm: {
@@ -116,8 +116,6 @@ const Button = ({
     </Pressable>
   )
 }
-
-export default Button
 
 // created ONCE when the module loads — never recreated
 // only put values here that never depend on theme or props
