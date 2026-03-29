@@ -1,0 +1,25 @@
+{
+  "name": "dazo",
+  "version": "0.0.1",
+  "private": false,
+  "main": "./index.ts",
+  "module": "./index.ts",
+  "react-native": "./index.ts",
+  "exports": {
+    ".": {
+      "react-native": "./index.ts",
+      "import": "./index.ts",
+      "require": "./index.ts"
+    }
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-native": ">=0.73.0",
+    "react-native-web": ">=0.19.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.0",
+    "@types/react": "^18.0.0",
+    "@types/react-native": "^0.73.0"
+  }
+}
