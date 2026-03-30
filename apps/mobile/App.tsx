@@ -1,20 +1,21 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { View, StyleSheet } from 'react-native'
+import { ThemeProvider } from 'dazo'
+import { ButtonTest } from './ButtonTest'
 
-export default function App() {
+export default function App(): React.JSX.Element {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    <ThemeProvider colorScheme='system'>
+      <View style={styles.container}>
+        <ButtonTest />
+      </View>
+    </ThemeProvider>
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 32,
+    gap: 16,
   },
-});
+})
