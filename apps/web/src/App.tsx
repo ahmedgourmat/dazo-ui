@@ -1,3 +1,4 @@
+import TestingContainer from './Container'
 import TestingButtons from './TestingButtons'
 
 function App() {
@@ -5,6 +6,7 @@ function App() {
   return (
     <div className="App">
       <TestingButtons/>
+      <TestingContainer/>
     </div>
   )
 }
