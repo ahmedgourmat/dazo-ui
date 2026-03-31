@@ -1,3 +1,5 @@
+import { Theme } from "./theme"
+
 export const tokens = {
   colors: {
     // brand
@@ -58,3 +60,9 @@ export const tokens = {
 }
 
 export type Tokens = typeof tokens
+
+
+
+export type SpacingKey = keyof Theme['spacing']
+export type RadiusKey = keyof Theme['radius']
+export type SpacingValue = SpacingKey | number
