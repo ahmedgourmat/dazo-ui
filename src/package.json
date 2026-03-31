@@ -8,7 +8,6 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      
       "types": "./dist/index.d.ts",
       "react-native": "./dist/index.mjs",
       "import": "./dist/index.mjs",
