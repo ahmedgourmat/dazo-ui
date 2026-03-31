@@ -1,13 +1,20 @@
-import { View, StyleSheet } from 'react-native'
-import { ThemeProvider } from 'dazo'
+import { View, StyleSheet, ScrollView } from 'react-native'
+import { Button, Container, ThemeProvider } from 'dazo'
 import { ButtonTest } from './ButtonTest'
 
 export default function App(): React.JSX.Element {
   return (
     <ThemeProvider colorScheme='system'>
-      <View style={styles.container}>
+      <Container>
         <ButtonTest />
-      </View>
+      </Container>
+      <Container>
+        <Button label='hhhhh' />
+      </Container>
+      <Container scrollable>
+        <ButtonTest />
+        <ButtonTest />
+      </Container>
     </ThemeProvider>
   )
 }
@@ -15,7 +22,8 @@ export default function App(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 32,
-    gap: 16,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 })
