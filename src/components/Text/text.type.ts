@@ -6,5 +6,7 @@ export interface TextProps extends Omit<CommonProps, 'style' | 'scrollable'> {
     variant?: 'default' | 'title' | 'subtitle' | 'caption'
     size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
     color?: string
+    lines?: number
+    letters?: number
     style?: StyleProp<TextStyle>
 }

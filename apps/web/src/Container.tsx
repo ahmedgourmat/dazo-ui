@@ -9,8 +9,16 @@ const TestingContainer = () => {
       borderRadius="md"
       borderWidth={1}
       borderColor="#ccc"
-
+      paddingBottom={300}
+      width={400}
     >
+      <Text
+        color='black'
+        variant="subtitle"
+        backgroundColor='white'
+      >
+        This is a test text to check the styling of the Container component. It should have padding, background color, border radius, and border as defined in the Container props.
+      </Text>
       <Container>
         <Button label='hhhhh' />
       </Container>
