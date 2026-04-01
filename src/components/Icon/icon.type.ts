@@ -1,7 +1,12 @@
-export interface TextProps {
-    children: React.ReactNode
-    variant?: 'default' | 'title' | 'subtitle' | 'caption'
-    size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-    color?: string
-    style?: any
+import { CommonProps } from "styles/commonStyling.type"
+
+
+export type IconName = string // lucide exports by name
+
+export interface IconProps {
+  name:         IconName
+  size?:        number
+  color?:       string
+  strokeWidth?: number
+  style?:       CommonProps['style']
 }
