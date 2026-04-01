@@ -1,6 +1,7 @@
-export {ThemeProvider} from './providers'
+export { ThemeProvider } from './providers'
 export { useTheme } from './providers'
 export { lightTheme, darkTheme } from './styles'
 export { Button } from './components/Button'
 export { Container } from './components/Container'
 export { Text } from './components/Text'
+export { Icon } from './components/Icon'

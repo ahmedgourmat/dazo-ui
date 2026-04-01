@@ -13,8 +13,9 @@
     "dazo": "workspace:*",
     "expo": "~54.0.33",
     "expo-status-bar": "~3.0.9",
+    "react": "19.2.4",
     "react-native": "0.81.5",
-    "react": "19.2.4"
+    "react-native-svg": "^15.15.4"
   },
   "devDependencies": {
     "@types/react": "^19.2.14",
