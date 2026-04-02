@@ -13,8 +13,6 @@ config.resolver.nodeModulesPaths = [
   path.resolve(workspaceRoot, 'node_modules'),
 ]
 
-// force Metro to resolve react and react-native
-// ALWAYS from the mobile app — never from the library
 config.resolver.extraNodeModules = {
   'react':             path.resolve(workspaceRoot, 'node_modules/react'),
   'react-native':      path.resolve(workspaceRoot, 'node_modules/react-native'),

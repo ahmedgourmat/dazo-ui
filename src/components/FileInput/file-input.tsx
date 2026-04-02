@@ -57,30 +57,10 @@ export const FileInput = ({
   }, [applySelectedFiles, commonProps.accept, commonProps.multiple])
 
   const openNativePicker = useCallback(async () => {
-    try {
-      const picker = require('expo-document-picker') as any
-      const result = await picker.getDocumentAsync({
-        type: commonProps.accept || '*/*',
-        multiple: Boolean(commonProps.multiple),
-        copyToCacheDirectory: true,
-      })
-
-      if (!result || result.canceled) {
-        return
-      }
-
-      const files = (result.assets ?? []).map((asset: any) => ({
-        name: asset.name,
-        uri: asset.uri,
-        size: asset.size,
-        mimeType: asset.mimeType,
-      }))
-
-      applySelectedFiles(files)
-    } catch (error) {
-      console.warn('Native file picker requires expo-document-picker in the app dependencies.', error)
-    }
-  }, [applySelectedFiles, commonProps.accept, commonProps.multiple])
+    console.warn(
+      'Native file picking is disabled in the library runtime to avoid requiring expo-document-picker from the client app.'
+    )
+  }, [])
 
   const handlePress = useCallback(async () => {
     if (disabled) {
