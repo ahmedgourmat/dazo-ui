@@ -1,7 +1,8 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { useCallback, useState } from 'react'
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import { useTheme } from '../../providers'
 import { useCommonStyles } from 'hooks/common.hooks'
-import type { FileInputProps } from './file-input.type'
+import type { FileInputProps, PickedFile } from './file-input.type'
 
 export const FileInput = ({
   label,
@@ -10,6 +11,8 @@ export const FileInput = ({
   disabled = false,
   leftIcon,
   rightIcon,
+  autoOpenPicker = true,
+  onFilesSelected,
   onPress,
   onClear,
   style,
@@ -18,11 +21,98 @@ export const FileInput = ({
 }: FileInputProps) => {
   const theme = useTheme()
   const commonStyles = useCommonStyles(commonProps)
-  const displayValue = value?.trim() || placeholder
+  const [selectedFiles, setSelectedFiles] = useState<PickedFile[]>([])
+
+  const applySelectedFiles = useCallback((files: PickedFile[]) => {
+    setSelectedFiles(files)
+    onFilesSelected?.(files)
+  }, [onFilesSelected])
+
+  const openWebPicker = useCallback(() => {
+    const webApi = globalThis as any
+    const doc = webApi['document'] as any
+    const urlApi = webApi['URL'] as any
+
+    if (!doc) {
+      return
+    }
+
+    const input = doc.createElement('input')
+    input.type = 'file'
+    input.multiple = Boolean(commonProps.multiple)
+    input.accept = commonProps.accept ?? ''
+
+    input.onchange = () => {
+      const files = (Array.from((input as any).files ?? []) as any[]).map((file: any) => ({
+        name: file.name,
+        uri: urlApi?.createObjectURL?.(file) ?? '',
+        size: file.size,
+        mimeType: file.type,
+      }))
+
+      applySelectedFiles(files)
+    }
+
+    input.click()
+  }, [applySelectedFiles, commonProps.accept, commonProps.multiple])
+
+  const openNativePicker = useCallback(async () => {
+    try {
+      const picker = require('expo-document-picker') as any
+      const result = await picker.getDocumentAsync({
+        type: commonProps.accept || '*/*',
+        multiple: Boolean(commonProps.multiple),
+        copyToCacheDirectory: true,
+      })
+
+      if (!result || result.canceled) {
+        return
+      }
+
+      const files = (result.assets ?? []).map((asset: any) => ({
+        name: asset.name,
+        uri: asset.uri,
+        size: asset.size,
+        mimeType: asset.mimeType,
+      }))
+
+      applySelectedFiles(files)
+    } catch (error) {
+      console.warn('Native file picker requires expo-document-picker in the app dependencies.', error)
+    }
+  }, [applySelectedFiles, commonProps.accept, commonProps.multiple])
+
+  const handlePress = useCallback(async () => {
+    if (disabled) {
+      return
+    }
+
+    onPress?.()
+
+    if (!autoOpenPicker) {
+      return
+    }
+
+    if (Platform.OS === 'web') {
+      openWebPicker()
+      return
+    }
+
+    await openNativePicker()
+  }, [autoOpenPicker, disabled, onPress, openNativePicker, openWebPicker])
+
+  const handleClear = useCallback(() => {
+    setSelectedFiles([])
+    onFilesSelected?.([])
+    onClear?.()
+  }, [onClear, onFilesSelected])
+
+  const localValue = selectedFiles.map((file) => file.name).join(', ')
+  const displayValue = value?.trim() || localValue || placeholder
 
   return (
     <Pressable
-      onPress={disabled ? undefined : onPress}
+      onPress={handlePress}
       disabled={disabled}
       style={[
         styles.container,
@@ -38,14 +128,14 @@ export const FileInput = ({
       {leftIcon ? <View style={styles.leftIcon}>{leftIcon}</View> : null}
 
       <View style={styles.content}>
-        {label ? <Text style={[styles.label, { color: theme.colors.textSecondary }, labelStyle]}>{label}</Text> : null}
-        <Text style={[styles.value, { color: value ? theme.colors.textPrimary : theme.colors.textSecondary }]} numberOfLines={1}>
+        {label ? <Text style={[styles.label, { color: theme.colors.textSecondary, fontFamily: theme.fontFamily.regular }, labelStyle]}>{label}</Text> : null}
+        <Text style={[styles.value, { color: value ? theme.colors.textPrimary : theme.colors.textSecondary, fontFamily: theme.fontFamily.regular }]} numberOfLines={1}>
           {displayValue}
         </Text>
       </View>
 
       {rightIcon ? <View style={styles.rightIcon}>{rightIcon}</View> : null}
-      {onClear && value ? <Text onPress={onClear} style={[styles.clear, { color: theme.colors.primary }]}>Clear</Text> : null}
+      {(onClear || localValue) && displayValue !== placeholder ? <Text onPress={handleClear} style={[styles.clear, { color: theme.colors.primary, fontFamily: theme.fontFamily.regular }]}>Clear</Text> : null}
     </Pressable>
   )
 }

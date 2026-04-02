@@ -27,6 +27,7 @@ export const useInputStyles = ({
         },
         input: {
           color: textColor ?? theme.colors.textInverse,
+          fontFamily: theme.fontFamily.regular,
         },
         placeholderColor: editable
           ? 'rgba(255,255,255,0.75)'
@@ -40,6 +41,7 @@ export const useInputStyles = ({
         },
         input: {
           color: textColor ?? (editable ? theme.colors.textPrimary : theme.colors.textDisabled),
+          fontFamily: theme.fontFamily.regular,
         },
         placeholderColor: editable ? theme.colors.textSecondary : theme.colors.textDisabled,
       },
@@ -51,6 +53,7 @@ export const useInputStyles = ({
         },
         input: {
           color: textColor ?? (editable ? theme.colors.textPrimary : theme.colors.textDisabled),
+          fontFamily: theme.fontFamily.regular,
         },
         placeholderColor: editable ? theme.colors.textSecondary : theme.colors.textDisabled,
       },

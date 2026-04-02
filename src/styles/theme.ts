@@ -34,6 +34,7 @@ const buildTheme = (mode: 'light' | 'dark') => ({
   radius:     tokens.radius,
   fontSize:   tokens.fontSize,
   fontWeight: tokens.fontWeight,
+  fontFamily: tokens.fontFamily,
   lineHeight: tokens.lineHeight,
 })
 

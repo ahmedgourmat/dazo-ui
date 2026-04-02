@@ -36,7 +36,7 @@ export const RadioGroup = ({
                                 {checked ? <View style={[styles.dot, { backgroundColor: resolvedCircleColor }]} /> : null}
                         </View>
                         {option.icon ? <View style={styles.optionIcon}>{option.icon}</View> : null}
-                            <Text style={[styles.label, { color: resolvedTextColor }, labelStyle]}>{option.label}</Text>
+                            <Text style={[styles.label, { color: resolvedTextColor, fontFamily: theme.fontFamily.regular }, labelStyle]}>{option.label}</Text>
                     </Pressable>
                 )
             })}

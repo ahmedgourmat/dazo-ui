@@ -46,6 +46,10 @@ export const ThemeProvider = ({
         ...base.spacing,
         ...(overrides.spacing ?? {}),
       },
+      fontFamily: {
+        ...base.fontFamily,
+        ...(overrides.fontFamily ?? {}),
+      },
     } as Theme
   }, [deviceScheme, colorScheme, overrides])
 
