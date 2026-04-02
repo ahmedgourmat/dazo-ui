@@ -1,4 +1,4 @@
-import { Pressable, Text, ActivityIndicator, StyleSheet, Platform } from 'react-native'
+import { Pressable, Text, ActivityIndicator, StyleSheet, Platform, View } from 'react-native'
 import { useButtonStyles } from './button.hooks'
 import type { ButtonProps } from './button.type'
 import { useCommonStyles } from 'hooks/common.hooks'
@@ -8,6 +8,9 @@ export const Button = ({
   onPress,
   disabled = false,
   loading = false,
+  leftIcon,
+  rightIcon,
+  icon,
   variant = 'solid',
   size = 'md',
   fullWidth = false,
@@ -18,6 +21,8 @@ export const Button = ({
 
   const computed = useButtonStyles({ variant, size, disabled, fullWidth })
   const commonStyles = useCommonStyles(commonProps)
+  const resolvedLeftIcon = leftIcon ?? icon
+  const resolvedRightIcon = rightIcon
 
   // Web platform rendering
   if (Platform.OS === 'web') {
@@ -41,12 +46,24 @@ export const Button = ({
         {
           loading
             ? <ActivityIndicator size='small' color={computed.indicator} />
-            : <span style={{
-              ...computed.label as React.CSSProperties,
-              ...(labelStyle as object),
-            }}>
-              {label}
-            </span>
+            : <>
+              {resolvedLeftIcon ? (
+                <span style={{ marginRight: 8, display: 'inline-flex', alignItems: 'center' }}>
+                  {resolvedLeftIcon}
+                </span>
+              ) : null}
+              <span style={{
+                ...computed.label as React.CSSProperties,
+                ...(labelStyle as object),
+              }}>
+                {label}
+              </span>
+              {resolvedRightIcon ? (
+                <span style={{ marginLeft: 8, display: 'inline-flex', alignItems: 'center' }}>
+                  {resolvedRightIcon}
+                </span>
+              ) : null}
+            </>
         }
       </button>
     )
@@ -67,9 +84,13 @@ export const Button = ({
     >
       {loading
         ? <ActivityIndicator size='small' color={computed.indicator} />
-        : <Text style={[styles.label, computed.label, labelStyle]}>
-          {label}
-        </Text>
+        : <>
+          {resolvedLeftIcon ? <View style={styles.leftIcon}>{resolvedLeftIcon}</View> : null}
+          <Text style={[styles.label, computed.label, labelStyle]}>
+            {label}
+          </Text>
+          {resolvedRightIcon ? <View style={styles.rightIcon}>{resolvedRightIcon}</View> : null}
+        </>
       }
     </Pressable>
   )
@@ -86,5 +107,11 @@ const styles = StyleSheet.create({
   },
   label: {
     includeFontPadding: false,
+  },
+  leftIcon: {
+    marginRight: 8,
+  },
+  rightIcon: {
+    marginLeft: 8,
   },
 })
