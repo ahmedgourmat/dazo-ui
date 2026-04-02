@@ -52,6 +52,11 @@ export const tokens = {
     medium:  '500' as const,
     bold:    '700' as const,
   },
+  fontFamily: {
+    regular: 'system',
+    medium: 'system',
+    bold: 'system',
+  },
   lineHeight: {
     tight:  1.3,
     normal: 1.6,

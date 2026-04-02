@@ -13,6 +13,7 @@ export default defineConfig({
     'react-native',
     'react-native-web',
     'react-native-svg',
+    'expo-document-picker',
     'lucide-react-native',
     'lucide-react',
   ],

@@ -20,21 +20,25 @@ export const useTextStyles = ({
                 fontSize: theme.fontSize.md,
                 color: theme.colors.textPrimary,
                 fontWeight: theme.fontWeight.regular,
+                fontFamily: theme.fontFamily.regular,
             },
             title: {
                 fontSize: theme.fontSize.xxl,
                 color: theme.colors.textPrimary,
                 fontWeight: theme.fontWeight.bold,
+                fontFamily: theme.fontFamily.bold,
             },
             subtitle: {
                 fontSize: theme.fontSize.lg,
                 color: theme.colors.textSecondary,
                 fontWeight: theme.fontWeight.medium,
+                fontFamily: theme.fontFamily.medium,
             },
             caption: {
                 fontSize: theme.fontSize.sm,
                 color: theme.colors.textSecondary,
                 fontWeight: theme.fontWeight.regular,
+                fontFamily: theme.fontFamily.regular,
             },
         } as const
 

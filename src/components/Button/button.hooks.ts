@@ -89,6 +89,7 @@ export const useButtonStyles = ({
                 ...variantStyles[variant].label,
                 fontSize: sizeStyles[size].fontSize,
                 fontWeight: theme.fontWeight.medium,
+                fontFamily: theme.fontFamily.medium,
             },
             indicator: variantStyles[variant].indicator,
             currentSize: sizeStyles[size],

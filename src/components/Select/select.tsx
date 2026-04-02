@@ -45,8 +45,8 @@ export const Select = ({
         {leftIcon ? <View style={styles.leftIcon}>{leftIcon}</View> : null}
 
         <View style={styles.content}>
-          {label ? <Text style={[styles.label, { color: theme.colors.textSecondary }, labelStyle]}>{label}</Text> : null}
-          <Text style={[styles.value, { color: selectedOption ? theme.colors.textPrimary : theme.colors.textSecondary }]} numberOfLines={1}>
+          {label ? <Text style={[styles.label, { color: theme.colors.textSecondary, fontFamily: theme.fontFamily.regular }, labelStyle]}>{label}</Text> : null}
+          <Text style={[styles.value, { color: selectedOption ? theme.colors.textPrimary : theme.colors.textSecondary, fontFamily: theme.fontFamily.regular }]} numberOfLines={1}>
             {selectedOption?.label ?? placeholder}
           </Text>
         </View>
@@ -75,7 +75,7 @@ export const Select = ({
                   ]}
                 >
                   {option.icon ? <View style={styles.optionIcon}>{option.icon}</View> : null}
-                  <Text style={{ color: theme.colors.textPrimary }}>{option.label}</Text>
+                  <Text style={{ color: theme.colors.textPrimary, fontFamily: theme.fontFamily.regular }}>{option.label}</Text>
                 </Pressable>
               )
             })}
