@@ -111,7 +111,8 @@ export const FormSection = () => {
         placeholder='Select one or more files'
         accept='image/*,application/pdf'
         multiple
-        rightIcon={<Icon name='Upload' size={16} color='#334155' />}
+        leftIcon={<Icon name='Upload' size={16} color='white' />}
+        rightIcon={<Icon name='Upload' size={16} color='white' />}
         onFilesSelected={(files) => {
           setPickedFileNames(files.map((file) => file.name).join(', '))
         }}

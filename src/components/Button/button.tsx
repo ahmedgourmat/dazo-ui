@@ -39,7 +39,6 @@ export const Button = ({
           justifyContent: 'center',
           cursor: disabled ? 'not-allowed' : 'pointer',
           fontFamily: 'inherit',
-          border: 'none',
           ...(style as object),
         }}
       >

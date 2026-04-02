@@ -13,30 +13,31 @@ export const useTextStyles = ({
 }: UseTextStylesParams) => {
 
     const theme = useTheme()
+    const modeTextColor = theme.mode === 'light' ? '#000000' : '#FFFFFF'
 
     return useMemo(() => {
         const variantStyles = {
             default: {
                 fontSize: theme.fontSize.md,
-                color: theme.colors.textPrimary,
+                color: modeTextColor,
                 fontWeight: theme.fontWeight.regular,
                 fontFamily: theme.fontFamily.regular,
             },
             title: {
                 fontSize: theme.fontSize.xxl,
-                color: theme.colors.textPrimary,
+                color: modeTextColor,
                 fontWeight: theme.fontWeight.bold,
                 fontFamily: theme.fontFamily.bold,
             },
             subtitle: {
                 fontSize: theme.fontSize.lg,
-                color: theme.colors.textSecondary,
+                color: modeTextColor,
                 fontWeight: theme.fontWeight.medium,
                 fontFamily: theme.fontFamily.medium,
             },
             caption: {
                 fontSize: theme.fontSize.sm,
-                color: theme.colors.textSecondary,
+                color: modeTextColor,
                 fontWeight: theme.fontWeight.regular,
                 fontFamily: theme.fontFamily.regular,
             },

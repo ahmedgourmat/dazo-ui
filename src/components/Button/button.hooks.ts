@@ -16,6 +16,7 @@ export const useButtonStyles = ({
 }: UseButtonStylesParams) => {
 
     const theme = useTheme()
+    const modeTextColor = theme.mode === 'light' ? '#010101' : '#FDFDFD'
 
     return useMemo(() => {
         const sizeStyles = {
@@ -40,29 +41,28 @@ export const useButtonStyles = ({
             solid: {
                 container: {
                     backgroundColor: disabled
-                        ? theme.colors.textDisabled
-                        : theme.colors.primary,
-                    borderWidth: 0,
+                        ? theme.colors.backgroundSunken
+                        : theme.colors.backgroundSurface,
+                    borderWidth: 1,
+                    borderColor: theme.colors.border,
                 },
                 label: {
-                    color: theme.colors.textInverse,
+                    color: modeTextColor,
                 },
-                indicator: theme.colors.textInverse,
+                indicator: modeTextColor,
             },
             outline: {
                 container: {
                     backgroundColor: 'transparent' as const,
-                    borderWidth: 1,
+                    borderWidth: 2,
                     borderColor: disabled
-                        ? theme.colors.textDisabled
-                        : theme.colors.primary,
+                        ? theme.colors.border
+                        : theme.colors.border,
                 },
                 label: {
-                    color: disabled
-                        ? theme.colors.textDisabled
-                        : theme.colors.primary,
+                    color: '#010101',
                 },
-                indicator: theme.colors.primary,
+                indicator: modeTextColor,
             },
             ghost: {
                 container: {
@@ -70,11 +70,9 @@ export const useButtonStyles = ({
                     borderWidth: 0,
                 },
                 label: {
-                    color: disabled
-                        ? theme.colors.textDisabled
-                        : theme.colors.primary,
+                    color: modeTextColor,
                 },
-                indicator: theme.colors.primary,
+                indicator: modeTextColor,
             },
         } as const
 

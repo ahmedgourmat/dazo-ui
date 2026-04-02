@@ -16,22 +16,23 @@ export const useInputStyles = ({
   textColor,
 }: UseInputStylesParams) => {
   const theme = useTheme()
+  const modeTextColor = theme.mode === 'light' ? '#000000' : '#FFFFFF'
 
   return useMemo(() => {
     const variantStyles = {
       solid: {
         container: {
-          backgroundColor: editable ? theme.colors.primary : theme.colors.textDisabled,
-          borderWidth: 0,
-          borderColor: 'transparent',
+          backgroundColor: editable ? theme.colors.backgroundSunken : theme.colors.backgroundSunken,
+          borderWidth: 1,
+          borderColor: theme.colors.border,
         },
         input: {
-          color: textColor ?? theme.colors.textInverse,
+          color: textColor ?? modeTextColor,
           fontFamily: theme.fontFamily.regular,
         },
         placeholderColor: editable
-          ? 'rgba(255,255,255,0.75)'
-          : theme.colors.textInverse,
+          ? modeTextColor
+          : modeTextColor,
       },
       outline: {
         container: {
@@ -40,10 +41,10 @@ export const useInputStyles = ({
           borderColor: editable ? theme.colors.primary : theme.colors.textDisabled,
         },
         input: {
-          color: textColor ?? (editable ? theme.colors.textPrimary : theme.colors.textDisabled),
+          color: textColor ?? modeTextColor,
           fontFamily: theme.fontFamily.regular,
         },
-        placeholderColor: editable ? theme.colors.textSecondary : theme.colors.textDisabled,
+        placeholderColor: modeTextColor,
       },
       ghost: {
         container: {
@@ -52,10 +53,10 @@ export const useInputStyles = ({
           borderColor: 'transparent',
         },
         input: {
-          color: textColor ?? (editable ? theme.colors.textPrimary : theme.colors.textDisabled),
+          color: textColor ?? modeTextColor,
           fontFamily: theme.fontFamily.regular,
         },
-        placeholderColor: editable ? theme.colors.textSecondary : theme.colors.textDisabled,
+        placeholderColor: modeTextColor,
       },
     } as const
 

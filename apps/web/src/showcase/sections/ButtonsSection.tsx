@@ -23,7 +23,7 @@ export const ButtonsSection = () => {
     >
       <Container flexDirection='row' flexWrap='wrap' gap='sm'>
         <Button label='Solid Button' leftIcon={<Icon name='Check' />} onPress={() => {}} />
-        <Button variant='outline' label='Outline Button' rightIcon={<Icon name='ArrowRight' />} onPress={() => {}} />
+        <Button variant='outline' label='Outline Button' rightIcon={<Icon name='ArrowRight' color='black' />} onPress={() => {}} />
         <Button variant='ghost' label='Ghost Button' onPress={() => {}} />
         <Button size='sm' label='Small' onPress={() => {}} />
         <Button size='md' label='Medium' onPress={() => {}} />
