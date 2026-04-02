@@ -11,10 +11,10 @@ const buildTheme = (mode: 'light' | 'dark') => ({
     backgroundSunken:  mode === 'light' ? tokens.colors.gray100    : tokens.colors.gray900,
 
     // text
-    textPrimary:   mode === 'light' ? tokens.colors.gray900   : tokens.colors.gray50,
-    textSecondary: mode === 'light' ? tokens.colors.gray600   : tokens.colors.gray400,
-    textDisabled:  mode === 'light' ? tokens.colors.gray400   : tokens.colors.gray600,
-    textInverse:   mode === 'light' ? tokens.colors.white     : tokens.colors.gray900,
+    textPrimary:   mode === 'light' ? tokens.colors.black     : tokens.colors.white,
+    textSecondary: mode === 'light' ? tokens.colors.black     : tokens.colors.white,
+    textDisabled:  mode === 'light' ? tokens.colors.black     : tokens.colors.white,
+    textInverse:   mode === 'light' ? tokens.colors.black     : tokens.colors.white,
 
     // brand
     primary:       tokens.colors.blue500,
