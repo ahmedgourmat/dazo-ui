@@ -4,8 +4,9 @@ import type { CommonProps } from 'styles/commonStyling.type'
 
 export interface ButtonProps extends Omit<CommonProps, 'children' | 'scrollable' | 'style'> {
     label: string;
+    leftIcon?: ReactNode;
+    rightIcon?: ReactNode;
     icon?: ReactNode;
-    iconPosition?: 'left' | 'right';
     onPress?: () => void;
     disabled?: boolean;
     loading?: boolean;
