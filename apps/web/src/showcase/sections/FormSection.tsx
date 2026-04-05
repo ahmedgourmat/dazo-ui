@@ -97,7 +97,7 @@ export const FormSection = () => {
         value={selectedRole}
         onChange={setSelectedRole}
         direction='row'
-        circleColor='#0ea5e9'
+        circleColor='red'
         textColor='#0f172a'
         options={[
           { label: 'Admin', value: 'admin' },
