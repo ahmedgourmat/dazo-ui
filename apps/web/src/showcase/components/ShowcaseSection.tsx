@@ -19,21 +19,15 @@ export const ShowcaseSection = ({
 }: ShowcaseSectionProps) => {
   return (
     <Container
-      backgroundColor='#ffffff'
       borderRadius='lg'
       borderWidth={1}
-      borderColor='#dbeafe'
       padding='lg'
       marginBottom='lg'
-      shadowColor='#0f172a'
-      shadowOpacity={0.1}
-      shadowRadius={10}
-      shadowOffset={{ width: 0, height: 6 }}
     >
-      <Text variant='subtitle' color='#0f172a' marginBottom='xs'>
+      <Text variant='subtitle' marginBottom='xs'>
         {title}
       </Text>
-      <Text variant='caption' color='#475569' marginBottom='md'>
+      <Text variant='caption' marginBottom='md'>
         {subtitle}
       </Text>
 
@@ -41,10 +35,10 @@ export const ShowcaseSection = ({
         <Container
           flex={1}
           minWidth={320}
-          backgroundColor='#f8fafc'
+          backgroundColor='backgroundSurface'
           borderRadius='md'
           borderWidth={1}
-          borderColor='#e2e8f0'
+          borderColor='border'
           padding='md'
         >
           {children}

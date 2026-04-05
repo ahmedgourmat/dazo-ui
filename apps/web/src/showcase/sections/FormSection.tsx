@@ -32,7 +32,7 @@ export const FormSection = () => {
         placeholder='name@company.com'
         value={email}
         onChangeText={setEmail}
-        leftIcon={<Icon name='Mail' color='#475569' size={16} />}
+        leftIcon={<Icon name='Mail' size={16} />}
         marginBottom='sm'
       />
 
@@ -41,8 +41,8 @@ export const FormSection = () => {
         variant='outline'
         value={search}
         onChangeText={setSearch}
-        leftIcon={<Icon name='Search' color='#475569' size={16} />}
-        rightIcon={<Icon name='SlidersHorizontal' color='#475569' size={16} />}
+        leftIcon={<Icon name='Search' size={16} />}
+        rightIcon={<Icon name='SlidersHorizontal' size={16} />}
         marginBottom='sm'
       />
 
@@ -60,23 +60,19 @@ export const FormSection = () => {
         label='Remember me'
         checked={rememberMe}
         onChange={setRememberMe}
-        checkedColor='#2563eb'
-        checkmarkColor='#ffffff'
         marginBottom='xs'
       />
       <Checkbox
         label='Subscribe to newsletter'
         checked={newsletter}
         onChange={setNewsletter}
-        checkedColor='#059669'
-        icon={<Icon name='Bell' size={16} color='#059669' />}
+        icon={<Icon name='Bell' size={16} />}
         marginBottom='xs'
       />
       <Checkbox
         label='I agree to privacy policy'
         checked={policyAccepted}
         onChange={setPolicyAccepted}
-        checkedColor='#7c3aed'
         marginBottom='md'
       />
 
@@ -85,11 +81,11 @@ export const FormSection = () => {
         value={selectedPlan}
         onChange={setSelectedPlan}
         options={[
-          { label: 'Starter Plan', value: 'starter', icon: <Icon name='Leaf' size={16} color='#166534' /> },
-          { label: 'Pro Plan', value: 'pro', icon: <Icon name='Zap' size={16} color='#1d4ed8' /> },
-          { label: 'Enterprise', value: 'enterprise', icon: <Icon name='Building2' size={16} color='#7c2d12' /> },
+          { label: 'Starter Plan', value: 'starter', icon: <Icon name='Leaf' size={16} /> },
+          { label: 'Pro Plan', value: 'pro', icon: <Icon name='Zap' size={16} /> },
+          { label: 'Enterprise', value: 'enterprise', icon: <Icon name='Building2' size={16} /> },
         ]}
-        leftIcon={<Icon name='Layers' size={16} color='#334155' />}
+        leftIcon={<Icon name='Layers' size={16} />}
         marginBottom='md'
       />
 
@@ -97,8 +93,6 @@ export const FormSection = () => {
         value={selectedRole}
         onChange={setSelectedRole}
         direction='row'
-        circleColor='red'
-        textColor='#0f172a'
         options={[
           { label: 'Admin', value: 'admin' },
           { label: 'Editor', value: 'editor' },
@@ -111,8 +105,8 @@ export const FormSection = () => {
         placeholder='Select one or more files'
         accept='image/*,application/pdf'
         multiple
-        leftIcon={<Icon name='Upload' size={16} color='white' />}
-        rightIcon={<Icon name='Upload' size={16} color='white' />}
+        leftIcon={<Icon name='Upload' size={16} />}
+        rightIcon={<Icon name='Upload' size={16} />}
         onFilesSelected={(files) => {
           setPickedFileNames(files.map((file) => file.name).join(', '))
         }}
@@ -120,7 +114,7 @@ export const FormSection = () => {
         marginBottom='sm'
       />
 
-      <Text variant='caption' color='#64748b'>
+      <Text variant='caption'>
         Last file event: {pickedFileNames || 'No files selected yet'}
       </Text>
     </ShowcaseSection>

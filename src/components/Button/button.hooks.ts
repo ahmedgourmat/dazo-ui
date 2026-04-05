@@ -16,23 +16,25 @@ export const useButtonStyles = ({
 }: UseButtonStylesParams) => {
 
     const theme = useTheme()
-    const modeTextColor = theme.mode === 'light' ? '#010101' : '#FDFDFD'
 
     return useMemo(() => {
         const sizeStyles = {
             sm: {
-                paddingVertical: theme.spacing.xs,
-                paddingHorizontal: theme.spacing.sm,
+                minHeight: 32,
+                paddingVertical: 6,
+                paddingHorizontal: 12,
                 fontSize: theme.fontSize.sm,
             },
             md: {
-                paddingVertical: theme.spacing.sm,
-                paddingHorizontal: theme.spacing.md,
+                minHeight: 40,
+                paddingVertical: 10,
+                paddingHorizontal: 20,
                 fontSize: theme.fontSize.md,
             },
             lg: {
-                paddingVertical: theme.spacing.md,
-                paddingHorizontal: theme.spacing.lg,
+                minHeight: 48,
+                paddingVertical: 12,
+                paddingHorizontal: 24,
                 fontSize: theme.fontSize.lg,
             },
         } as const
@@ -41,38 +43,49 @@ export const useButtonStyles = ({
             solid: {
                 container: {
                     backgroundColor: disabled
-                        ? theme.colors.backgroundSunken
-                        : theme.colors.backgroundSurface,
-                    borderWidth: 1,
-                    borderColor: theme.colors.border,
+                        ? theme.colors.textDisabled
+                        : theme.colors.primary,
+                    borderWidth: 0,
+                    shadowColor: '#000000',
+                    shadowOpacity: disabled ? 0 : 0.2,
+                    shadowRadius: 3,
+                    shadowOffset: { width: 0, height: 1 },
+                    elevation: disabled ? 0 : 2,
                 },
                 label: {
-                    color: modeTextColor,
+                    color: theme.colors.textInverse,
                 },
-                indicator: modeTextColor,
+                indicator: theme.colors.textInverse,
             },
             outline: {
                 container: {
-                    backgroundColor: 'transparent' as const,
-                    borderWidth: 2,
+                    backgroundColor: theme.colors.backgroundSurface,
+                    borderWidth: 1,
                     borderColor: disabled
                         ? theme.colors.border
-                        : theme.colors.border,
+                        : theme.colors.borderStrong,
+                    shadowColor: '#000000',
+                    shadowOpacity: 0.05,
+                    shadowRadius: 8,
+                    shadowOffset: { width: 0, height: 2 },
+                    elevation: 1,
                 },
                 label: {
-                    color: '#010101',
+                    color: theme.colors.textPrimary,
                 },
-                indicator: modeTextColor,
+                indicator: theme.colors.textPrimary,
             },
             ghost: {
                 container: {
                     backgroundColor: 'transparent' as const,
                     borderWidth: 0,
+                    shadowOpacity: 0,
+                    elevation: 0,
                 },
                 label: {
-                    color: modeTextColor,
+                    color: theme.colors.textSecondary,
                 },
-                indicator: modeTextColor,
+                indicator: theme.colors.textSecondary,
             },
         } as const
 
@@ -88,6 +101,7 @@ export const useButtonStyles = ({
                 fontSize: sizeStyles[size].fontSize,
                 fontWeight: theme.fontWeight.medium,
                 fontFamily: theme.fontFamily.medium,
+                lineHeight: sizeStyles[size].fontSize * 1.15,
             },
             indicator: variantStyles[variant].indicator,
             currentSize: sizeStyles[size],

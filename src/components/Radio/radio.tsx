@@ -32,11 +32,11 @@ export const RadioGroup = ({
                         onPress={() => onChange?.(option.value)}
                         style={[styles.option, direction === 'row' && styles.optionRow, option.disabled && { opacity: 0.5 }]}
                     >
-                            <View style={[styles.circle, { borderColor: checked ? resolvedCircleColor : theme.colors.border }]}>
-                                {checked ? <View style={[styles.dot, { backgroundColor: resolvedCircleColor }]} /> : null}
+                        <View style={[styles.circle, { borderColor: checked ? resolvedCircleColor : theme.colors.border }]}>
+                            {checked ? <View style={[styles.dot, { backgroundColor: resolvedCircleColor }]} /> : null}
                         </View>
                         {option.icon ? <View style={styles.optionIcon}>{option.icon}</View> : null}
-                            <Text style={[styles.label, { color: resolvedTextColor, fontFamily: theme.fontFamily.regular }, labelStyle]}>{option.label}</Text>
+                        <Text style={[styles.label, { color: resolvedTextColor, fontFamily: theme.fontFamily.regular }, labelStyle]}>{option.label}</Text>
                     </Pressable>
                 )
             })}
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     option: {
         flexDirection: 'row',
         alignItems: 'center',
-        minHeight: 40,
+        minHeight: 44,
     },
     optionRow: {
         marginRight: 16,
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         alignItems: 'center',
         justifyContent: 'center',
-        marginRight: 8,
+        marginRight: 12,
     },
     dot: {
         width: 10,
@@ -74,6 +74,6 @@ const styles = StyleSheet.create({
         marginRight: 8,
     },
     label: {
-        fontSize: 14,
+        fontSize: 15,
     },
 })

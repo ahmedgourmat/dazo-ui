@@ -37,6 +37,11 @@ export const Select = ({
             borderColor: theme.colors.border,
             backgroundColor: theme.colors.backgroundSurface,
             opacity: disabled ? 0.7 : 1,
+            shadowColor: '#000000',
+            shadowOpacity: disabled ? 0 : 0.06,
+            shadowRadius: 8,
+            shadowOffset: { width: 0, height: 2 },
+            elevation: disabled ? 0 : 1,
           },
           commonStyles,
           style,
@@ -56,7 +61,20 @@ export const Select = ({
 
       <Modal transparent visible={open} animationType="fade" onRequestClose={() => setOpen(false)}>
         <Pressable style={styles.backdrop} onPress={() => setOpen(false)}>
-          <Pressable style={[styles.menu, { backgroundColor: theme.colors.backgroundSurface, borderColor: theme.colors.border }]}>
+          <Pressable
+            style={[
+              styles.menu,
+              {
+                backgroundColor: theme.colors.backgroundSurface,
+                borderColor: theme.colors.border,
+                shadowColor: '#000000',
+                shadowOpacity: 0.2,
+                shadowRadius: 18,
+                shadowOffset: { width: 0, height: 8 },
+                elevation: 5,
+              },
+            ]}
+          >
             {options.map((option) => {
               const isSelected = option.value === value
 
@@ -88,29 +106,29 @@ export const Select = ({
 
 const styles = StyleSheet.create({
   container: {
-    minHeight: 44,
+    minHeight: 48,
     borderWidth: 1,
-    borderRadius: 12,
+    borderRadius: 14,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
+    paddingHorizontal: 16,
   },
   content: {
     flex: 1,
-    paddingVertical: 8,
+    paddingVertical: 10,
   },
   label: {
     fontSize: 12,
     marginBottom: 2,
   },
   value: {
-    fontSize: 14,
+    fontSize: 15,
   },
   leftIcon: {
-    marginRight: 8,
+    marginRight: 12,
   },
   rightIcon: {
-    marginLeft: 8,
+    marginLeft: 12,
   },
   backdrop: {
     flex: 1,
@@ -120,17 +138,17 @@ const styles = StyleSheet.create({
   },
   menu: {
     borderWidth: 1,
-    borderRadius: 16,
+    borderRadius: 18,
     overflow: 'hidden',
     maxHeight: 320,
   },
   option: {
-    minHeight: 44,
-    paddingHorizontal: 14,
+    minHeight: 48,
+    paddingHorizontal: 16,
     flexDirection: 'row',
     alignItems: 'center',
   },
   optionIcon: {
-    marginRight: 8,
+    marginRight: 12,
   },
 })

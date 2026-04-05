@@ -19,10 +19,8 @@ export const ShowcaseSection = ({
 }: ShowcaseSectionProps): React.JSX.Element => {
   return (
     <Container
-      backgroundColor='#ffffff'
       borderRadius='lg'
       borderWidth={1}
-      borderColor='#dbeafe'
       padding='lg'
       marginBottom='lg'
     >
@@ -34,10 +32,8 @@ export const ShowcaseSection = ({
       </Text>
 
       <Container
-        backgroundColor='#f8fafc'
         borderRadius='md'
         borderWidth={1}
-        borderColor='#e2e8f0'
         padding='md'
         marginBottom='md'
       >

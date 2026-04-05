@@ -27,25 +27,25 @@ export const TableSection = (): React.JSX.Element => {
   return (
     <ShowcaseSection
       title='Table'
-      subtitle='Data table demo with custom renderers and striping.'
+      subtitle='A clean, standard data table with restrained spacing, typography, and striping.'
       codeTitle='table.tsx'
       code={code}
     >
       <Table<TeamRow>
         columns={[
-          { key: 'name', title: 'Name', width: 160, align: 'left' },
-          { key: 'role', title: 'Role', width: 110, align: 'center' },
+          { key: 'name', title: 'Name', width: 180, align: 'left' },
+          { key: 'role', title: 'Role', width: 120, align: 'center' },
           {
             key: 'score',
             title: 'Score',
-            width: 90,
+            width: 100,
             align: 'right',
             render: (value) => `${String(value)}%`,
           },
           {
             key: 'status',
             title: 'Status',
-            width: 120,
+            width: 130,
             align: 'center',
             render: (value) => {
               const safeValue = String(value)
@@ -57,15 +57,15 @@ export const TableSection = (): React.JSX.Element => {
         keyExtractor={(row) => row.id}
         emptyText='No users found'
         stripedRow
-        rowColor='#22c55e'
-        rowStripeOpacity={0.14}
+        rowColor='#dbeafe'
+        rowStripeOpacity={0.18}
         stripedColumn
-        columnColor='#3b82f6'
-        columnStripeOpacity={0.06}
+        columnColor='#e2e8f0'
+        columnStripeOpacity={0.1}
         horizontalScroll
         headerStyle={{ backgroundColor: '#eef2ff' }}
-        rowStyle={{ minHeight: 46 }}
-        cellTextStyle={{ fontSize: 13 }}
+        rowStyle={{ minHeight: 48 }}
+        cellTextStyle={{ fontSize: 14 }}
       />
     </ShowcaseSection>
   )

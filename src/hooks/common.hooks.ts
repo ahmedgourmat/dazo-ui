@@ -23,6 +23,13 @@ const resolveRadius = (
     return radius[value]
 }
 
+const resolveColor = (value: string | undefined, colors: Theme['colors']): string | undefined => {
+    if (!value) return undefined
+    // If the value exists as a key in theme.colors, use the theme color.
+    // Otherwise, assume it's a raw color string (like hex or 'transparent').
+    return (colors as any)[value] || value
+}
+
 export const useCommonStyles = (props: CommonProps): any => {
     const theme = useTheme()
 
@@ -125,7 +132,7 @@ export const useCommonStyles = (props: CommonProps): any => {
             ...(justifyContent && { justifyContent }),
             ...(alignSelf && { alignSelf }),
             ...(alignContent && { alignContent }),
-            ...(backgroundColor && { backgroundColor }),
+            ...(backgroundColor && { backgroundColor: resolveColor(backgroundColor, theme.colors) }),
             ...(opacity !== undefined && { opacity }),
             ...(overflow && { overflow }),
             ...(elevation !== undefined && { elevation }),
@@ -144,7 +151,7 @@ export const useCommonStyles = (props: CommonProps): any => {
             ...(borderBottomWidth !== undefined && { borderBottomWidth }),
             ...(borderLeftWidth !== undefined && { borderLeftWidth }),
             ...(borderRightWidth !== undefined && { borderRightWidth }),
-            ...(borderColor && { borderColor }),
+            ...(borderColor && { borderColor: resolveColor(borderColor, theme.colors) }),
         }),
         [
             theme,

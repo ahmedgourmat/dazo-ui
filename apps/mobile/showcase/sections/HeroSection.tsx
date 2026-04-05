@@ -3,10 +3,8 @@ import { Container, Icon, Text } from 'dazo'
 export const HeroSection = (): React.JSX.Element => {
   return (
     <Container
-      backgroundColor='#0f172a'
       borderRadius='lg'
       borderWidth={1}
-      borderColor='#1d4ed8'
       padding='lg'
       marginBottom='lg'
     >

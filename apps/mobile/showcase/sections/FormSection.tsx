@@ -48,6 +48,7 @@ export const FormSection = (): React.JSX.Element => {
         label='Remember me'
         checked={rememberMe}
         onChange={setRememberMe}
+        textColor='red'
         checkedColor='green'
         uncheckedColor='red'
         checkmarkColor='blue'

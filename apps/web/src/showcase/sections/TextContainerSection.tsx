@@ -24,28 +24,28 @@ export const TextContainerSection = () => {
       <Text variant='title' marginBottom='xs'>
         Title Variant
       </Text>
-      <Text variant='subtitle' color='#334155' marginBottom='xs'>
+      <Text variant='subtitle' marginBottom='xs'>
         Subtitle Variant
       </Text>
       <Text variant='default' marginBottom='xs'>
         Default text for body content and paragraph style.
       </Text>
-      <Text variant='caption' color='#64748b' marginBottom='md'>
+      <Text variant='caption' marginBottom='md'>
         Caption text for helper notes and hints.
       </Text>
 
       <Container flexDirection='row' flexWrap='wrap' gap='sm'>
-        <Container backgroundColor='#eef2ff' padding='md' borderRadius='md' minWidth={150}>
-          <Text variant='caption' color='#3730a3'>Analytics</Text>
-          <Text variant='title' color='#1e1b4b'>1,284</Text>
+        <Container backgroundColor='backgroundSurface' padding='md' borderRadius='md' minWidth={150} borderWidth={1} borderColor='border'>
+          <Text variant='caption'>Analytics</Text>
+          <Text variant='title'>1,284</Text>
         </Container>
-        <Container backgroundColor='#ecfdf5' padding='md' borderRadius='md' minWidth={150}>
-          <Text variant='caption' color='#065f46'>Revenue</Text>
-          <Text variant='title' color='#064e3b'>$9.8k</Text>
+        <Container backgroundColor='backgroundSurface' padding='md' borderRadius='md' minWidth={150} borderWidth={1} borderColor='border'>
+          <Text variant='caption'>Revenue</Text>
+          <Text variant='title'>$9.8k</Text>
         </Container>
-        <Container backgroundColor='#fff7ed' padding='md' borderRadius='md' minWidth={150}>
-          <Text variant='caption' color='#9a3412'>Tasks</Text>
-          <Text variant='title' color='#7c2d12'>24</Text>
+        <Container backgroundColor='backgroundSurface' padding='md' borderRadius='md' minWidth={150} borderWidth={1} borderColor='border'>
+          <Text variant='caption'>Tasks</Text>
+          <Text variant='title'>24</Text>
         </Container>
       </Container>
     </ShowcaseSection>
