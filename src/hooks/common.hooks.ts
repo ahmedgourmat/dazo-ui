@@ -96,19 +96,31 @@ export const useCommonStyles = (props: CommonProps): any => {
     return useMemo(
         () => ({
             ...(padding !== undefined && { padding: resolveSpacing(padding, theme.spacing) }),
+            ...(paddingHorizontal !== undefined && { 
+                paddingLeft: resolveSpacing(paddingHorizontal, theme.spacing),
+                paddingRight: resolveSpacing(paddingHorizontal, theme.spacing)
+            }),
+            ...(paddingVertical !== undefined && { 
+                paddingTop: resolveSpacing(paddingVertical, theme.spacing),
+                paddingBottom: resolveSpacing(paddingVertical, theme.spacing)
+            }),
             ...(paddingTop !== undefined && { paddingTop: resolveSpacing(paddingTop, theme.spacing) }),
             ...(paddingBottom !== undefined && { paddingBottom: resolveSpacing(paddingBottom, theme.spacing) }),
             ...(paddingLeft !== undefined && { paddingLeft: resolveSpacing(paddingLeft, theme.spacing) }),
             ...(paddingRight !== undefined && { paddingRight: resolveSpacing(paddingRight, theme.spacing) }),
-            ...(paddingHorizontal !== undefined && { paddingHorizontal: resolveSpacing(paddingHorizontal, theme.spacing) }),
-            ...(paddingVertical !== undefined && { paddingVertical: resolveSpacing(paddingVertical, theme.spacing) }),
             ...(margin !== undefined && { margin: resolveSpacing(margin, theme.spacing) }),
+            ...(marginHorizontal !== undefined && { 
+                marginLeft: resolveSpacing(marginHorizontal, theme.spacing),
+                marginRight: resolveSpacing(marginHorizontal, theme.spacing)
+            }),
+            ...(marginVertical !== undefined && { 
+                marginTop: resolveSpacing(marginVertical, theme.spacing),
+                marginBottom: resolveSpacing(marginVertical, theme.spacing)
+            }),
             ...(marginTop !== undefined && { marginTop: resolveSpacing(marginTop, theme.spacing) }),
             ...(marginBottom !== undefined && { marginBottom: resolveSpacing(marginBottom, theme.spacing) }),
             ...(marginLeft !== undefined && { marginLeft: resolveSpacing(marginLeft, theme.spacing) }),
             ...(marginRight !== undefined && { marginRight: resolveSpacing(marginRight, theme.spacing) }),
-            ...(marginHorizontal !== undefined && { marginHorizontal: resolveSpacing(marginHorizontal, theme.spacing) }),
-            ...(marginVertical !== undefined && { marginVertical: resolveSpacing(marginVertical, theme.spacing) }),
             ...(gap !== undefined && { gap: resolveSpacing(gap, theme.spacing) }),
             ...(position && { position }),
             ...(top !== undefined && { top }),

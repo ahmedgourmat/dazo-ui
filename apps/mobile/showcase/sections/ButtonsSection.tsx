@@ -19,7 +19,7 @@ export const ButtonsSection = (): React.JSX.Element => {
       codeTitle='buttons.tsx'
       code={code}
     >
-      <Container flexDirection='row' flexWrap='wrap' gap='sm'>
+      <Container flexDirection='column' flexWrap='wrap' gap='sm'>
         <Button label='Solid' leftIcon={<Icon name='Check' />} onPress={() => {}} />
         <Button variant='outline' label='Outline' rightIcon={<Icon name='ArrowRight' />} onPress={() => {}} />
         <Button variant='ghost' label='Ghost' onPress={() => {}} />

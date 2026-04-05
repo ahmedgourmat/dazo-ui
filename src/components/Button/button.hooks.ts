@@ -20,20 +20,20 @@ export const useButtonStyles = ({
     return useMemo(() => {
         const sizeStyles = {
             sm: {
-                minHeight: 32,
-                paddingVertical: 6,
+                maxHeight: 32,
+                paddingVertical: 14,
                 paddingHorizontal: 12,
                 fontSize: theme.fontSize.sm,
             },
             md: {
-                minHeight: 40,
-                paddingVertical: 10,
+                maxHeight: 40,
+                paddingVertical: 16,
                 paddingHorizontal: 20,
                 fontSize: theme.fontSize.md,
             },
             lg: {
-                minHeight: 48,
-                paddingVertical: 12,
+                maxHeight: 48,
+                paddingVertical: 18,
                 paddingHorizontal: 24,
                 fontSize: theme.fontSize.lg,
             },
@@ -59,16 +59,11 @@ export const useButtonStyles = ({
             },
             outline: {
                 container: {
-                    backgroundColor: theme.colors.backgroundSurface,
-                    borderWidth: 1,
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
                     borderColor: disabled
                         ? theme.colors.border
-                        : theme.colors.borderStrong,
-                    shadowColor: '#000000',
-                    shadowOpacity: 0.05,
-                    shadowRadius: 8,
-                    shadowOffset: { width: 0, height: 2 },
-                    elevation: 1,
+                        : theme.colors.primary,
                 },
                 label: {
                     color: theme.colors.textPrimary,
