@@ -3,10 +3,11 @@
   "compilerOptions": {
     "jsx": "react-native",
     "lib": ["ESNext"],
-    "types": ["react-native"]
+    "types": ["react-native"],
+    "ignoreDeprecations": "6.0"
   },
   "include": [
     "**/*.ts",
     "**/*.tsx"
-  ]
+, "metro.config.js"  ]
 }
