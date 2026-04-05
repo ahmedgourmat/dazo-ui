@@ -21,7 +21,7 @@ export const useCheckboxStyles = ({
     const baseBoxStyle = {
       width: checkboxSize,
       height: checkboxSize,
-      borderRadius: 4,
+      borderRadius: 6,
       borderWidth: 2,
       justifyContent: 'center',
       alignItems: 'center',
@@ -31,8 +31,8 @@ export const useCheckboxStyles = ({
       borderColor: checked
         ? checkedColor || theme.colors.primary
         : disabled
-          ? theme.colors.textDisabled
-          : theme.colors.textSecondary,
+          ? theme.colors.border
+          : theme.colors.borderStrong,
       opacity: disabled ? 0.5 : 1,
     }
 

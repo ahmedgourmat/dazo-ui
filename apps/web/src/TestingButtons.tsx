@@ -10,12 +10,8 @@ const TestingButtons = () => {
     <Container
       scrollable
       padding='xl'
-      backgroundColor='#e2e8f0'
-      style={{
-        backgroundImage: 'radial-gradient(circle at 15% 0%, rgba(59,130,246,0.14), transparent 40%), radial-gradient(circle at 85% 5%, rgba(14,165,233,0.16), transparent 35%)',
-      } as any}
     >
-      <Container maxWidth={1280} style={{ width: '100%', alignSelf: 'center' } as any}>
+      <Container style={{ width: '100%', alignSelf: 'center' } as any}>
         <HeroSection />
         <ButtonsSection />
         <TextContainerSection />

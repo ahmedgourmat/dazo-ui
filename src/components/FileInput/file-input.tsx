@@ -100,6 +100,11 @@ export const FileInput = ({
           borderColor: theme.colors.border,
           backgroundColor: theme.colors.backgroundSurface,
           opacity: disabled ? 0.7 : 1,
+          shadowColor: '#000000',
+          shadowOpacity: disabled ? 0 : 0.06,
+          shadowRadius: 8,
+          shadowOffset: { width: 0, height: 2 },
+          elevation: disabled ? 0 : 1,
         },
         commonStyles,
         style,
@@ -122,32 +127,32 @@ export const FileInput = ({
 
 const styles = StyleSheet.create({
   container: {
-    minHeight: 44,
+    minHeight: 48,
     borderWidth: 1,
-    borderRadius: 12,
+    borderRadius: 14,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
+    paddingHorizontal: 16,
   },
   content: {
     flex: 1,
-    paddingVertical: 8,
+    paddingVertical: 10,
   },
   label: {
     fontSize: 12,
     marginBottom: 2,
   },
   value: {
-    fontSize: 14,
+    fontSize: 15,
   },
   leftIcon: {
-    marginRight: 8,
+    marginRight: 12,
   },
   rightIcon: {
-    marginLeft: 8,
+    marginLeft: 12,
   },
   clear: {
-    marginLeft: 8,
+    marginLeft: 12,
     fontSize: 12,
   },
 })

@@ -5,25 +5,25 @@ import { tokens } from './tokens'
 const buildTheme = (mode: 'light' | 'dark') => ({
   mode,
   colors: {
-    // backgrounds
-    background:        mode === 'light' ? tokens.colors.white      : tokens.colors.gray900,
-    backgroundSurface: mode === 'light' ? tokens.colors.gray50     : tokens.colors.gray800,
-    backgroundSunken:  mode === 'light' ? tokens.colors.gray100    : tokens.colors.gray900,
+    // backgrounds - Material logic: elevated surfaces are lighter in dark mode
+    background:        mode === 'light' ? tokens.colors.white      : tokens.colors.black900,
+    backgroundSurface: mode === 'light' ? tokens.colors.white      : tokens.colors.black800,
+    backgroundSunken:  mode === 'light' ? tokens.colors.black50    : tokens.colors.black950,
 
     // text
-    textPrimary:   mode === 'light' ? tokens.colors.black     : tokens.colors.white,
-    textSecondary: mode === 'light' ? tokens.colors.black     : tokens.colors.white,
-    textDisabled:  mode === 'light' ? tokens.colors.black     : tokens.colors.white,
-    textInverse:   mode === 'light' ? tokens.colors.black     : tokens.colors.white,
+    textPrimary:   mode === 'light' ? tokens.colors.black900   : tokens.colors.black50,
+    textSecondary: mode === 'light' ? tokens.colors.black600   : tokens.colors.black300,
+    textDisabled:  mode === 'light' ? tokens.colors.black400   : tokens.colors.black500,
+    textInverse:   tokens.colors.white,
 
     // brand
-    primary:       tokens.colors.blue500,
-    primaryLight:  tokens.colors.blue300,
-    primaryDark:   tokens.colors.blue700,
+    primary:       tokens.colors.purple600,
+    primaryLight:  tokens.colors.purple400,
+    primaryDark:   tokens.colors.purple800,
 
     // borders
-    border:        mode === 'light' ? tokens.colors.gray200   : tokens.colors.gray600,
-    borderStrong:  mode === 'light' ? tokens.colors.gray400   : tokens.colors.gray400,
+    border:        mode === 'light' ? tokens.colors.black200   : tokens.colors.black700,
+    borderStrong:  mode === 'light' ? tokens.colors.black300   : tokens.colors.black600,
 
     // semantic states
     danger:  tokens.colors.red500,

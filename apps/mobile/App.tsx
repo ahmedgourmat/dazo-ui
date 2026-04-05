@@ -7,10 +7,16 @@ import { TextContainerSection } from './showcase/sections/TextContainerSection'
 
 export default function App(): React.JSX.Element {
   return (
-    <ThemeProvider colorScheme='system'>
+    <ThemeProvider colorScheme='dark' theme={{
+      fontFamily: {
+        regular: 'Open Sans',
+        medium: 'Open Sans',
+        bold: 'Open Sans',
+      }
+    }}>
       <Container
         scrollable
-        backgroundColor='#e2e8f0'
+        backgroundColor='background'
         padding='lg'
         paddingBottom='xxl'
       >

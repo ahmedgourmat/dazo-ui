@@ -52,28 +52,29 @@ export const Input = ({
 
 const styles = StyleSheet.create({
   container: {
-    minHeight: 44,
+    minHeight: 48,
     borderWidth: 1,
-    borderRadius: 12,
+    borderRadius: 14,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
+    paddingHorizontal: 16,
   },
   input: {
     flex: 1,
-    minHeight: 40,
+    minHeight: 44,
     paddingVertical: 0,
+    fontSize: 15,
   },
   noFocusRing: {
     outlineStyle: 'none',
   } as any,
   leftIcon: {
-    marginRight: 8,
+    marginRight: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },
   rightIcon: {
-    marginLeft: 8,
+    marginLeft: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },

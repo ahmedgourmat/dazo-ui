@@ -16,35 +16,36 @@ export const useInputStyles = ({
   textColor,
 }: UseInputStylesParams) => {
   const theme = useTheme()
-  const modeTextColor = theme.mode === 'light' ? '#000000' : '#FFFFFF'
+  const modeTextColor = theme.colors.textPrimary
 
   return useMemo(() => {
     const variantStyles = {
       solid: {
         container: {
-          backgroundColor: editable ? theme.colors.backgroundSunken : theme.colors.backgroundSunken,
-          borderWidth: 1,
-          borderColor: theme.colors.border,
+          backgroundColor: theme.colors.backgroundSunken,
+          borderWidth: 0,
+          borderBottomWidth: editable ? 2 : 1,
+          borderColor: editable ? theme.colors.primary : theme.colors.borderStrong,
+          borderRadius: theme.radius.sm,
         },
         input: {
           color: textColor ?? modeTextColor,
           fontFamily: theme.fontFamily.regular,
         },
-        placeholderColor: editable
-          ? modeTextColor
-          : modeTextColor,
+        placeholderColor: editable ? theme.colors.textSecondary : theme.colors.textDisabled,
       },
       outline: {
         container: {
-          backgroundColor: theme.colors.backgroundSurface,
+          backgroundColor: 'transparent' as const,
           borderWidth: 1,
-          borderColor: editable ? theme.colors.primary : theme.colors.textDisabled,
+          borderColor: editable ? theme.colors.borderStrong : theme.colors.border,
+          borderRadius: theme.radius.md,
         },
         input: {
           color: textColor ?? modeTextColor,
           fontFamily: theme.fontFamily.regular,
         },
-        placeholderColor: modeTextColor,
+        placeholderColor: editable ? theme.colors.textSecondary : theme.colors.textDisabled,
       },
       ghost: {
         container: {
@@ -56,7 +57,7 @@ export const useInputStyles = ({
           color: textColor ?? modeTextColor,
           fontFamily: theme.fontFamily.regular,
         },
-        placeholderColor: modeTextColor,
+        placeholderColor: editable ? theme.colors.textSecondary : theme.colors.textDisabled,
       },
     } as const
 

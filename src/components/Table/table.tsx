@@ -134,6 +134,11 @@ export const Table = <T extends Record<string, unknown>>({
         {
           borderColor: theme.colors.border,
           backgroundColor: theme.colors.backgroundSurface,
+          shadowColor: '#000000',
+          shadowOpacity: 0.08,
+          shadowRadius: 10,
+          shadowOffset: { width: 0, height: 4 },
+          elevation: 2,
         },
         commonStyles,
         style,
@@ -158,6 +163,7 @@ export const Table = <T extends Record<string, unknown>>({
               style={[
                 styles.headerText,
                 {
+                  fontSize: theme.fontSize.sm,
                   color: theme.colors.textSecondary,
                   fontFamily: theme.fontFamily.medium,
                 },
@@ -212,6 +218,7 @@ export const Table = <T extends Record<string, unknown>>({
                         style={[
                           styles.cellText,
                           {
+                            fontSize: theme.fontSize.md,
                             color: theme.colors.textPrimary,
                             fontFamily: theme.fontFamily.regular,
                           },
@@ -247,35 +254,34 @@ export const Table = <T extends Record<string, unknown>>({
 const styles = StyleSheet.create({
   table: {
     borderWidth: 1,
-    borderRadius: 12,
+    borderRadius: 14,
     overflow: 'hidden',
   },
   header: {
     flexDirection: 'row',
-    minHeight: 44,
+    minHeight: 48,
     borderBottomWidth: 1,
   },
   row: {
     flexDirection: 'row',
-    minHeight: 44,
+    minHeight: 48,
     borderBottomWidth: 1,
   },
   cell: {
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     justifyContent: 'center',
   },
   headerText: {
-    fontSize: 12,
     fontWeight: 600,
   },
   cellText: {
-    fontSize: 14,
+    fontSize: 15,
   },
   emptyState: {
-    minHeight: 64,
+    minHeight: 72,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 12,
+    paddingHorizontal: 16,
   },
 })

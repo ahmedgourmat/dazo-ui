@@ -3,8 +3,7 @@
   "compilerOptions": {
     "jsx": "react-native",
     "lib": ["ESNext"],
-    "types": ["react-native"],
-    "ignoreDeprecations": "6.0"
+    "types": ["react-native"]
   },
   "include": [
     "**/*.ts",

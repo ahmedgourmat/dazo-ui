@@ -98,6 +98,7 @@ Checkbox.displayName = 'Checkbox'
 const styles = StyleSheet.create({
   container: {
     alignItems: 'flex-start',
+    minHeight: 44,
   },
   content: {
     flexDirection: 'row',
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   box: {
-    marginRight: 8,
+    marginRight: 12,
     flexShrink: 0,
   },
   labelContainer: {
@@ -120,5 +121,6 @@ const styles = StyleSheet.create({
   },
   label: {
     flex: 1,
+    fontSize: 15,
   },
 })

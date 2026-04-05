@@ -62,13 +62,8 @@ export const TableSection = () => {
         keyExtractor={(row) => row.id}
         emptyText='No users found'
         stripedRow
-        rowColor='#22c55e'
-        rowStripeOpacity={0.14}
         stripedColumn
-        columnColor='#3b82f6'
-        columnStripeOpacity={0.06}
         horizontalScroll
-        headerStyle={{ backgroundColor: '#eef2ff' }}
         rowStyle={{ minHeight: 48 }}
         cellTextStyle={{ fontSize: 13 }}
       />

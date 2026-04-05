@@ -7,9 +7,9 @@ import { resolveLucideIcon } from './icon.utils'
 
 export const Icon = ({
   name,
-  size = 24,
+  size = 20,
   color,
-  strokeWidth = 2,
+  strokeWidth = 1.75,
   style,
   ...commonProps
 }: IconProps) => {
@@ -19,7 +19,7 @@ export const Icon = ({
   // resolve color — fallback to theme primary
   const commonStyles = useCommonStyles(commonProps)
   const mergedStyle = StyleSheet.flatten([commonStyles, style])
-  const resolvedColor = color ?? theme.colors.textPrimary
+  const resolvedColor = color ?? theme.colors.textSecondary
 
   // dynamically get the icon component by name
   const LucideIcon = resolveLucideIcon(name, LucideIcons as Record<string, unknown>)

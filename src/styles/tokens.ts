@@ -13,7 +13,19 @@ export const tokens = {
     blue800: '#1E40AF',
     blue900: '#1E3A8A',
 
-    // ─── Neutrals ─────────────────────────────────────────────
+    // ─── Neutrals / Black Scale ───────────────────────────────
+    black50:  '#F8F8F8',
+    black100: '#F2F2F2',
+    black200: '#E5E5E5',
+    black300: '#CCCCCC',
+    black400: '#A3A3A3',
+    black500: '#737373',
+    black600: '#525252',
+    black700: '#2B2B2B',
+    black800: '#1A1A1A',
+    black900: '#0F0F0F',
+    black950: '#000000',
+
     gray50:  '#F9FAFB',
     gray100: '#F3F4F6',
     gray200: '#E5E7EB',
@@ -138,9 +150,9 @@ export const tokens = {
   },
 
   radius: {
-    sm:   4,
-    md:   8,
-    lg:   12,
+    sm:   2,
+    md:   4,
+    lg:   8,
     full: 9999,
   },
 
