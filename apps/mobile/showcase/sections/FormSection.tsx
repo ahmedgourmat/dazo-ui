@@ -1,4 +1,5 @@
 import { Checkbox, FileInput, Icon, Input, RadioGroup, Select, Text } from 'dazo'
+import * as DocumentPicker from 'expo-document-picker'
 import { useState } from 'react'
 import { ShowcaseSection } from '../components/ShowcaseSection'
 
@@ -95,6 +96,19 @@ export const FormSection = (): React.JSX.Element => {
         accept='image/*,application/pdf'
         multiple
         rightIcon={<Icon name='Upload' size={16} color='#334155' />}
+        customPicker={async () => {
+          const result = await DocumentPicker.getDocumentAsync({
+            multiple: true,
+            type: ['image/*', 'application/pdf'],
+          })
+          if (result.canceled) return []
+          return result.assets.map((asset) => ({
+            name: asset.name,
+            uri: asset.uri,
+            size: asset.size,
+            mimeType: asset.mimeType,
+          }))
+        }}
         onFilesSelected={(files) => {
           setPickedFileNames(files.map((file) => file.name).join(', '))
         }}

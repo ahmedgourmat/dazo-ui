@@ -3,7 +3,7 @@ import { ThemeProvider } from 'dazo'
 import TestingButtons from './TestingButtons'
 
 function ThemeWrappedApp() {
-  const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('dark')
+  const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('light')
 
   return (
     <ThemeProvider colorScheme={colorScheme} theme={{
