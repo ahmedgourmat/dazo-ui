@@ -24,4 +24,5 @@ export interface FileInputProps extends Omit<CommonProps, 'children' | 'scrollab
   onClear?: () => void
   style?: StyleProp<ViewStyle>
   labelStyle?: StyleProp<TextStyle>
+  customPicker?: () => Promise<PickedFile[] | undefined | null>
 }

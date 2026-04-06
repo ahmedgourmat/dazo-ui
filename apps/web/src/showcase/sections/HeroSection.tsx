@@ -32,7 +32,7 @@ export const HeroSection = () => {
         </Container>
 
         <Container backgroundColor='backgroundSunken' borderRadius='full' padding='md'>
-          <Icon name='Sparkles' color='primary' size={34} />
+          <Icon name='Sparkles' color='#7E22CE' size={34} />
         </Container>
       </Container>
     </Container>

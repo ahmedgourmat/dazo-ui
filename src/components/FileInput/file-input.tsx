@@ -17,6 +17,7 @@ export const FileInput = ({
   onClear,
   style,
   labelStyle,
+  customPicker,
   ...commonProps
 }: FileInputProps) => {
   const theme = useTheme()
@@ -73,13 +74,25 @@ export const FileInput = ({
       return
     }
 
+    if (customPicker) {
+      try {
+        const files = await customPicker()
+        if (files) {
+          applySelectedFiles(files)
+        }
+      } catch (error) {
+        console.error('Error with custom picker:', error)
+      }
+      return
+    }
+
     if (Platform.OS === 'web') {
       openWebPicker()
       return
     }
 
     await openNativePicker()
-  }, [autoOpenPicker, disabled, onPress, openNativePicker, openWebPicker])
+  }, [autoOpenPicker, disabled, onPress, openNativePicker, openWebPicker, customPicker, applySelectedFiles])
 
   const handleClear = useCallback(() => {
     setSelectedFiles([])
