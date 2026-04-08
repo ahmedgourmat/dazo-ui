@@ -1,3 +1,2 @@
-export {ThemeProvider} from './Providers'
-export { useTheme } from './Providers'
-export { lightTheme, darkTheme } from './styles'
+export * from './index.shared'
+export { Icon } from './components/Icon/icon.native'

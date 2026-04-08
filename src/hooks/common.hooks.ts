@@ -1,0 +1,229 @@
+import { useMemo } from 'react'
+import type { ViewStyle } from 'react-native'
+import { useTheme } from 'providers'
+import type { CommonProps } from 'styles/commonStyling.type'
+import type { Theme } from 'styles/theme'
+import type { RadiusKey, SpacingValue } from 'styles/tokens'
+
+const resolveSpacing = (
+    value: SpacingValue | undefined,
+    spacing: Theme['spacing']
+): number | undefined => {
+    if (value === undefined) return undefined
+    if (typeof value === 'number') return value
+    return spacing[value]
+}
+
+const resolveRadius = (
+    value: RadiusKey | number | undefined,
+    radius: Theme['radius']
+): number | undefined => {
+    if (value === undefined) return undefined
+    if (typeof value === 'number') return value
+    return radius[value]
+}
+
+const resolveColor = (value: string | undefined, colors: Theme['colors']): string | undefined => {
+    if (!value) return undefined
+    // If the value exists as a key in theme.colors, use the theme color.
+    // Otherwise, assume it's a raw color string (like hex or 'transparent').
+    return (colors as any)[value] || value
+}
+
+export const useCommonStyles = (props: CommonProps): any => {
+    const theme = useTheme()
+
+    const {
+        padding,
+        paddingHorizontal,
+        paddingVertical,
+        paddingTop,
+        paddingBottom,
+        paddingLeft,
+        paddingRight,
+        margin,
+        marginHorizontal,
+        marginVertical,
+        marginTop,
+        marginBottom,
+        marginLeft,
+        marginRight,
+        gap,
+        flex,
+        flexDirection,
+        flexWrap,
+        flexGrow,
+        flexShrink,
+        flexBasis,
+        alignItems,
+        justifyContent,
+        alignSelf,
+        alignContent,
+        position,
+        top,
+        bottom,
+        left,
+        right,
+        zIndex,
+        width,
+        height,
+        minWidth,
+        maxWidth,
+        minHeight,
+        maxHeight,
+        backgroundColor,
+        opacity,
+        overflow,
+        elevation,
+        shadowColor,
+        shadowOpacity,
+        shadowRadius,
+        shadowOffset,
+        borderRadius,
+        borderTopLeftRadius,
+        borderTopRightRadius,
+        borderBottomLeftRadius,
+        borderBottomRightRadius,
+        borderStyle,
+        borderWidth,
+        borderTopWidth,
+        borderBottomWidth,
+        borderLeftWidth,
+        borderRightWidth,
+        borderColor,
+    } = props
+
+    return useMemo(
+        () => ({
+            ...(padding !== undefined && { padding: resolveSpacing(padding, theme.spacing) }),
+            ...(paddingHorizontal !== undefined && { 
+                paddingLeft: resolveSpacing(paddingHorizontal, theme.spacing),
+                paddingRight: resolveSpacing(paddingHorizontal, theme.spacing)
+            }),
+            ...(paddingVertical !== undefined && { 
+                paddingTop: resolveSpacing(paddingVertical, theme.spacing),
+                paddingBottom: resolveSpacing(paddingVertical, theme.spacing)
+            }),
+            ...(paddingTop !== undefined && { paddingTop: resolveSpacing(paddingTop, theme.spacing) }),
+            ...(paddingBottom !== undefined && { paddingBottom: resolveSpacing(paddingBottom, theme.spacing) }),
+            ...(paddingLeft !== undefined && { paddingLeft: resolveSpacing(paddingLeft, theme.spacing) }),
+            ...(paddingRight !== undefined && { paddingRight: resolveSpacing(paddingRight, theme.spacing) }),
+            ...(margin !== undefined && { margin: resolveSpacing(margin, theme.spacing) }),
+            ...(marginHorizontal !== undefined && { 
+                marginLeft: resolveSpacing(marginHorizontal, theme.spacing),
+                marginRight: resolveSpacing(marginHorizontal, theme.spacing)
+            }),
+            ...(marginVertical !== undefined && { 
+                marginTop: resolveSpacing(marginVertical, theme.spacing),
+                marginBottom: resolveSpacing(marginVertical, theme.spacing)
+            }),
+            ...(marginTop !== undefined && { marginTop: resolveSpacing(marginTop, theme.spacing) }),
+            ...(marginBottom !== undefined && { marginBottom: resolveSpacing(marginBottom, theme.spacing) }),
+            ...(marginLeft !== undefined && { marginLeft: resolveSpacing(marginLeft, theme.spacing) }),
+            ...(marginRight !== undefined && { marginRight: resolveSpacing(marginRight, theme.spacing) }),
+            ...(gap !== undefined && { gap: resolveSpacing(gap, theme.spacing) }),
+            ...(position && { position }),
+            ...(top !== undefined && { top }),
+            ...(bottom !== undefined && { bottom }),
+            ...(left !== undefined && { left }),
+            ...(right !== undefined && { right }),
+            ...(zIndex !== undefined && { zIndex }),
+            ...(width !== undefined && { width }),
+            ...(height !== undefined && { height }),
+            ...(minWidth !== undefined && { minWidth }),
+            ...(maxWidth !== undefined && { maxWidth }),
+            ...(minHeight !== undefined && { minHeight }),
+            ...(maxHeight !== undefined && { maxHeight }),
+            ...(flex !== undefined && { flex }),
+            ...(flexDirection && { flexDirection }),
+            ...(flexWrap && { flexWrap }),
+            ...(flexGrow !== undefined && { flexGrow }),
+            ...(flexShrink !== undefined && { flexShrink }),
+            ...(flexBasis !== undefined && { flexBasis }),
+            ...(alignItems && { alignItems }),
+            ...(justifyContent && { justifyContent }),
+            ...(alignSelf && { alignSelf }),
+            ...(alignContent && { alignContent }),
+            ...(backgroundColor && { backgroundColor: resolveColor(backgroundColor, theme.colors) }),
+            ...(opacity !== undefined && { opacity }),
+            ...(overflow && { overflow }),
+            ...(elevation !== undefined && { elevation }),
+            ...(shadowColor && { shadowColor }),
+            ...(shadowOpacity !== undefined && { shadowOpacity }),
+            ...(shadowRadius !== undefined && { shadowRadius }),
+            ...(shadowOffset && { shadowOffset }),
+            ...(borderRadius !== undefined && { borderRadius: resolveRadius(borderRadius, theme.radius) }),
+            ...(borderTopLeftRadius !== undefined && { borderTopLeftRadius }),
+            ...(borderTopRightRadius !== undefined && { borderTopRightRadius }),
+            ...(borderBottomLeftRadius !== undefined && { borderBottomLeftRadius }),
+            ...(borderBottomRightRadius !== undefined && { borderBottomRightRadius }),
+            ...(borderStyle && { borderStyle }),
+            ...(borderWidth !== undefined && { borderWidth }),
+            ...(borderTopWidth !== undefined && { borderTopWidth }),
+            ...(borderBottomWidth !== undefined && { borderBottomWidth }),
+            ...(borderLeftWidth !== undefined && { borderLeftWidth }),
+            ...(borderRightWidth !== undefined && { borderRightWidth }),
+            ...(borderColor && { borderColor: resolveColor(borderColor, theme.colors) }),
+        }),
+        [
+            theme,
+            padding,
+            paddingHorizontal,
+            paddingVertical,
+            paddingTop,
+            paddingBottom,
+            paddingLeft,
+            paddingRight,
+            margin,
+            marginHorizontal,
+            marginVertical,
+            marginTop,
+            marginBottom,
+            marginLeft,
+            marginRight,
+            gap,
+            flex,
+            flexDirection,
+            flexWrap,
+            flexGrow,
+            flexShrink,
+            flexBasis,
+            alignItems,
+            justifyContent,
+            alignSelf,
+            alignContent,
+            position,
+            top,
+            bottom,
+            left,
+            right,
+            zIndex,
+            width,
+            height,
+            minWidth,
+            maxWidth,
+            minHeight,
+            maxHeight,
+            backgroundColor,
+            opacity,
+            overflow,
+            elevation,
+            shadowColor,
+            shadowOpacity,
+            shadowRadius,
+            shadowOffset,
+            borderRadius,
+            borderTopLeftRadius,
+            borderTopRightRadius,
+            borderBottomLeftRadius,
+            borderBottomRightRadius,
+            borderStyle,
+            borderWidth,
+            borderTopWidth,
+            borderBottomWidth,
+            borderLeftWidth,
+            borderRightWidth,
+            borderColor,
+        ]
+    )
+}
