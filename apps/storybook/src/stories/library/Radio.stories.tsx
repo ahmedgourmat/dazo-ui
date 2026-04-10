@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { fn } from 'storybook/test'
-import { Icon, RadioGroup } from 'dazo'
+import { Icon, RadioGroup } from 'dazo-ui'
 
 const options = [
   { label: 'Starter', value: 'starter' },

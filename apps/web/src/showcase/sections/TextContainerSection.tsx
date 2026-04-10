@@ -1,7 +1,7 @@
-import { Container, Text } from 'dazo'
+import { Container, Text } from 'dazo-ui'
 import { ShowcaseSection } from '../components/ShowcaseSection'
 
-const textContainerCode = `import { Container, Text } from 'dazo'
+const textContainerCode = `import { Container, Text } from 'dazo-ui'
 
 <Text variant='title'>Title Variant</Text>
 <Text variant='subtitle'>Subtitle Variant</Text>

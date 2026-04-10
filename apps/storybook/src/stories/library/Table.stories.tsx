@@ -1,24 +1,24 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { Table } from 'dazo'
+import { Table } from 'dazo-ui'
 
 const rows = [
   {
     name: 'Ava Johnson',
     role: 'Design',
     status: 'Active',
-    email: 'ava@dazo.dev',
+    email: 'ava@dazo-ui.dev',
   },
   {
     name: 'Noah Kim',
     role: 'Engineering',
     status: 'Away',
-    email: 'noah@dazo.dev',
+    email: 'noah@dazo-ui.dev',
   },
   {
     name: 'Mia Chen',
     role: 'Marketing',
     status: 'Active',
-    email: 'mia@dazo.dev',
+    email: 'mia@dazo-ui.dev',
   },
 ]
 

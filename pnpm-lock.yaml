@@ -20,7 +20,7 @@ importers:
       '@expo-google-fonts/poppins':
         specifier: ^0.4.1
         version: 0.4.1
-      dazo:
+      dazo-ui:
         specifier: workspace:*
         version: link:../../src
       expo:
@@ -54,7 +54,7 @@ importers:
 
   apps/storybook:
     dependencies:
-      dazo:
+      dazo-ui:
         specifier: workspace:*
         version: link:../../src
       lucide-react:
@@ -151,7 +151,7 @@ importers:
       '@fontsource/poppins':
         specifier: ^5.2.7
         version: 5.2.7
-      dazo:
+      dazo-ui:
         specifier: workspace:*
         version: link:../../src
       lucide-react-native:

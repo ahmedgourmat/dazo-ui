@@ -1,5 +1,5 @@
 import type { Preview } from '@storybook/react-vite'
-import { ThemeProvider } from 'dazo'
+import { ThemeProvider } from 'dazo-ui'
 
 const preview: Preview = {
   decorators: [

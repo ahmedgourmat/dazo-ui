@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react'
-import { useTheme } from 'dazo'
+import { useTheme } from 'dazo-ui'
 
 type CodePanelProps = {
   title: string

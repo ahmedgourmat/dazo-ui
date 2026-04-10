@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native'
-import { Button, Icon } from 'dazo'
+import { Button, Icon } from 'dazo-ui'
 
 export const ButtonTest = () :React.JSX.Element => {
   return (

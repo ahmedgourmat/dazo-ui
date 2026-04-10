@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ThemeProvider } from 'dazo'
+import { ThemeProvider } from 'dazo-ui'
 import TestingButtons from './TestingButtons'
 
 function ThemeWrappedApp() {

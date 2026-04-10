@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@expo-google-fonts/poppins": "^0.4.1",
-    "dazo": "workspace:*",
+    "dazo-ui": "workspace:*",
     "expo": "~54.0.33",
     "expo-document-picker": "^14.0.8",
     "expo-font": "^55.0.4",

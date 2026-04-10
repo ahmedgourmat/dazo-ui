@@ -1,9 +1,9 @@
-import { Table } from 'dazo'
+import { Table } from 'dazo-ui'
 import { useMemo } from 'react'
 import { ShowcaseSection } from '../components/ShowcaseSection'
 import type { TeamRow } from '../types/showcase.type'
 
-const code = `import { Table } from 'dazo'
+const code = `import { Table } from 'dazo-ui'
 
 <Table
   columns={columns}

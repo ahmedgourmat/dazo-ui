@@ -1,7 +1,7 @@
-import { Button, Container, Icon } from 'dazo'
+import { Button, Container, Icon } from 'dazo-ui'
 import { ShowcaseSection } from '../components/ShowcaseSection'
 
-const buttonCode = `import { Button, Icon } from 'dazo'
+const buttonCode = `import { Button, Icon } from 'dazo-ui'
 
 <Button label='Solid' onPress={() => {}} />
 <Button variant='outline' label='Outline' onPress={() => {}} />

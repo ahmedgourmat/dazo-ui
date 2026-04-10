@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { fn } from 'storybook/test'
-import { Icon, Input } from 'dazo'
+import { Icon, Input } from 'dazo-ui'
 
 const meta = {
   title: 'Library/Input',
@@ -24,7 +24,7 @@ const meta = {
   },
   args: {
     onChangeText: fn(),
-    value: 'hello@dazo.dev',
+    value: 'hello@dazo-ui.dev',
     placeholder: 'Enter your email',
     variant: 'outline',
     editable: true,

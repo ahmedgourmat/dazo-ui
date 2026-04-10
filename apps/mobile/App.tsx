@@ -1,4 +1,4 @@
-import { Container, ThemeProvider } from 'dazo'
+import { Container, ThemeProvider } from 'dazo-ui'
 import { ButtonsSection } from './showcase/sections/ButtonsSection'
 import { FormSection } from './showcase/sections/FormSection'
 import { HeroSection } from './showcase/sections/HeroSection'
