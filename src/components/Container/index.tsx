@@ -6,6 +6,7 @@ export const Container = ({
     children,
     scrollable = false,
     style,
+    css,
     ...commonProps
 }: ContainerProps) => {
     const computed = useCommonStyles(commonProps)
@@ -14,7 +15,7 @@ export const Container = ({
     if (scrollable) {
         return (
             <ScrollView
-                contentContainerStyle={[styles.container, computed, style]}
+                contentContainerStyle={[styles.container, computed, css, style]}
             >
                 {children}
             </ScrollView>
@@ -22,7 +23,7 @@ export const Container = ({
     }
 
     return (
-        <View style={[styles.container, computed, style]}>
+        <View style={[styles.container, computed, css, style]}>
             {children}
         </View>
     )

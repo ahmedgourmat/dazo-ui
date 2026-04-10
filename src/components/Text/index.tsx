@@ -8,6 +8,15 @@ export const Text = ({
   variant = 'default',
   size,
   color,
+  fontSize,
+  fontWeight,
+  fontFamily,
+  fontStyle,
+  lineHeight,
+  textAlign,
+  textTransform,
+  textDecorationLine,
+  letterSpacing,
   lines,
   letters,
   style,
@@ -15,7 +24,20 @@ export const Text = ({
 }: TextProps) => {
 
   const commonStyles = useCommonStyles(commonProps)
-  const computedTextStyle = useTextStyles({ variant, size, color })
+  const computedTextStyle = useTextStyles({
+    variant,
+    size,
+    color,
+    fontSize,
+    fontWeight,
+    fontFamily,
+    fontStyle,
+    lineHeight,
+    textAlign,
+    textTransform,
+    textDecorationLine,
+    letterSpacing,
+  })
   const { displayText, numberOfLines } = useTextContent({
     children,
     lines,

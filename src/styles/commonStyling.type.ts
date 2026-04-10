@@ -35,6 +35,7 @@ export interface CommonProps {
     // Dimensions
     width?: number | string
     height?: number | string
+    aspectRatio?: number
     minWidth?: number | string
     maxWidth?: number | string
     minHeight?: number | string
@@ -47,11 +48,14 @@ export interface CommonProps {
     flexBasis?: number | string
     alignSelf?: 'auto' | 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline'
     alignContent?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'space-between' | 'space-around'
+    display?: 'none' | 'flex'
     flex?: number
     flexDirection?: 'row' | 'column' | 'row-reverse' | 'column-reverse'
     alignItems?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline'
     justifyContent?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly'
     gap?: SpacingValue
+    rowGap?: SpacingValue
+    columnGap?: SpacingValue
 
     // Visual
     opacity?: number
@@ -67,14 +71,19 @@ export interface CommonProps {
     borderBottomWidth?: number
     borderLeftWidth?: number
     borderRightWidth?: number
-    borderTopLeftRadius?: number
-    borderTopRightRadius?: number
-    borderBottomLeftRadius?: number
-    borderBottomRightRadius?: number
+    borderTopLeftRadius?: RadiusKey | number
+    borderTopRightRadius?: RadiusKey | number
+    borderBottomLeftRadius?: RadiusKey | number
+    borderBottomRightRadius?: RadiusKey | number
     borderStyle?: 'solid' | 'dotted' | 'dashed'
     borderRadius?: RadiusKey | number
     borderWidth?: number
     borderColor?: string
+    borderTopColor?: string
+    borderBottomColor?: string
+    borderLeftColor?: string
+    borderRightColor?: string
+    transform?: ViewStyle['transform']
 
     style?: StyleProp<ViewStyle>
 }

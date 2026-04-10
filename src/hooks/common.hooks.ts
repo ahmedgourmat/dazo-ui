@@ -49,6 +49,8 @@ export const useCommonStyles = (props: CommonProps): any => {
         marginLeft,
         marginRight,
         gap,
+        rowGap,
+        columnGap,
         flex,
         flexDirection,
         flexWrap,
@@ -59,6 +61,7 @@ export const useCommonStyles = (props: CommonProps): any => {
         justifyContent,
         alignSelf,
         alignContent,
+        display,
         position,
         top,
         bottom,
@@ -67,6 +70,7 @@ export const useCommonStyles = (props: CommonProps): any => {
         zIndex,
         width,
         height,
+        aspectRatio,
         minWidth,
         maxWidth,
         minHeight,
@@ -91,37 +95,44 @@ export const useCommonStyles = (props: CommonProps): any => {
         borderLeftWidth,
         borderRightWidth,
         borderColor,
+        borderTopColor,
+        borderBottomColor,
+        borderLeftColor,
+        borderRightColor,
+        transform,
     } = props
 
     return useMemo(
         () => ({
             ...(padding !== undefined && { padding: resolveSpacing(padding, theme.spacing) }),
-            ...(paddingHorizontal !== undefined && { 
+            ...(paddingHorizontal !== undefined && {
                 paddingLeft: resolveSpacing(paddingHorizontal, theme.spacing),
-                paddingRight: resolveSpacing(paddingHorizontal, theme.spacing)
+                paddingRight: resolveSpacing(paddingHorizontal, theme.spacing),
             }),
-            ...(paddingVertical !== undefined && { 
+            ...(paddingVertical !== undefined && {
                 paddingTop: resolveSpacing(paddingVertical, theme.spacing),
-                paddingBottom: resolveSpacing(paddingVertical, theme.spacing)
+                paddingBottom: resolveSpacing(paddingVertical, theme.spacing),
             }),
             ...(paddingTop !== undefined && { paddingTop: resolveSpacing(paddingTop, theme.spacing) }),
             ...(paddingBottom !== undefined && { paddingBottom: resolveSpacing(paddingBottom, theme.spacing) }),
             ...(paddingLeft !== undefined && { paddingLeft: resolveSpacing(paddingLeft, theme.spacing) }),
             ...(paddingRight !== undefined && { paddingRight: resolveSpacing(paddingRight, theme.spacing) }),
             ...(margin !== undefined && { margin: resolveSpacing(margin, theme.spacing) }),
-            ...(marginHorizontal !== undefined && { 
+            ...(marginHorizontal !== undefined && {
                 marginLeft: resolveSpacing(marginHorizontal, theme.spacing),
-                marginRight: resolveSpacing(marginHorizontal, theme.spacing)
+                marginRight: resolveSpacing(marginHorizontal, theme.spacing),
             }),
-            ...(marginVertical !== undefined && { 
+            ...(marginVertical !== undefined && {
                 marginTop: resolveSpacing(marginVertical, theme.spacing),
-                marginBottom: resolveSpacing(marginVertical, theme.spacing)
+                marginBottom: resolveSpacing(marginVertical, theme.spacing),
             }),
             ...(marginTop !== undefined && { marginTop: resolveSpacing(marginTop, theme.spacing) }),
             ...(marginBottom !== undefined && { marginBottom: resolveSpacing(marginBottom, theme.spacing) }),
             ...(marginLeft !== undefined && { marginLeft: resolveSpacing(marginLeft, theme.spacing) }),
             ...(marginRight !== undefined && { marginRight: resolveSpacing(marginRight, theme.spacing) }),
             ...(gap !== undefined && { gap: resolveSpacing(gap, theme.spacing) }),
+            ...(rowGap !== undefined && { rowGap: resolveSpacing(rowGap, theme.spacing) }),
+            ...(columnGap !== undefined && { columnGap: resolveSpacing(columnGap, theme.spacing) }),
             ...(position && { position }),
             ...(top !== undefined && { top }),
             ...(bottom !== undefined && { bottom }),
@@ -130,11 +141,13 @@ export const useCommonStyles = (props: CommonProps): any => {
             ...(zIndex !== undefined && { zIndex }),
             ...(width !== undefined && { width }),
             ...(height !== undefined && { height }),
+            ...(aspectRatio !== undefined && { aspectRatio }),
             ...(minWidth !== undefined && { minWidth }),
             ...(maxWidth !== undefined && { maxWidth }),
             ...(minHeight !== undefined && { minHeight }),
             ...(maxHeight !== undefined && { maxHeight }),
             ...(flex !== undefined && { flex }),
+            ...(display && { display }),
             ...(flexDirection && { flexDirection }),
             ...(flexWrap && { flexWrap }),
             ...(flexGrow !== undefined && { flexGrow }),
@@ -153,10 +166,10 @@ export const useCommonStyles = (props: CommonProps): any => {
             ...(shadowRadius !== undefined && { shadowRadius }),
             ...(shadowOffset && { shadowOffset }),
             ...(borderRadius !== undefined && { borderRadius: resolveRadius(borderRadius, theme.radius) }),
-            ...(borderTopLeftRadius !== undefined && { borderTopLeftRadius }),
-            ...(borderTopRightRadius !== undefined && { borderTopRightRadius }),
-            ...(borderBottomLeftRadius !== undefined && { borderBottomLeftRadius }),
-            ...(borderBottomRightRadius !== undefined && { borderBottomRightRadius }),
+            ...(borderTopLeftRadius !== undefined && { borderTopLeftRadius: resolveRadius(borderTopLeftRadius, theme.radius) }),
+            ...(borderTopRightRadius !== undefined && { borderTopRightRadius: resolveRadius(borderTopRightRadius, theme.radius) }),
+            ...(borderBottomLeftRadius !== undefined && { borderBottomLeftRadius: resolveRadius(borderBottomLeftRadius, theme.radius) }),
+            ...(borderBottomRightRadius !== undefined && { borderBottomRightRadius: resolveRadius(borderBottomRightRadius, theme.radius) }),
             ...(borderStyle && { borderStyle }),
             ...(borderWidth !== undefined && { borderWidth }),
             ...(borderTopWidth !== undefined && { borderTopWidth }),
@@ -164,6 +177,11 @@ export const useCommonStyles = (props: CommonProps): any => {
             ...(borderLeftWidth !== undefined && { borderLeftWidth }),
             ...(borderRightWidth !== undefined && { borderRightWidth }),
             ...(borderColor && { borderColor: resolveColor(borderColor, theme.colors) }),
+            ...(borderTopColor && { borderTopColor: resolveColor(borderTopColor, theme.colors) }),
+            ...(borderBottomColor && { borderBottomColor: resolveColor(borderBottomColor, theme.colors) }),
+            ...(borderLeftColor && { borderLeftColor: resolveColor(borderLeftColor, theme.colors) }),
+            ...(borderRightColor && { borderRightColor: resolveColor(borderRightColor, theme.colors) }),
+            ...(transform !== undefined && { transform }),
         }),
         [
             theme,
@@ -182,6 +200,8 @@ export const useCommonStyles = (props: CommonProps): any => {
             marginLeft,
             marginRight,
             gap,
+            rowGap,
+            columnGap,
             flex,
             flexDirection,
             flexWrap,
@@ -192,6 +212,7 @@ export const useCommonStyles = (props: CommonProps): any => {
             justifyContent,
             alignSelf,
             alignContent,
+            display,
             position,
             top,
             bottom,
@@ -200,6 +221,7 @@ export const useCommonStyles = (props: CommonProps): any => {
             zIndex,
             width,
             height,
+            aspectRatio,
             minWidth,
             maxWidth,
             minHeight,
@@ -224,6 +246,11 @@ export const useCommonStyles = (props: CommonProps): any => {
             borderLeftWidth,
             borderRightWidth,
             borderColor,
+            borderTopColor,
+            borderBottomColor,
+            borderLeftColor,
+            borderRightColor,
+            transform,
         ]
     )
 }
