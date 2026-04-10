@@ -3,13 +3,33 @@ import { useTheme } from '../../providers'
 import type { TextProps } from './text.type'
 
 type UseTextStylesParams = Pick<TextProps,
-    'variant' | 'size' | 'color'
+    | 'variant'
+    | 'size'
+    | 'color'
+    | 'fontSize'
+    | 'fontWeight'
+    | 'fontFamily'
+    | 'fontStyle'
+    | 'lineHeight'
+    | 'textAlign'
+    | 'textTransform'
+    | 'textDecorationLine'
+    | 'letterSpacing'
 >
 
 export const useTextStyles = ({
     variant = 'default',
     size,
-    color
+    color,
+    fontSize,
+    fontWeight,
+    fontFamily,
+    fontStyle,
+    lineHeight,
+    textAlign,
+    textTransform,
+    textDecorationLine,
+    letterSpacing,
 }: UseTextStylesParams) => {
 
     const theme = useTheme()
@@ -51,8 +71,31 @@ export const useTextStyles = ({
             ...variantStyles[variant],
             ...(size && { fontSize: theme.fontSize[size] }),
             ...(color && { color }),
+            ...(fontSize !== undefined && { fontSize }),
+            ...(fontWeight && { fontWeight }),
+            ...(fontFamily && { fontFamily }),
+            ...(fontStyle && { fontStyle }),
+            ...(lineHeight !== undefined && { lineHeight }),
+            ...(textAlign && { textAlign }),
+            ...(textTransform && { textTransform }),
+            ...(textDecorationLine && { textDecorationLine }),
+            ...(letterSpacing !== undefined && { letterSpacing }),
         }
-    }, [theme, variant, size, color])
+    }, [
+        theme,
+        variant,
+        size,
+        color,
+        fontSize,
+        fontWeight,
+        fontFamily,
+        fontStyle,
+        lineHeight,
+        textAlign,
+        textTransform,
+        textDecorationLine,
+        letterSpacing,
+    ])
 }
 
 type UseTextContentParams = Pick<TextProps, 'children' | 'lines' | 'letters'>
