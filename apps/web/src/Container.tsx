@@ -1,4 +1,4 @@
-import { Button, Container, Icon, Text } from 'dazo'
+import {  Container, Icon, Text } from 'dazo-ui'
 
 const TestingContainer = () => {
   return (

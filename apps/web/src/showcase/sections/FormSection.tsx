@@ -1,8 +1,8 @@
-import { Checkbox, FileInput, Icon, Input, RadioGroup, Select, Text } from 'dazo'
+import { Checkbox, FileInput, Icon, Input, RadioGroup, Select, Text } from 'dazo-ui'
 import { useState } from 'react'
 import { ShowcaseSection } from '../components/ShowcaseSection'
 
-const formCode = `import { Checkbox, FileInput, Icon, Input, RadioGroup, Select } from 'dazo'
+const formCode = `import { Checkbox, FileInput, Icon, Input, RadioGroup, Select } from 'dazo-ui'
 
 <Input placeholder='name@company.com' value={email} onChangeText={setEmail} />
 <Select value={plan} onChange={setPlan} options={[{ label: 'Pro', value: 'pro' }]} />

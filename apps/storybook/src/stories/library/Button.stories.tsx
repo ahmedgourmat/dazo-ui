@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { fn } from 'storybook/test'
-import { Button, Icon } from 'dazo'
+import { Button, Icon } from 'dazo-ui'
 
 const meta = {
   title: 'Library/Button',

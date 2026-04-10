@@ -1,4 +1,4 @@
-import { Container, Icon, Text } from 'dazo'
+import { Container, Icon, Text } from 'dazo-ui'
 
 export const HeroSection = (): React.JSX.Element => {
   return (
@@ -11,7 +11,7 @@ export const HeroSection = (): React.JSX.Element => {
       <Container flexDirection='row' justifyContent='space-between' alignItems='center'>
         <Container flex={1} marginRight='sm'>
           <Text variant='title' color='#ffffff' marginBottom='xs'>
-            Dazo Mobile Testing
+            dazo-ui Mobile Testing
           </Text>
           <Text color='#cbd5e1' marginBottom='sm'>
             Component playground for mobile with previews and code references.

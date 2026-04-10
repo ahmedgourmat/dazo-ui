@@ -18,7 +18,7 @@
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "@dazo/*": ["./src/*"]
+      "@dazo-ui/*": ["./src/*"]
     }
   },
   "exclude": ["node_modules", "dist", "**/.*"]

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { Container, Text } from 'dazo'
+import { Container, Text } from 'dazo-ui'
 
 const meta = {
   title: 'Library/Container',

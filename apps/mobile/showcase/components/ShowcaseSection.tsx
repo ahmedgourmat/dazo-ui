@@ -1,4 +1,4 @@
-import { Container, Text } from 'dazo'
+import { Container, Text } from 'dazo-ui'
 import type { ReactNode } from 'react'
 import { CodePanel } from './CodePanel'
 

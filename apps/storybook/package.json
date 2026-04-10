@@ -12,7 +12,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "dazo": "workspace:*",
+    "dazo-ui": "workspace:*",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-native-web": "^0.21.0",

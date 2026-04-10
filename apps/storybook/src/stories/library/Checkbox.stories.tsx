@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { fn } from 'storybook/test'
-import { Checkbox, Icon } from 'dazo'
+import { Checkbox, Icon } from 'dazo-ui'
 
 const meta = {
   title: 'Library/Checkbox',

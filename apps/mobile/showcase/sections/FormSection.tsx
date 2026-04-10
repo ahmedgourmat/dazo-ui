@@ -1,9 +1,9 @@
-import { Checkbox, FileInput, Icon, Input, RadioGroup, Select, Text } from 'dazo'
+import { Checkbox, FileInput, Icon, Input, RadioGroup, Select, Text } from 'dazo-ui'
 import * as DocumentPicker from 'expo-document-picker'
 import { useState } from 'react'
 import { ShowcaseSection } from '../components/ShowcaseSection'
 
-const code = `import { Checkbox, FileInput, Input, RadioGroup, Select } from 'dazo'
+const code = `import { Checkbox, FileInput, Input, RadioGroup, Select } from 'dazo-ui'
 
 <Input value={email} onChangeText={setEmail} />
 <Select value={plan} onChange={setPlan} options={plans} />

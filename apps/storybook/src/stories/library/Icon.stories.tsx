@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { Icon } from 'dazo'
+import { Icon } from 'dazo-ui'
 
 const meta = {
   title: 'Library/Icon',
