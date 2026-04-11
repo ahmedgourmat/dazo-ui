@@ -21,7 +21,7 @@ export const TextContainerSection = () => {
       codeTitle='text-container.tsx'
       code={textContainerCode}
     >
-      <Text variant='title' marginBottom='xs'>
+      <Text fontSize={22} variant='title' marginBottom='xs'>
         Title Variant
       </Text>
       <Text variant='subtitle' marginBottom='xs'>
