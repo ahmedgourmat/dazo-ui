@@ -1,6 +1,5 @@
 import type { StyleProp, ViewStyle } from 'react-native'
 import { RadiusKey, SpacingValue } from 'styles/tokens'
-
 export interface CommonProps {
     children?: React.ReactNode
 
