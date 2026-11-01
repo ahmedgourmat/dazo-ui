@@ -84,6 +84,15 @@ export const FormSection = () => {
           { label: 'Starter Plan', value: 'starter', icon: <Icon name='Leaf' size={16} /> },
           { label: 'Pro Plan', value: 'pro', icon: <Icon name='Zap' size={16} /> },
           { label: 'Enterprise', value: 'enterprise', icon: <Icon name='Building2' size={16} /> },
+          { label: 'Enterprise', value: 'enterprise', icon: <Icon name='Building2' size={16} /> },
+          { label: 'Enterprise', value: 'enterprise', icon: <Icon name='Building2' size={16} /> },
+          { label: 'Enterprise', value: 'enterprise', icon: <Icon name='Building2' size={16} /> },
+          { label: 'Enterprise', value: 'enterprise', icon: <Icon name='Building2' size={16} /> },
+          { label: 'Enterprise', value: 'enterprise', icon: <Icon name='Building2' size={16} /> },
+          { label: 'Enterprise', value: 'enterprise', icon: <Icon name='Building2' size={16} /> },
+          { label: 'Enterprise', value: 'enterprise', icon: <Icon name='Building2' size={16} /> },
+          { label: 'Pro Plan', value: 'pro', icon: <Icon name='Zap' size={16} /> },
+
         ]}
         leftIcon={<Icon name='Layers' size={16} />}
         marginBottom='md'

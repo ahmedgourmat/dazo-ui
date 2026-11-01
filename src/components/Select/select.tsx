@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Modal, Pressable, StyleSheet, Text, View } from 'react-native'
+import { FlatList, Modal, Pressable, StyleSheet, Text, View } from 'react-native'
 import { useTheme } from '../../providers'
 import { useCommonStyles } from 'hooks/common.hooks'
 import type { SelectProps, SelectOption } from './select.type'
@@ -75,28 +75,32 @@ export const Select = ({
               },
             ]}
           >
-            {options.map((option) => {
-              const isSelected = option.value === value
+            <FlatList
+              data={options}
+              keyExtractor={(item) => item.value}
+              keyboardShouldPersistTaps="handled"
+              renderItem={({ item }) => {
+                const isSelected = item.value === value
 
-              return (
-                <Pressable
-                  key={option.value}
-                  disabled={option.disabled}
-                  onPress={() => {
-                    onChange?.(option.value)
-                    setOpen(false)
-                  }}
-                  style={[
-                    styles.option,
-                    isSelected && { backgroundColor: theme.colors.backgroundSunken },
-                    option.disabled && { opacity: 0.5 },
-                  ]}
-                >
-                  {option.icon ? <View style={styles.optionIcon}>{option.icon}</View> : null}
-                  <Text style={{ color: theme.colors.textPrimary, fontFamily: theme.fontFamily.regular }}>{option.label}</Text>
-                </Pressable>
-              )
-            })}
+                return (
+                  <Pressable
+                    disabled={item.disabled}
+                    onPress={() => {
+                      onChange?.(item.value)
+                      setOpen(false)
+                    }}
+                    style={[
+                      styles.option,
+                      isSelected && { backgroundColor: theme.colors.backgroundSunken },
+                      item.disabled && { opacity: 0.5 },
+                    ]}
+                  >
+                    {item.icon ? <View style={styles.optionIcon}>{item.icon}</View> : null}
+                    <Text style={{ color: theme.colors.textPrimary, fontFamily: theme.fontFamily.regular }}>{item.label}</Text>
+                  </Pressable>
+                )
+              }}
+            />
           </Pressable>
         </Pressable>
       </Modal>
