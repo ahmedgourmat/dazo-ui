@@ -1,7 +1,7 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, type JSX } from 'react'
 import { FlatList, Modal, Pressable, StyleSheet, Text, View } from 'react-native'
 import { useTheme } from '../../providers'
-import { useCommonStyles } from 'hooks/common.hooks'
+import { useCommonStyles } from '../../hooks/common.hooks'
 import type { SelectProps, SelectOption } from './select.type'
 
 export const Select = ({
@@ -16,7 +16,7 @@ export const Select = ({
   style,
   labelStyle,
   ...commonProps
-}: SelectProps) => {
+}: SelectProps): JSX.Element => {
   const theme = useTheme()
   const commonStyles = useCommonStyles(commonProps)
   const [open, setOpen] = useState(false)

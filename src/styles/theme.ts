@@ -1,9 +1,41 @@
-import { tokens } from './tokens'
+import { tokens, type Tokens } from './tokens'
 
-// this is the shape every component reads from
+export type ThemeMode = 'light' | 'dark'
+
+export interface ThemeColors {
+  background: string
+  backgroundSurface: string
+  backgroundSunken: string
+  textPrimary: string
+  textSecondary: string
+  textDisabled: string
+  textInverse: string
+  primary: string
+  primaryLight: string
+  primaryDark: string
+  border: string
+  borderStrong: string
+  danger: string
+  success: string
+  warning: string
+}
+
+// this is the shape every component reads from (what useTheme() returns)
+// every component types against this, never against raw tokens
+export interface Theme {
+  mode: ThemeMode
+  colors: ThemeColors
+  spacing: Tokens['spacing']
+  radius: Tokens['radius']
+  fontSize: Tokens['fontSize']
+  fontWeight: Tokens['fontWeight']
+  fontFamily: Tokens['fontFamily']
+  lineHeight: Tokens['lineHeight']
+}
+
 // semantic names — not raw values
-const buildTheme = (mode: 'light' | 'dark') => ({
-  mode,
+const buildTheme = (mode: ThemeMode): Theme => ({
+  mode: mode,
   colors: {
     // backgrounds - Material logic: elevated surfaces are lighter in dark mode
     background:        mode === 'light' ? tokens.colors.white      : tokens.colors.black900,
@@ -38,9 +70,5 @@ const buildTheme = (mode: 'light' | 'dark') => ({
   lineHeight: tokens.lineHeight,
 })
 
-export const lightTheme = buildTheme('light')
-export const darkTheme  = buildTheme('dark')
-
-// this type is what useTheme() returns
-// every component types against this, never against raw tokens
-export type Theme = ReturnType<typeof buildTheme>
+export const lightTheme: Theme = buildTheme('light')
+export const darkTheme: Theme  = buildTheme('dark')

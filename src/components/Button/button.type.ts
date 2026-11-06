@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import type { StyleProp, TextStyle, ViewStyle } from "react-native";
-import type { CommonProps } from 'styles/commonStyling.type'
+import type { CommonProps } from '../../styles/commonStyling.type'
 
 export interface ButtonProps extends Omit<CommonProps, 'children' | 'scrollable' | 'style'> {
     label: string;

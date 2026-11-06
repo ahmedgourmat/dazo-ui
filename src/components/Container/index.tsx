@@ -1,6 +1,7 @@
+import type { JSX } from 'react'
 import { View, ScrollView, StyleSheet } from 'react-native'
 import type { ContainerProps } from './container.type'
-import { useCommonStyles } from 'hooks/common.hooks'
+import { useCommonStyles } from '../../hooks/common.hooks'
 
 export const Container = ({
     children,
@@ -8,7 +9,7 @@ export const Container = ({
     style,
     css,
     ...commonProps
-}: ContainerProps) => {
+}: ContainerProps): JSX.Element => {
     const computed = useCommonStyles(commonProps)
 
 

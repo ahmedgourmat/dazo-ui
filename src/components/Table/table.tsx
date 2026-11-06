@@ -1,7 +1,7 @@
-import { isValidElement, type ReactNode } from 'react'
+import { isValidElement, type ReactNode, type JSX } from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useTheme } from '../../providers'
-import { useCommonStyles } from 'hooks/common.hooks'
+import { useCommonStyles } from '../../hooks/common.hooks'
 import type { TableAlign, TableColumn, TableProps } from './table.type'
 
 const applyOpacityToColor = (color: string, opacity: number) => {
@@ -91,7 +91,7 @@ export const Table = <T extends Record<string, unknown>>({
   rowStyle,
   cellTextStyle,
   ...commonProps
-}: TableProps<T>) => {
+}: TableProps<T>): JSX.Element => {
   const theme = useTheme()
   const commonStyles = useCommonStyles(commonProps)
   const useStripedRows = stripedRow ?? striped

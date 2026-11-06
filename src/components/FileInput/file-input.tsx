@@ -1,7 +1,7 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, type JSX } from 'react'
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import { useTheme } from '../../providers'
-import { useCommonStyles } from 'hooks/common.hooks'
+import { useCommonStyles } from '../../hooks/common.hooks'
 import type { FileInputProps, PickedFile } from './file-input.type'
 
 export const FileInput = ({
@@ -19,7 +19,7 @@ export const FileInput = ({
   labelStyle,
   customPicker,
   ...commonProps
-}: FileInputProps) => {
+}: FileInputProps): JSX.Element => {
   const theme = useTheme()
   const commonStyles = useCommonStyles(commonProps)
   const [selectedFiles, setSelectedFiles] = useState<PickedFile[]>([])

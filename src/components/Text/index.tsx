@@ -1,5 +1,6 @@
+import type { JSX } from 'react'
 import { StyleSheet, Text as RNText } from 'react-native'
-import { useCommonStyles } from 'hooks/common.hooks'
+import { useCommonStyles } from '../../hooks/common.hooks'
 import type { TextProps } from './text.type'
 import { useTextContent, useTextStyles } from './text.hooks'
 
@@ -21,7 +22,7 @@ export const Text = ({
   letters,
   style,
   ...commonProps
-}: TextProps) => {
+}: TextProps): JSX.Element => {
 
   const commonStyles = useCommonStyles(commonProps)
   const computedTextStyle = useTextStyles({

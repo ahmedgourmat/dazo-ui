@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import type { CommonProps } from 'styles/commonStyling.type'
+import type { CommonProps } from '../../styles/commonStyling.type'
 import type { StyleProp, TextStyle, ViewStyle } from 'react-native'
 
 export type SelectOption = {

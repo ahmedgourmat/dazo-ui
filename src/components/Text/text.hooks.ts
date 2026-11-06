@@ -1,4 +1,5 @@
-import { useMemo } from 'react'
+import { useMemo, type ReactNode } from 'react'
+import type { TextStyle } from 'react-native'
 import { useTheme } from '../../providers'
 import type { TextProps } from './text.type'
 
@@ -30,7 +31,7 @@ export const useTextStyles = ({
     textTransform,
     textDecorationLine,
     letterSpacing,
-}: UseTextStylesParams) => {
+}: UseTextStylesParams): TextStyle => {
 
     const theme = useTheme()
     const modeTextColor = theme.colors.textPrimary
@@ -100,11 +101,16 @@ export const useTextStyles = ({
 
 type UseTextContentParams = Pick<TextProps, 'children' | 'lines' | 'letters'>
 
+export type TextContent = {
+    displayText: ReactNode
+    numberOfLines: number | undefined
+}
+
 export const useTextContent = ({
     children,
     lines,
     letters,
-}: UseTextContentParams) => {
+}: UseTextContentParams): TextContent => {
     return useMemo(() => {
         const safeLines =
             typeof lines === 'number' && lines > 0

@@ -15,11 +15,7 @@
     "noEmit": false,
     "declaration": true,
     "declarationMap": true,
-    "sourceMap": true,
-    "baseUrl": ".",
-    "paths": {
-      "@dazo-ui/*": ["./src/*"]
-    }
+    "sourceMap": true
   },
   "exclude": ["node_modules", "dist", "**/.*"]
 }
