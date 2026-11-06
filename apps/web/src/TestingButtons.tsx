@@ -11,7 +11,7 @@ const TestingButtons = () => {
       scrollable
       padding='xl'
     >
-      <Container style={{ width: '100%', alignSelf: 'center' } as any}>
+      <Container width='100%' alignSelf='center'>
         <HeroSection />
         <ButtonsSection />
         <TextContainerSection />
