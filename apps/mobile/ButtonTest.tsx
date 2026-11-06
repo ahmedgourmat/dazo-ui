@@ -1,15 +1,11 @@
 import { View, Text } from 'react-native'
-import { Button, Icon } from 'dazo-ui'
+import { Button } from 'dazo-ui'
 
 export const ButtonTest = () :React.JSX.Element => {
   return (
     <View style={{ gap: 12 }}>
-    <Icon
-      name="AlarmClock"
-      color='red'
-    />
       <Text>Variants</Text>
-      <Button variant='solid'   size='md' label='Solid'   onPress={() => {console.log("solid,md")}} fullWidth={true} leftIcon={<Icon name="ActivityIcon"/>} rightIcon={<Icon name="ActivityIcon"/>}/>
+      <Button variant='solid'   size='md' label='Solid'   onPress={() => {console.log("solid,md")}} fullWidth={true} />
       <Button variant='outline' size='md' label='Outline' onPress={() => {console.log("outline,md")}} />
       <Button variant='ghost'   size='md' label='Ghost'   onPress={() => {console.log("Ghost,md")}} />
 

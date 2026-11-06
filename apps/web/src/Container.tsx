@@ -1,4 +1,4 @@
-import {  Container, Icon, Text } from 'dazo-ui'
+import {  Container, Text } from 'dazo-ui'
 
 const TestingContainer = () => {
   return (
@@ -12,10 +12,6 @@ const TestingContainer = () => {
       paddingBottom={300}
       width={400}
     >
-      <Icon
-        name="AlignLeftIcon"
-        color="red"
-      />
       <Text
         color='black'
         variant="title"

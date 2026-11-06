@@ -15,9 +15,7 @@
     "dazo-ui": "workspace:*",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "react-native-web": "^0.21.0",
-    "react-native-svg": "^15.15.4",
-    "lucide-react": "^0.475.0"
+    "react-native-web": "^0.21.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",

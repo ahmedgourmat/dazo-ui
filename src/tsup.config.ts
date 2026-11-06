@@ -12,10 +12,7 @@ export default defineConfig({
     'react',
     'react-native',
     'react-native-web',
-    'react-native-svg',
     'expo-document-picker',
-    'lucide-react-native',
-    'lucide-react',
   ],
   esbuildOptions(options) {
     options.jsx = 'automatic'

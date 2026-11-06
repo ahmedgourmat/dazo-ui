@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { fn } from 'storybook/test'
-import { Icon, Select } from 'dazo-ui'
+import { Select } from 'dazo-ui'
 
 const options = [
   { label: 'Design', value: 'design' },
@@ -49,8 +49,6 @@ export const Playground: Story = {
       <Select
         {...args}
         value={value}
-        leftIcon={<Icon name="Layers3" size={16} />}
-        rightIcon={<Icon name="ChevronDown" size={16} />}
         onChange={(nextValue) => {
           setValue(nextValue)
           args.onChange?.(nextValue)

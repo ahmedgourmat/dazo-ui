@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { fn } from 'storybook/test'
-import { Checkbox, Icon } from 'dazo-ui'
+import { Checkbox } from 'dazo-ui'
 
 const meta = {
   title: 'Library/Checkbox',
@@ -58,7 +58,6 @@ export const Playground: Story = {
           setChecked(nextChecked)
           args.onChange?.(nextChecked)
         }}
-        icon={<Icon name="Check" size={14} />}
       />
     )
   },

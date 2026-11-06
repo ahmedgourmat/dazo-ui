@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { fn } from 'storybook/test'
-import { Icon, Input } from 'dazo-ui'
+import { Input } from 'dazo-ui'
 
 const meta = {
   title: 'Library/Input',
@@ -43,8 +43,6 @@ export const Playground: Story = {
       <Input
         {...args}
         value={value}
-        leftIcon={<Icon name="Mail" size={16} />}
-        rightIcon={<Icon name="ArrowRight" size={16} />}
         onChangeText={(nextValue) => {
           setValue(nextValue)
           args.onChangeText?.(nextValue)

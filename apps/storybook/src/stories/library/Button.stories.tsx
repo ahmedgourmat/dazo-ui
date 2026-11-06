@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { fn } from 'storybook/test'
-import { Button, Icon } from 'dazo-ui'
+import { Button } from 'dazo-ui'
 
 const meta = {
   title: 'Library/Button',
@@ -51,8 +51,6 @@ export const Playground: Story = {
   render: (args) => (
     <Button
       {...args}
-      leftIcon={<Icon name="Sparkles" size={16} />}
-      rightIcon={<Icon name="ArrowRight" size={16} />}
     />
   ),
 }
