@@ -7,7 +7,9 @@
     "start": "expo start --offline",
     "android": "expo start --offline --android",
     "ios": "expo start --offline --ios",
-    "web": "expo start --offline --web"
+    "web": "expo start --offline --web",
+    "typecheck": "tsc --noEmit",
+    "bundle:android": "expo export --platform android --output-dir dist"
   },
   "dependencies": {
     "@expo-google-fonts/poppins": "^0.4.1",

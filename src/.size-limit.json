@@ -1,0 +1,26 @@
+[
+  {
+    "name": "web: whole library",
+    "path": "dist/web/index.js",
+    "import": "*",
+    "limit": "7.5 kB"
+  },
+  {
+    "name": "web: Button only",
+    "path": "dist/web/index.js",
+    "import": "{ Button }",
+    "limit": "3 kB"
+  },
+  {
+    "name": "native: whole library",
+    "path": "dist/native/index.js",
+    "import": "*",
+    "limit": "7.5 kB"
+  },
+  {
+    "name": "native: Button only",
+    "path": "dist/native/index.js",
+    "import": "{ Button }",
+    "limit": "3 kB"
+  }
+]

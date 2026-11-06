@@ -16,6 +16,16 @@
     },
     "typecheck": {
       "dependsOn": ["^build"]
+    },
+    "check:package": {
+      "dependsOn": ["build"]
+    },
+    "size": {
+      "dependsOn": ["build"]
+    },
+    "bundle:android": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
     }
   }
 }
