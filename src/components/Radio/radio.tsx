@@ -1,6 +1,7 @@
+import type { JSX } from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { useTheme } from '../../providers'
-import { useCommonStyles } from 'hooks/common.hooks'
+import { useCommonStyles } from '../../hooks/common.hooks'
 import type { RadioGroupProps } from './radio.type'
 
 export const RadioGroup = ({
@@ -14,7 +15,7 @@ export const RadioGroup = ({
     circleColor,
     labelStyle,
     ...commonProps
-}: RadioGroupProps) => {
+}: RadioGroupProps): JSX.Element => {
     const theme = useTheme()
     const commonStyles = useCommonStyles(commonProps)
     const resolvedTextColor = textColor ?? theme.colors.textPrimary

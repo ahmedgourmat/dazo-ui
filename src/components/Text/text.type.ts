@@ -1,5 +1,5 @@
 import type { StyleProp, TextStyle } from 'react-native'
-import type { CommonProps } from 'styles/commonStyling.type'
+import type { CommonProps } from '../../styles/commonStyling.type'
 
 export interface TextProps extends Omit<CommonProps, 'style' | 'scrollable'> {
     children?: React.ReactNode

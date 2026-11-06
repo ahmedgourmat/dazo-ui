@@ -1,5 +1,5 @@
 import type { StyleProp, ViewStyle } from 'react-native'
-import { RadiusKey, SpacingValue } from 'styles/tokens'
+import type { RadiusKey, SpacingValue } from './tokens'
 export interface CommonProps {
     children?: React.ReactNode
 

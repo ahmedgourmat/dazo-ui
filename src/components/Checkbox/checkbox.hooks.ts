@@ -1,5 +1,11 @@
 import { useMemo } from 'react'
+import type { TextStyle, ViewStyle } from 'react-native'
 import { useTheme } from '../../providers'
+
+export type CheckboxStyles = {
+  boxStyle: ViewStyle
+  checkmarkStyle: TextStyle
+}
 import type { CheckboxProps } from './checkbox.type'
 
 type UseCheckboxStylesParams = Pick<
@@ -14,11 +20,11 @@ export const useCheckboxStyles = ({
   uncheckedColor,
   checkmarkColor,
   checkboxSize = 20,
-}: UseCheckboxStylesParams) => {
+}: UseCheckboxStylesParams): CheckboxStyles => {
   const theme = useTheme()
 
   return useMemo(() => {
-    const baseBoxStyle = {
+    const baseBoxStyle: ViewStyle = {
       width: checkboxSize,
       height: checkboxSize,
       borderRadius: 6,
@@ -36,7 +42,7 @@ export const useCheckboxStyles = ({
       opacity: disabled ? 0.5 : 1,
     }
 
-    const checkmarkStyle = {
+    const checkmarkStyle: TextStyle = {
       color: checkmarkColor || theme.colors.textInverse,
       fontSize: checkboxSize * 0.65,
       fontWeight: '700' as const,
@@ -54,7 +60,7 @@ type UseCheckboxLabelStylesParams = Pick<CheckboxProps, 'disabled' | 'textColor'
 export const useCheckboxLabelStyles = ({
   disabled = false,
   textColor,
-}: UseCheckboxLabelStylesParams) => {
+}: UseCheckboxLabelStylesParams): TextStyle => {
   const theme = useTheme()
 
   return useMemo(() => {

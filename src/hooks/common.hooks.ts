@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import type { ViewStyle } from 'react-native'
-import { useTheme } from 'providers'
-import type { CommonProps } from 'styles/commonStyling.type'
-import type { Theme } from 'styles/theme'
-import type { RadiusKey, SpacingValue } from 'styles/tokens'
+import { useTheme } from '../providers'
+import type { CommonProps } from '../styles/commonStyling.type'
+import type { Theme } from '../styles/theme'
+import type { RadiusKey, SpacingValue } from '../styles/tokens'
 
 const resolveSpacing = (
     value: SpacingValue | undefined,

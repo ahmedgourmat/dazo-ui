@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import type { CommonProps } from 'styles/commonStyling.type'
+import type { CommonProps } from '../../styles/commonStyling.type'
 import type { StyleProp, TextInputProps, TextStyle, ViewStyle } from 'react-native'
 
 type NativeInputProps = Omit<TextInputProps, 'style' | 'value' | 'onChangeText'>

@@ -1,4 +1,4 @@
-import { Checkbox, FileInput, Icon, Input, RadioGroup, Select, Text } from 'dazo-ui'
+import { Checkbox, FileInput, Input, RadioGroup, Select, Text } from 'dazo-ui'
 import * as DocumentPicker from 'expo-document-picker'
 import { useState } from 'react'
 import { ShowcaseSection } from '../components/ShowcaseSection'
@@ -31,7 +31,6 @@ export const FormSection = (): React.JSX.Element => {
         placeholder='name@company.com'
         value={email}
         onChangeText={setEmail}
-        leftIcon={<Icon name='Mail' color='#475569' size={16} />}
         marginBottom='sm'
       />
 
@@ -40,8 +39,6 @@ export const FormSection = (): React.JSX.Element => {
         variant='outline'
         value={search}
         onChangeText={setSearch}
-        leftIcon={<Icon name='Search' color='#475569' size={16} />}
-        rightIcon={<Icon name='SlidersHorizontal' color='#475569' size={16} />}
         marginBottom='sm'
       />
 
@@ -60,7 +57,6 @@ export const FormSection = (): React.JSX.Element => {
         checked={newsletter}
         onChange={setNewsletter}
         checkedColor='#059669'
-        icon={<Icon name='Bell' size={16} color='#059669' />}
         marginBottom='md'
       />
 
@@ -69,11 +65,10 @@ export const FormSection = (): React.JSX.Element => {
         value={selectedPlan}
         onChange={setSelectedPlan}
         options={[
-          { label: 'Starter', value: 'starter', icon: <Icon name='Leaf' size={16} color='#166534' /> },
-          { label: 'Pro', value: 'pro', icon: <Icon name='Zap' size={16} color='#1d4ed8' /> },
-          { label: 'Enterprise', value: 'enterprise', icon: <Icon name='Building2' size={16} color='#7c2d12' /> },
+          { label: 'Starter', value: 'starter' },
+          { label: 'Pro', value: 'pro' },
+          { label: 'Enterprise', value: 'enterprise' },
         ]}
-        leftIcon={<Icon name='Layers' size={16} color='#334155' />}
         marginBottom='md'
       />
 
@@ -95,7 +90,6 @@ export const FormSection = (): React.JSX.Element => {
         placeholder='Select one or more files'
         accept='image/*,application/pdf'
         multiple
-        rightIcon={<Icon name='Upload' size={16} color='#334155' />}
         customPicker={async () => {
           const result = await DocumentPicker.getDocumentAsync({
             multiple: true,

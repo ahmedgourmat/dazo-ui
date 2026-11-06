@@ -4,6 +4,12 @@ import { useTheme } from '../../providers'
 
 type InputVariant = 'solid' | 'outline' | 'ghost'
 
+export type InputStyles = {
+  container: ViewStyle
+  input: TextStyle
+  placeholderColor: string
+}
+
 type UseInputStylesParams = {
   variant?: InputVariant
   editable?: boolean
@@ -14,7 +20,7 @@ export const useInputStyles = ({
   variant = 'outline',
   editable = true,
   textColor,
-}: UseInputStylesParams) => {
+}: UseInputStylesParams): InputStyles => {
   const theme = useTheme()
   const modeTextColor = theme.colors.textPrimary
 

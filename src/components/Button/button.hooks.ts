@@ -2,7 +2,21 @@
 import { useMemo } from 'react'
 import { useTheme } from '../../providers'
 import type { ButtonProps } from './button.type'
-import { ViewStyle } from 'react-native'
+import type { TextStyle, ViewStyle } from 'react-native'
+
+export type ButtonSizeStyle = {
+    maxHeight: number
+    paddingVertical: number
+    paddingHorizontal: number
+    fontSize: number
+}
+
+export type ButtonStyles = {
+    container: ViewStyle
+    label: TextStyle
+    indicator: string
+    currentSize: ButtonSizeStyle
+}
 
 type UseButtonStylesParams = Pick<ButtonProps,
     'variant' | 'size' | 'disabled' | 'fullWidth'
@@ -13,7 +27,7 @@ export const useButtonStyles = ({
     size = 'md',
     disabled = false,
     fullWidth = false,
-}: UseButtonStylesParams) => {
+}: UseButtonStylesParams): ButtonStyles => {
 
     const theme = useTheme()
 

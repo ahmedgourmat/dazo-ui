@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { fn } from 'storybook/test'
-import { Icon, RadioGroup } from 'dazo-ui'
+import { RadioGroup } from 'dazo-ui'
 
 const options = [
   { label: 'Starter', value: 'starter' },
@@ -66,9 +66,9 @@ export const RowLayout: Story = {
     direction: 'row',
     value: 'starter',
     options: [
-      { label: 'Daily', value: 'daily', icon: <Icon name="CalendarDays" size={14} /> },
-      { label: 'Weekly', value: 'weekly', icon: <Icon name="CalendarRange" size={14} /> },
-      { label: 'Monthly', value: 'monthly', icon: <Icon name="CalendarClock" size={14} /> },
+      { label: 'Daily', value: 'daily' },
+      { label: 'Weekly', value: 'weekly' },
+      { label: 'Monthly', value: 'monthly' },
     ],
   },
 }

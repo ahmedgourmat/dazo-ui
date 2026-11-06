@@ -17,7 +17,6 @@ Dazo UI provides reusable, theme-aware primitives and form controls that let tea
 - Checkbox
 - Container
 - FileInput
-- Icon
 - Input
 - Radio
 - Select
@@ -31,16 +30,12 @@ Install the package plus the peer dependencies for your platform.
 ### React Native (Expo)
 
 ```bash
-pnpm add dazo-ui lucide-react-native
-npx expo install react-native-svg
+pnpm add dazo-ui
 ```
 
-`lucide-react-native` draws icons with `react-native-svg`. Installing it with `npx expo install` picks the version that matches your Expo SDK.
-
-If your Expo app also runs on web, add the web packages too. Without `lucide-react`, the web build fails with `Unable to resolve module lucide-react`.
+If your Expo app also runs on web, add the web packages too:
 
 ```bash
-pnpm add lucide-react
 npx expo install react-dom react-native-web @expo/metro-runtime
 ```
 
@@ -49,7 +44,7 @@ FileInput has no built-in native picker yet. On iOS and Android, pass your own p
 ### React Web (Vite/Next)
 
 ```bash
-pnpm add dazo-ui react-native-web lucide-react
+pnpm add dazo-ui react-native-web
 ```
 
 For Next.js, add React Native aliasing in next.config.ts:
@@ -177,10 +172,12 @@ pnpm --filter storybook storybook
 | react | >= 19.0.0 | All platforms |
 | react-native | >= 0.81.5 | All platforms (web apps alias it to react-native-web, but the type definitions still use its types) |
 | react-native-web | >= 0.19.0 | Web only (optional peer) |
-| lucide-react | >= 0.300.0 | Web only (optional peer) |
-| lucide-react-native | >= 0.300.0 | iOS and Android only (optional peer; also needs react-native-svg) |
 
-Optional peers aren't installed or checked automatically, so install the ones for your platform as shown in [Installation](#installation).
+Optional peers aren't installed or checked automatically, so web apps need to install `react-native-web` as shown in [Installation](#installation).
+
+## Icons
+
+Dazo UI doesn't ship an icon set. Components that show icons (`leftIcon`, `rightIcon`, `icon`) accept any React node, so you can pass icons from any library or your own components.
 
 ## Notes
 

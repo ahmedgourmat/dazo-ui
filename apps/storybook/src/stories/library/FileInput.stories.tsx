@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { fn } from 'storybook/test'
-import { FileInput, Icon } from 'dazo-ui'
+import { FileInput } from 'dazo-ui'
 
 const meta = {
   title: 'Library/FileInput',
@@ -45,8 +45,6 @@ export const Playground: Story = {
   render: (args) => (
     <FileInput
       {...args}
-      leftIcon={<Icon name="Upload" size={16} />}
-      rightIcon={<Icon name="FileText" size={16} />}
     />
   ),
 }

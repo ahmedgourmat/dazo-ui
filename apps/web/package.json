@@ -12,10 +12,8 @@
   "dependencies": {
     "@fontsource/poppins": "^5.2.7",
     "dazo-ui": "workspace:*",
-    "lucide-react-native": "^1.7.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "react-native-svg": "^15.15.4",
     "react-native-web": "^0.21.0"
   },
   "devDependencies": {

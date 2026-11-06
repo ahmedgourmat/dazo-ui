@@ -1,8 +1,8 @@
-import { Checkbox, FileInput, Icon, Input, RadioGroup, Select, Text } from 'dazo-ui'
+import { Checkbox, FileInput, Input, RadioGroup, Select, Text } from 'dazo-ui'
 import { useState } from 'react'
 import { ShowcaseSection } from '../components/ShowcaseSection'
 
-const formCode = `import { Checkbox, FileInput, Icon, Input, RadioGroup, Select } from 'dazo-ui'
+const formCode = `import { Checkbox, FileInput, Input, RadioGroup, Select } from 'dazo-ui'
 
 <Input placeholder='name@company.com' value={email} onChangeText={setEmail} />
 <Select value={plan} onChange={setPlan} options={[{ label: 'Pro', value: 'pro' }]} />
@@ -32,7 +32,6 @@ export const FormSection = () => {
         placeholder='name@company.com'
         value={email}
         onChangeText={setEmail}
-        leftIcon={<Icon name='Mail' size={16} />}
         marginBottom='sm'
       />
 
@@ -41,8 +40,6 @@ export const FormSection = () => {
         variant='outline'
         value={search}
         onChangeText={setSearch}
-        leftIcon={<Icon name='Search' size={16} />}
-        rightIcon={<Icon name='SlidersHorizontal' size={16} />}
         marginBottom='sm'
       />
 
@@ -66,7 +63,6 @@ export const FormSection = () => {
         label='Subscribe to newsletter'
         checked={newsletter}
         onChange={setNewsletter}
-        icon={<Icon name='Bell' size={16} />}
         marginBottom='xs'
       />
       <Checkbox
@@ -81,20 +77,19 @@ export const FormSection = () => {
         value={selectedPlan}
         onChange={setSelectedPlan}
         options={[
-          { label: 'Starter Plan', value: 'starter', icon: <Icon name='Leaf' size={16} /> },
-          { label: 'Pro Plan', value: 'pro', icon: <Icon name='Zap' size={16} /> },
-          { label: 'Enterprise', value: 'enterprise', icon: <Icon name='Building2' size={16} /> },
-          { label: 'Enterprise', value: 'enterprise', icon: <Icon name='Building2' size={16} /> },
-          { label: 'Enterprise', value: 'enterprise', icon: <Icon name='Building2' size={16} /> },
-          { label: 'Enterprise', value: 'enterprise', icon: <Icon name='Building2' size={16} /> },
-          { label: 'Enterprise', value: 'enterprise', icon: <Icon name='Building2' size={16} /> },
-          { label: 'Enterprise', value: 'enterprise', icon: <Icon name='Building2' size={16} /> },
-          { label: 'Enterprise', value: 'enterprise', icon: <Icon name='Building2' size={16} /> },
-          { label: 'Enterprise', value: 'enterprise', icon: <Icon name='Building2' size={16} /> },
-          { label: 'Pro Plan', value: 'pro', icon: <Icon name='Zap' size={16} /> },
+          { label: 'Starter Plan', value: 'starter' },
+          { label: 'Pro Plan', value: 'pro' },
+          { label: 'Enterprise', value: 'enterprise' },
+          { label: 'Enterprise', value: 'enterprise' },
+          { label: 'Enterprise', value: 'enterprise' },
+          { label: 'Enterprise', value: 'enterprise' },
+          { label: 'Enterprise', value: 'enterprise' },
+          { label: 'Enterprise', value: 'enterprise' },
+          { label: 'Enterprise', value: 'enterprise' },
+          { label: 'Enterprise', value: 'enterprise' },
+          { label: 'Pro Plan', value: 'pro' },
 
         ]}
-        leftIcon={<Icon name='Layers' size={16} />}
         marginBottom='md'
       />
 
@@ -114,8 +109,6 @@ export const FormSection = () => {
         placeholder='Select one or more files'
         accept='image/*,application/pdf'
         multiple
-        leftIcon={<Icon name='Upload' size={16} />}
-        rightIcon={<Icon name='Upload' size={16} />}
         onFilesSelected={(files) => {
           setPickedFileNames(files.map((file) => file.name).join(', '))
         }}

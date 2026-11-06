@@ -3,7 +3,9 @@ import { Pressable, View, Text, StyleSheet } from 'react-native'
 import { useCheckboxStyles, useCheckboxLabelStyles } from './checkbox.hooks'
 import type { CheckboxProps } from './checkbox.type'
 
-export const Checkbox = React.forwardRef<View, CheckboxProps>(
+export const Checkbox: React.ForwardRefExoticComponent<
+  CheckboxProps & React.RefAttributes<View>
+> = React.forwardRef<View, CheckboxProps>(
   (
     {
       label,

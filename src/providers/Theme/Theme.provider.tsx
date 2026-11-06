@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, type JSX } from 'react'
 import { useColorScheme } from 'react-native'
 import { lightTheme, darkTheme, type Theme } from '../../styles/theme'
 import { ThemeContext } from './Theme.context'
@@ -21,7 +21,7 @@ export const ThemeProvider = ({
   children,
   theme: overrides,
   colorScheme = 'system',
-}: ThemeProviderProps) => {
+}: ThemeProviderProps): JSX.Element => {
   const deviceScheme = useColorScheme()
 
   const resolvedTheme = useMemo(() => {

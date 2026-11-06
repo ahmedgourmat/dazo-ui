@@ -2,8 +2,8 @@
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "moduleResolution": "bundler",
-    "jsx": "react-native",
-    "baseUrl": ".",
+    "jsx": "react-jsx",
+    "isolatedDeclarations": true,
     "outDir": "./dist"
   },
   "include": [
@@ -12,6 +12,8 @@
   ],
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    "rolldown.config.ts",
+    "tsup.config.ts"
   ]
 }

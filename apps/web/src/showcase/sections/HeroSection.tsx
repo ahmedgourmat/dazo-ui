@@ -1,4 +1,4 @@
-import { Container, Icon, Text } from 'dazo-ui'
+import { Container, Text } from 'dazo-ui'
 
 export const HeroSection = () => {
   return (
@@ -29,10 +29,6 @@ export const HeroSection = () => {
               <Text variant='caption'>Table</Text>
             </Container>
           </Container>
-        </Container>
-
-        <Container backgroundColor='backgroundSunken' borderRadius='full' padding='md'>
-          <Icon name='Sparkles' color='#7E22CE' size={34} />
         </Container>
       </Container>
     </Container>

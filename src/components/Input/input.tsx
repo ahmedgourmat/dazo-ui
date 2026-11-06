@@ -1,5 +1,6 @@
+import type { JSX } from 'react'
 import { StyleSheet, TextInput, View } from 'react-native'
-import { useCommonStyles } from 'hooks/common.hooks'
+import { useCommonStyles } from '../../hooks/common.hooks'
 import type { InputProps } from './input.type'
 import { useInputStyles } from './input.hooks'
 
@@ -15,7 +16,7 @@ export const Input = ({
   placeholderTextColor,
   editable = true,
   ...commonAndNativeProps
-}: InputProps) => {
+}: InputProps): JSX.Element => {
   const commonStyles = useCommonStyles(commonAndNativeProps)
   const selectedVariant = useInputStyles({ variant, editable, textColor })
 

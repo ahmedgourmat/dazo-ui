@@ -1,4 +1,4 @@
-import { Container, Icon, Text } from 'dazo-ui'
+import { Container, Text } from 'dazo-ui'
 
 export const HeroSection = (): React.JSX.Element => {
   return (
@@ -16,9 +16,6 @@ export const HeroSection = (): React.JSX.Element => {
           <Text color='#cbd5e1' marginBottom='sm'>
             Component playground for mobile with previews and code references.
           </Text>
-        </Container>
-        <Container backgroundColor='#111827' borderRadius='full' padding='sm'>
-          <Icon name='Sparkles' color='#38bdf8' size={26} />
         </Container>
       </Container>
     </Container>
