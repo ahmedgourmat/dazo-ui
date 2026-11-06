@@ -26,24 +26,30 @@ Dazo UI provides reusable, theme-aware primitives and form controls that let tea
 
 ## Installation
 
-Install the package and required peer dependencies.
+Install the package plus the peer dependencies for your platform.
 
 ### React Native (Expo)
 
 ```bash
-pnpm add dazo-ui react-native-svg lucide-react-native
+pnpm add dazo-ui lucide-react-native
+npx expo install react-native-svg
 ```
 
-If your app uses FileInput with native document selection:
+`lucide-react-native` draws icons with `react-native-svg`. Installing it with `npx expo install` picks the version that matches your Expo SDK.
+
+If your Expo app also runs on web, add the web packages too. Without `lucide-react`, the web build fails with `Unable to resolve module lucide-react`.
 
 ```bash
-pnpm add expo-document-picker
+pnpm add lucide-react
+npx expo install react-dom react-native-web @expo/metro-runtime
 ```
+
+FileInput has no built-in native picker yet. On iOS and Android, pass your own picker through the `customPicker` prop, for example one built on `expo-document-picker`.
 
 ### React Web (Vite/Next)
 
 ```bash
-pnpm add dazo-ui react-native-web react-native-svg lucide-react
+pnpm add dazo-ui react-native-web lucide-react
 ```
 
 For Next.js, add React Native aliasing in next.config.ts:
@@ -166,17 +172,16 @@ pnpm --filter storybook storybook
 
 ## Peer Dependencies
 
-The package expects these peer dependencies in consumer apps:
+| Package | Version | Needed on |
+|---|---|---|
+| react | >= 19.0.0 | All platforms |
+| react-native | >= 0.81.5 | All platforms (web apps alias it to react-native-web, but the type definitions still use its types) |
+| react-native-web | >= 0.19.0 | Web only (optional peer) |
+| lucide-react | >= 0.300.0 | Web only (optional peer) |
+| lucide-react-native | >= 0.300.0 | iOS and Android only (optional peer; also needs react-native-svg) |
 
-- react >= 19.2.4
-- react-native >= 0.81.5
-- react-native-web >= 0.19.0
-- react-native-svg ^15.15.4
-- lucide-react-native >= 0.300.0
-- lucide-react >= 0.300.0
-- expo-document-picker ^14.0.8 (optional)
+Optional peers aren't installed or checked automatically, so install the ones for your platform as shown in [Installation](#installation).
 
 ## Notes
 
-- For FileInput on web-only projects, expo-document-picker is optional.
 - For best consistency, wrap the full application tree once with ThemeProvider.

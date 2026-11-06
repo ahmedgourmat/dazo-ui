@@ -12,16 +12,16 @@
   "dependencies": {
     "@expo-google-fonts/poppins": "^0.4.1",
     "dazo-ui": "workspace:*",
-    "expo": "~54.0.33",
+    "expo": "~54.0.38",
     "expo-document-picker": "^14.0.8",
-    "expo-font": "^55.0.4",
+    "expo-font": "~14.0.12",
     "expo-status-bar": "~3.0.9",
-    "react": "19.2.4",
+    "react": "19.1.0",
     "react-native": "0.81.5",
-    "react-native-svg": "^15.15.4"
+    "react-native-svg": "15.12.1"
   },
   "devDependencies": {
-    "@types/react": "^19.2.14",
+    "@types/react": "~19.1.10",
     "typescript": "~5.9.2"
   },
   "private": true

@@ -20,16 +20,20 @@
     "dev": "tsup --watch"
   },
   "peerDependencies": {
-    "react": ">=19.2.4",
+    "react": ">=19.0.0",
     "react-native": ">=0.81.5",
     "react-native-web": ">=0.19.0",
-    "react-native-svg": "^15.15.4",
-    "expo-document-picker": "^14.0.8",
     "lucide-react-native": ">=0.300.0",
     "lucide-react": ">=0.300.0"
   },
   "peerDependenciesMeta": {
-    "expo-document-picker": {
+    "react-native-web": {
+      "optional": true
+    },
+    "lucide-react-native": {
+      "optional": true
+    },
+    "lucide-react": {
       "optional": true
     }
   },
