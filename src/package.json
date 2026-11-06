@@ -2,22 +2,65 @@
   "name": "dazo-ui",
   "version": "1.0.2",
   "private": false,
-  "main": "./dist/index.native.js",
-  "module": "./dist/index.web.mjs",
-  "react-native": "./dist/index.native.mjs",
-  "types": "./dist/index.d.ts",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/web/index.cjs",
+  "module": "./dist/web/index.js",
+  "react-native": "./dist/native/index.js",
+  "types": "./dist/web/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "browser": "./dist/index.web.mjs",
-      "react-native": "./dist/index.native.mjs",
-      "import": "./dist/index.web.mjs",
-      "require": "./dist/index.native.js"
-    }
+      "react-native": {
+        "import": {
+          "types": "./dist/web/index.d.ts",
+          "default": "./dist/native/index.js"
+        },
+        "require": {
+          "types": "./dist/web/index.d.cts",
+          "default": "./dist/native/index.cjs"
+        },
+        "default": {
+          "types": "./dist/web/index.d.ts",
+          "default": "./dist/native/index.js"
+        }
+      },
+      "browser": {
+        "import": {
+          "types": "./dist/web/index.d.ts",
+          "default": "./dist/web/index.js"
+        },
+        "require": {
+          "types": "./dist/web/index.d.cts",
+          "default": "./dist/web/index.cjs"
+        },
+        "default": {
+          "types": "./dist/web/index.d.ts",
+          "default": "./dist/web/index.js"
+        }
+      },
+      "import": {
+        "types": "./dist/web/index.d.ts",
+        "default": "./dist/web/index.js"
+      },
+      "require": {
+        "types": "./dist/web/index.d.cts",
+        "default": "./dist/web/index.cjs"
+      },
+      "default": {
+        "types": "./dist/web/index.d.ts",
+        "default": "./dist/web/index.js"
+      }
+    },
+    "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch"
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
+    "build": "pnpm clean && rolldown -c && node scripts/emit-cjs-types.js",
+    "dev": "rolldown -c --watch",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "peerDependencies": {
     "react": ">=19.0.0",
@@ -31,8 +74,9 @@
   },
   "devDependencies": {
     "@types/react": "^19.2.14",
-    "@types/react-native": "^0.73.0",
-    "tsup": "^8.5.1",
+    "react-native": "0.81.5",
+    "rolldown": "^1.3.0",
+    "rolldown-plugin-dts": "^0.30.0",
     "typescript": "^5.3.0"
   }
 }
