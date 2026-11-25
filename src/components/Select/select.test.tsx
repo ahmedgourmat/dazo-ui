@@ -1,6 +1,6 @@
-import { fireEvent, screen } from '@testing-library/react'
+import { fireEvent, screen, waitFor, within } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import { finishModalAnimations, renderWithTheme } from '../../test/utils'
+import { finishModalAnimations, isDisabled, renderWithTheme } from '../../test/utils'
 import { Select } from './index'
 
 const options = [
@@ -63,6 +63,115 @@ describe('Select', () => {
     open('Select an option')
 
     expect(screen.queryByText('Starter')).toBeNull()
+  })
+
+  describe('accessibility (#33)', () => {
+    const trigger = (name: string) => screen.getByRole('button', { name })
+
+    it('is announced as a button named by its visible label and value', () => {
+      const { rerender } = renderWithTheme(<Select label='Plan' options={options} />)
+      expect(trigger('Plan Select an option')).toBeTruthy()
+
+      rerender(<Select label='Plan' options={options} value='pro' />)
+      expect(trigger('Plan Pro')).toBeTruthy()
+    })
+
+    it('announces whether it is open', () => {
+      renderWithTheme(<Select label='Plan' options={options} />)
+      expect(trigger('Plan Select an option').getAttribute('aria-expanded')).toBe('false')
+
+      open('Select an option')
+
+      expect(trigger('Plan Select an option').getAttribute('aria-expanded')).toBe('true')
+    })
+
+    it('announces when it is disabled', () => {
+      renderWithTheme(<Select label='Plan' options={options} disabled />)
+
+      expect(isDisabled(trigger('Plan Select an option'))).toBe(true)
+    })
+
+    // Browsers turn Enter and Space on a real <button> into a click, which is
+    // how it opens from the keyboard. jsdom doesn't do that conversion, so this
+    // checks the element type; the key presses are checked in real Chrome.
+    it('is a real button element, so Enter and Space open it', () => {
+      renderWithTheme(<Select label='Plan' options={options} />)
+
+      expect(trigger('Plan Select an option').tagName).toBe('BUTTON')
+    })
+
+    it('opens as a dialog named after the field', () => {
+      renderWithTheme(<Select label='Plan' options={options} />)
+      open('Select an option')
+      finishModalAnimations() // react-native-web adds the dialog role once the fade-in ends
+
+      expect(screen.getByRole('dialog', { name: 'Plan' })).toBeTruthy()
+    })
+
+    it('shows the options as a radio group with the selected one checked', () => {
+      renderWithTheme(<Select label='Plan' options={options} value='pro' />)
+      open('Pro')
+
+      const group = screen.getByRole('radiogroup', { name: 'Plan' })
+      const radios = within(group).getAllByRole('radio')
+      expect(radios.map((radio) => radio.textContent)).toEqual(['Starter', 'Pro', 'Legacy'])
+      expect(radios.map((radio) => radio.getAttribute('aria-checked'))).toEqual(['false', 'true', 'false'])
+      expect(radios.map(isDisabled)).toEqual([false, false, true])
+    })
+
+    it('picks an option with the Space key', () => {
+      const onChange = vi.fn()
+      renderWithTheme(<Select label='Plan' options={options} onChange={onChange} />)
+      open('Select an option')
+
+      fireEvent.keyDown(screen.getByRole('radio', { name: 'Starter' }), { key: ' ' })
+
+      expect(onChange).toHaveBeenCalledWith('starter')
+    })
+
+    // react-native-web only listens for Escape and traps focus once the opening
+    // fade has finished, hence finishModalAnimations() right after opening.
+    it('closes with the Escape key', () => {
+      renderWithTheme(<Select label='Plan' options={options} />)
+      open('Select an option')
+      finishModalAnimations()
+
+      fireEvent.keyUp(document, { key: 'Escape' })
+      finishModalAnimations()
+
+      expect(screen.queryByRole('radiogroup')).toBeNull()
+      expect(trigger('Plan Select an option').getAttribute('aria-expanded')).toBe('false')
+    })
+
+    it('closes when you tap outside the menu, but not when you tap inside it', () => {
+      const onChange = vi.fn()
+      renderWithTheme(<Select label='Plan' options={options} onChange={onChange} />)
+      open('Select an option')
+      finishModalAnimations()
+
+      fireEvent.click(screen.getByRole('radiogroup', { name: 'Plan' }))
+      expect(screen.getByRole('radiogroup', { name: 'Plan' })).toBeTruthy()
+
+      const backdrop = screen.getByRole('dialog').querySelector('[aria-hidden="true"]') as HTMLElement
+      fireEvent.click(backdrop)
+      finishModalAnimations()
+
+      expect(screen.queryByRole('radiogroup')).toBeNull()
+      expect(onChange).not.toHaveBeenCalled()
+    })
+
+    it('moves focus into the options when it opens, and back to the field when it closes', async () => {
+      renderWithTheme(<Select label='Plan' options={options} />)
+      trigger('Plan Select an option').focus()
+
+      open('Select an option')
+      finishModalAnimations()
+      await waitFor(() => expect(screen.getByRole('radiogroup').contains(document.activeElement)).toBe(true))
+
+      fireEvent.keyUp(document, { key: 'Escape' })
+      finishModalAnimations()
+      await waitFor(() => expect(document.activeElement).toBe(trigger('Plan Select an option')))
+    })
   })
 
   // Regression for #27: options after about the sixth could not be reached.

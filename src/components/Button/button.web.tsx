@@ -29,8 +29,11 @@ export const Button = ({
 
   return (
     <button
+      // Without this, a button inside a <form> submits the form when clicked.
+      type='button'
       onClick={onPress}
       disabled={disabled || loading}
+      aria-busy={loading || undefined}
       style={{
         ...computed.container as CSSProperties,
         ...commonStyles as CSSProperties,
@@ -45,7 +48,9 @@ export const Button = ({
       }}
     >
       {loading && (
-        <span style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', display: 'flex' }}>
+        // Hidden from screen readers: the button itself is announced as busy,
+        // and an unnamed spinner would be read out as an empty progress bar.
+        <span aria-hidden style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', display: 'flex' }}>
           <ActivityIndicator size='small' color={computed.indicator} />
         </span>
       )}

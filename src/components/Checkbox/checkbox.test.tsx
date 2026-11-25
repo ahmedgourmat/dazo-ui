@@ -1,6 +1,6 @@
 import { fireEvent, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import { renderWithTheme } from '../../test/utils'
+import { isDisabled, renderWithTheme } from '../../test/utils'
 import { Checkbox } from './index'
 
 describe('Checkbox', () => {
@@ -10,10 +10,37 @@ describe('Checkbox', () => {
     expect(screen.getByRole('checkbox', { name: 'Remember me' })).toBeTruthy()
   })
 
-  // Known gap on web: react-native-web 0.21 ignores `accessibilityState`, so
-  // aria-checked / aria-disabled are missing. iOS and Android do read it.
-  // To be fixed with the accessibility issues (#33).
-  it.todo('exposes checked and disabled state to screen readers on web')
+  it('announces whether it is checked', () => {
+    const { rerender } = renderWithTheme(<Checkbox label='Terms' checked />)
+    expect(screen.getByRole('checkbox', { name: 'Terms' }).getAttribute('aria-checked')).toBe('true')
+
+    rerender(<Checkbox label='Terms' checked={false} />)
+    expect(screen.getByRole('checkbox', { name: 'Terms' }).getAttribute('aria-checked')).toBe('false')
+  })
+
+  it('announces when it is disabled', () => {
+    renderWithTheme(<Checkbox label='Terms' disabled />)
+
+    expect(isDisabled(screen.getByRole('checkbox', { name: 'Terms' }))).toBe(true)
+  })
+
+  it('toggles with the Space key', () => {
+    const onChange = vi.fn()
+    renderWithTheme(<Checkbox label='Terms' onChange={onChange} />)
+
+    fireEvent.keyDown(screen.getByRole('checkbox', { name: 'Terms' }), { key: ' ' })
+
+    expect(onChange).toHaveBeenCalledWith(true)
+  })
+
+  it('ignores the Space key while disabled', () => {
+    const onChange = vi.fn()
+    renderWithTheme(<Checkbox label='Terms' onChange={onChange} disabled />)
+
+    fireEvent.keyDown(screen.getByRole('checkbox', { name: 'Terms' }), { key: ' ' })
+
+    expect(onChange).not.toHaveBeenCalled()
+  })
 
   it('asks to become checked when unchecked, and unchecked when checked', () => {
     const onChange = vi.fn()

@@ -2,6 +2,7 @@ import React from 'react'
 import { Pressable, View, Text, StyleSheet } from 'react-native'
 import { useCheckboxStyles, useCheckboxLabelStyles } from './checkbox.hooks'
 import type { CheckboxProps } from './checkbox.type'
+import { spaceKeyActivates } from '../../hooks/keyboard'
 
 export const Checkbox: React.ForwardRefExoticComponent<
   CheckboxProps & React.RefAttributes<View>
@@ -73,10 +74,13 @@ export const Checkbox: React.ForwardRefExoticComponent<
         style={containerStyle}
         onPress={handlePress}
         disabled={disabled}
-        accessible
-        accessibilityRole='checkbox'
-        accessibilityState={{ checked, disabled }}
-        accessibilityLabel={label || value}
+        // role and aria-* work on iOS, Android and web; react-native-web
+        // ignores the older accessibilityState.
+        role='checkbox'
+        aria-checked={checked}
+        aria-disabled={disabled}
+        aria-label={label || value}
+        {...spaceKeyActivates(handlePress, disabled)}
       >
         <View style={styles.content}>
           <View style={[styles.box, boxStyle]}>

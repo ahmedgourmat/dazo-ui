@@ -1,6 +1,6 @@
 import { act, fireEvent, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import { renderWithTheme } from '../../test/utils'
+import { isDisabled, renderWithTheme } from '../../test/utils'
 import { FileInput } from './index'
 
 const files = [
@@ -87,6 +87,25 @@ describe('FileInput', () => {
     ])
     expect(await screen.findByText('report.pdf')).toBeTruthy()
     vi.unstubAllGlobals()
+  })
+
+  describe('accessibility', () => {
+    it('is announced as a button named by its visible label and value', () => {
+      renderWithTheme(<FileInput label='Attachment' placeholder='Pick a file' disabled />)
+
+      const picker = screen.getByRole('button', { name: 'Attachment Pick a file' })
+      expect(isDisabled(picker)).toBe(true)
+    })
+
+    it('has a separate Clear button, not one nested inside the picker', async () => {
+      renderWithTheme(<FileInput label='Attachment' placeholder='Pick' customPicker={async () => files} />)
+
+      fireEvent.click(screen.getByRole('button', { name: 'Attachment Pick' }))
+      const clear = await screen.findByRole('button', { name: 'Clear Attachment' })
+      const picker = screen.getByRole('button', { name: 'Attachment report.pdf, photo.png' })
+
+      expect(picker.contains(clear)).toBe(false)
+    })
   })
 
   it('only calls onPress when autoOpenPicker is off', () => {

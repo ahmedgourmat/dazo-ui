@@ -1,4 +1,5 @@
 import { act, fireEvent, render, type RenderResult } from '@testing-library/react'
+import axe from 'axe-core'
 import type { ReactElement } from 'react'
 import { ThemeProvider } from '../providers'
 import { changeSystemScheme, type Scheme } from './match-media'
@@ -24,6 +25,26 @@ export const finishModalAnimations = (): void => {
     }
   })
 }
+
+/**
+ * Runs axe-core (the checker behind most browser accessibility tools) on the
+ * page and returns one readable line per problem, so `expect(...).toEqual([])`
+ * prints exactly what is wrong. Two rules are off because they can't work here:
+ * color-contrast needs real layout and colors (jsdom has none), and region
+ * expects page landmarks, which a single component on its own doesn't have.
+ */
+export const accessibilityProblems = async (root: Element = document.body): Promise<string[]> => {
+  const result = await axe.run(root, {
+    rules: { 'color-contrast': { enabled: false }, region: { enabled: false } },
+  })
+  return result.violations.flatMap((violation) =>
+    violation.nodes.map((node) => `${violation.id}: ${violation.help} → ${node.html.slice(0, 120)}`),
+  )
+}
+
+/** True when an element is disabled for both pointer and assistive-technology users. */
+export const isDisabled = (element: Element): boolean =>
+  element.hasAttribute('disabled') || element.getAttribute('aria-disabled') === 'true'
 
 /** Render inside a ThemeProvider forced to light mode, so results don't depend on the OS. */
 export const renderWithTheme = (ui: ReactElement): RenderResult =>

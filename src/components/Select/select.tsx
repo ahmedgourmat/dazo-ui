@@ -3,6 +3,7 @@ import { FlatList, Modal, Pressable, StyleSheet, Text, View } from 'react-native
 import { useTheme } from '../../providers'
 import { useCommonStyles } from '../../hooks/common.hooks'
 import type { SelectProps, SelectOption } from './select.type'
+import { spaceKeyActivates } from '../../hooks/keyboard'
 
 export const Select = ({
   label,
@@ -26,11 +27,19 @@ export const Select = ({
     [options, value],
   )
 
+  const displayValue = selectedOption?.label ?? placeholder
+  const menuName = label ?? placeholder
+
   return (
     <>
       <Pressable
         onPress={disabled ? undefined : () => setOpen(true)}
         disabled={disabled}
+        // No aria-label: the name comes from the visible label and value
+        // ("Plan Pro"), so voice-control users can say what they see.
+        role='button'
+        aria-expanded={open}
+        aria-disabled={disabled}
         style={[
           styles.container,
           {
@@ -52,16 +61,27 @@ export const Select = ({
         <View style={styles.content}>
           {label ? <Text style={[styles.label, { color: theme.colors.textSecondary, fontFamily: theme.fontFamily.regular }, labelStyle]}>{label}</Text> : null}
           <Text style={[styles.value, { color: selectedOption ? theme.colors.textPrimary : theme.colors.textSecondary, fontFamily: theme.fontFamily.regular }]} numberOfLines={1}>
-            {selectedOption?.label ?? placeholder}
+            {displayValue}
           </Text>
         </View>
 
         {rightIcon ? <View style={styles.rightIcon}>{rightIcon}</View> : null}
       </Pressable>
 
-      <Modal transparent visible={open} animationType="fade" onRequestClose={() => setOpen(false)}>
-        <Pressable style={styles.backdrop} onPress={() => setOpen(false)}>
-          <Pressable
+      <Modal
+        transparent
+        visible={open}
+        animationType="fade"
+        onRequestClose={() => setOpen(false)}
+        // On web, react-native-web turns the modal into a dialog once it has
+        // opened; this gives that dialog a name. React Native's Modal type
+        // doesn't list the prop, and iOS/Android ignore it.
+        {...({ 'aria-label': menuName } as object)}
+      >
+        <View style={styles.overlay}>
+          {/* The menu comes first so that, on web, opening moves focus to the
+              first option rather than to the backdrop. */}
+          <View
             style={[
               styles.menu,
               {
@@ -75,20 +95,27 @@ export const Select = ({
               },
             ]}
           >
+            {/* One choice out of many, like Android's own single-choice dialogs. */}
+            <View role='radiogroup' aria-label={menuName}>
             <FlatList
               data={options}
               keyExtractor={(item) => item.value}
               keyboardShouldPersistTaps="handled"
               renderItem={({ item }) => {
                 const isSelected = item.value === value
+                const pick = () => {
+                  onChange?.(item.value)
+                  setOpen(false)
+                }
 
                 return (
                   <Pressable
                     disabled={item.disabled}
-                    onPress={() => {
-                      onChange?.(item.value)
-                      setOpen(false)
-                    }}
+                    onPress={pick}
+                    role='radio'
+                    aria-checked={isSelected}
+                    aria-disabled={Boolean(item.disabled)}
+                    {...spaceKeyActivates(pick, item.disabled)}
                     style={[
                       styles.option,
                       isSelected && { backgroundColor: theme.colors.backgroundSunken },
@@ -101,8 +128,20 @@ export const Select = ({
                 )
               }}
             />
-          </Pressable>
-        </Pressable>
+            </View>
+          </View>
+
+          {/* Tapping outside the menu closes it. The backdrop sits behind the
+              menu and is hidden from screen readers; they close the menu by
+              picking an option, Escape (web) or Back (Android). */}
+          <Pressable
+            style={[StyleSheet.absoluteFill, styles.backdrop]}
+            onPress={() => setOpen(false)}
+            accessible={false}
+            aria-hidden
+            tabIndex={-1}
+          />
+        </View>
       </Modal>
     </>
   )
@@ -134,13 +173,17 @@ const styles = StyleSheet.create({
   rightIcon: {
     marginLeft: 12,
   },
-  backdrop: {
+  overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.35)',
     justifyContent: 'center',
     padding: 20,
   },
+  // Fills the overlay (absoluteFill) behind the menu.
+  backdrop: {
+    backgroundColor: 'rgba(0,0,0,0.35)',
+  },
   menu: {
+    zIndex: 1,
     borderWidth: 1,
     borderRadius: 18,
     overflow: 'hidden',
