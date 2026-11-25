@@ -51,6 +51,8 @@ export const Checkbox: React.ForwardRefExoticComponent<
       }
     }
 
+    // Spacing tokens like 'md' reach the style unresolved here; fixed by #32.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const containerStyle: any = [
       styles.container,
       {
@@ -77,8 +79,8 @@ export const Checkbox: React.ForwardRefExoticComponent<
         accessibilityLabel={label || value}
       >
         <View style={styles.content}>
-          <View style={[styles.box, boxStyle as any]}>
-            {checked && <Text style={checkmarkStyle as any}>✓</Text>}
+          <View style={[styles.box, boxStyle]}>
+            {checked && <Text style={checkmarkStyle}>✓</Text>}
           </View>
 
           <View style={styles.labelContainer}>

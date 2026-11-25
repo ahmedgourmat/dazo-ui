@@ -5,10 +5,11 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
+    "test": "turbo run test",
     "typecheck": "turbo run typecheck"
   },
   "devDependencies": {
-    "turbo": "latest",
+    "turbo": "2.8.21",
     "typescript": "^5.3.0"
   },
   "packageManager": "pnpm@9.0.0",

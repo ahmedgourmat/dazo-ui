@@ -34,9 +34,9 @@ export const useTextStyles = ({
 }: UseTextStylesParams): TextStyle => {
 
     const theme = useTheme()
-    const modeTextColor = theme.colors.textPrimary
 
     return useMemo(() => {
+        const modeTextColor = theme.colors.textPrimary
         const variantStyles = {
             default: {
                 fontSize: theme.fontSize.md,

@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# A new push to the same branch/PR cancels the run that is still going.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  TURBO_TELEMETRY_DISABLED: 1
+  EXPO_NO_TELEMETRY: 1
+
+jobs:
+  checks:
+    name: Typecheck, lint, build, package checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      # pnpm version comes from "packageManager" in the root package.json
+      - uses: pnpm/action-setup@v6
+
+      # rolldown-plugin-dts needs Node ^22.18 || ^24.11 || >=26
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # typecheck: library + its tests + mobile app (web/storybook typecheck inside their build)
+      # lint:      library + web and storybook apps (ESLint)
+      # test:      library component tests (Vitest), run once for the web and once for the native files
+      # build:     library (Rolldown) + web and storybook apps (Vite)
+      # check:package: publint + arethetypeswrong on the packed library
+      # size:      size-limit budgets in src/.size-limit.json
+      - run: pnpm turbo run typecheck lint test build check:package size
+
+  mobile-bundle:
+    name: Bundle mobile app with Metro (Android)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Builds dazo-ui first, then bundles apps/mobile the way a real
+      # React Native app consumes the package (react-native export condition).
+      - run: pnpm turbo run bundle:android --filter=mobile

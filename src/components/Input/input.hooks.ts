@@ -22,9 +22,9 @@ export const useInputStyles = ({
   textColor,
 }: UseInputStylesParams): InputStyles => {
   const theme = useTheme()
-  const modeTextColor = theme.colors.textPrimary
 
   return useMemo(() => {
+    const modeTextColor = theme.colors.textPrimary
     const variantStyles = {
       solid: {
         container: {
