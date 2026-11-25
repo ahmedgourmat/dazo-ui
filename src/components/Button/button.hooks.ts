@@ -5,7 +5,7 @@ import type { ButtonProps } from './button.type'
 import type { TextStyle, ViewStyle } from 'react-native'
 
 export type ButtonSizeStyle = {
-    maxHeight: number
+    minHeight: number
     paddingVertical: number
     paddingHorizontal: number
     fontSize: number
@@ -32,26 +32,31 @@ export const useButtonStyles = ({
     const theme = useTheme()
 
     return useMemo(() => {
+        // minHeight keeps the designed heights (32 / 40 / 48) but lets the button
+        // grow when the label needs more room: a second line, or a larger system
+        // font size. The vertical padding plus one line of label fits inside each
+        // height: 15 + 2×6 = 27 ≤ 32, 17.3 + 2×8 ≈ 33 ≤ 40, 19.6 + 2×10 ≈ 40 ≤ 48.
         const sizeStyles = {
             sm: {
-                maxHeight: 32,
-                paddingVertical: 14,
+                minHeight: 32,
+                paddingVertical: 6,
                 paddingHorizontal: 12,
                 fontSize: theme.fontSize.sm,
             },
             md: {
-                maxHeight: 40,
-                paddingVertical: 16,
+                minHeight: 40,
+                paddingVertical: 8,
                 paddingHorizontal: 20,
                 fontSize: theme.fontSize.md,
             },
             lg: {
-                maxHeight: 48,
-                paddingVertical: 18,
+                minHeight: 48,
+                paddingVertical: 10,
                 paddingHorizontal: 24,
                 fontSize: theme.fontSize.lg,
             },
         } as const
+        const currentSize = sizeStyles[size]
 
         const variantStyles = {
             solid: {
@@ -100,20 +105,30 @@ export const useButtonStyles = ({
 
         return {
             container: {
-                ...sizeStyles[size],
+                // Each side is written out (not paddingVertical/Horizontal) so the
+                // web Button, which hands these styles to a DOM <button>, can use
+                // them as CSS too.
+                minHeight: currentSize.minHeight,
+                paddingTop: currentSize.paddingVertical,
+                paddingBottom: currentSize.paddingVertical,
+                paddingLeft: currentSize.paddingHorizontal,
+                paddingRight: currentSize.paddingHorizontal,
                 ...variantStyles[variant].container,
+                // Native draws solid borders by default; a DOM <button> would
+                // otherwise use the browser's 3D "outset" border.
+                borderStyle: 'solid',
                 borderRadius: theme.radius.md,
                 alignSelf: fullWidth ? 'stretch' : 'flex-start',
             } as ViewStyle,
             label: {
                 ...variantStyles[variant].label,
-                fontSize: sizeStyles[size].fontSize,
+                fontSize: currentSize.fontSize,
                 fontWeight: theme.fontWeight.medium,
                 fontFamily: theme.fontFamily.medium,
-                lineHeight: sizeStyles[size].fontSize * 1.15,
+                lineHeight: currentSize.fontSize * 1.15,
             },
             indicator: variantStyles[variant].indicator,
-            currentSize: sizeStyles[size],
+            currentSize,
         }
     }, [theme, variant, size, disabled, fullWidth])
 }

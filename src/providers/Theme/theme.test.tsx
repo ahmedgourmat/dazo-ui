@@ -58,7 +58,45 @@ describe('ThemeProvider', () => {
     expect(theme.fontFamily).toEqual({ ...lightTheme.fontFamily, bold: 'Poppins-Bold' })
   })
 
-  // Known bug, issue #31: radius, fontSize, fontWeight and lineHeight overrides
-  // replace the whole section instead of merging into it.
-  it.todo('keeps the other radius values when only one is overridden (#31)')
+  describe('partial overrides keep the rest of every section (#31)', () => {
+    it('radius', () => {
+      const theme = themeFrom({ colorScheme: 'light', theme: { radius: { md: 6 } } })
+      expect(theme.radius).toEqual({ ...lightTheme.radius, md: 6 })
+    })
+
+    it('fontSize, fontWeight and lineHeight', () => {
+      const theme = themeFrom({
+        colorScheme: 'light',
+        theme: { fontSize: { lg: 19 }, fontWeight: { bold: '800' }, lineHeight: { tight: 1.2 } },
+      })
+      expect(theme.fontSize).toEqual({ ...lightTheme.fontSize, lg: 19 })
+      expect(theme.fontWeight).toEqual({ ...lightTheme.fontWeight, bold: '800' })
+      expect(theme.lineHeight).toEqual({ ...lightTheme.lineHeight, tight: 1.2 })
+    })
+
+    it('leaves sections you did not override exactly as they were', () => {
+      const theme = themeFrom({ colorScheme: 'dark', theme: { radius: { md: 6 } } })
+      expect(theme.colors).toEqual(darkTheme.colors)
+      expect(theme.spacing).toEqual(darkTheme.spacing)
+      expect(theme.fontSize).toEqual(darkTheme.fontSize)
+    })
+
+    it('ignores undefined values instead of erasing the base value', () => {
+      const theme = themeFrom({ colorScheme: 'light', theme: { radius: { md: undefined }, colors: undefined } })
+      expect(theme.radius).toEqual(lightTheme.radius)
+      expect(theme.colors).toEqual(lightTheme.colors)
+    })
+
+    it('adds new color names next to the built-in ones', () => {
+      const theme = themeFrom({ colorScheme: 'light', theme: { colors: { brand: '#ff6600' } as never } })
+      expect(theme.colors).toEqual({ ...lightTheme.colors, brand: '#ff6600' })
+    })
+
+    it('never changes the built-in light and dark themes', () => {
+      const before = JSON.stringify([lightTheme, darkTheme])
+      themeFrom({ colorScheme: 'light', theme: { radius: { md: 99 }, colors: { primary: '#000' } } })
+      themeFrom({ colorScheme: 'dark', theme: { spacing: { md: 99 } } })
+      expect(JSON.stringify([lightTheme, darkTheme])).toBe(before)
+    })
+  })
 })

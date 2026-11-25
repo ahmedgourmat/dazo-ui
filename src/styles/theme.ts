@@ -1,3 +1,4 @@
+import type { TextStyle } from 'react-native'
 import { tokens, type Tokens } from './tokens'
 
 export type ThemeMode = 'light' | 'dark'
@@ -28,7 +29,9 @@ export interface Theme {
   spacing: Tokens['spacing']
   radius: Tokens['radius']
   fontSize: Tokens['fontSize']
-  fontWeight: Tokens['fontWeight']
+  // Any React Native weight, not only the token values ('400' | '500' | '700'),
+  // so a theme can override e.g. bold with '800'.
+  fontWeight: { [K in keyof Tokens['fontWeight']]: NonNullable<TextStyle['fontWeight']> }
   fontFamily: Tokens['fontFamily']
   lineHeight: Tokens['lineHeight']
 }
