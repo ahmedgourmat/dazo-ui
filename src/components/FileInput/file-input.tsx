@@ -117,10 +117,13 @@ export const FileInput = ({
   const localValue = selectedFiles.map((file) => file.name).join(', ')
   const displayValue = value?.trim() || localValue || placeholder
 
+  const showClear = Boolean(onClear || localValue) && displayValue !== placeholder
+
+  // The bordered box holds two separate buttons: the picker and "Clear".
+  // Clear used to sit inside the picker, and a button inside a button is
+  // invalid on web and hard to reach with a screen reader.
   return (
-    <Pressable
-      onPress={handlePress}
-      disabled={disabled}
+    <View
       style={[
         styles.container,
         {
@@ -137,18 +140,38 @@ export const FileInput = ({
         style,
       ]}
     >
-      {leftIcon ? <View style={styles.leftIcon}>{leftIcon}</View> : null}
+      <Pressable
+        onPress={handlePress}
+        disabled={disabled}
+        // No aria-label: the name comes from the visible label and value, so
+        // voice-control users can say what they see.
+        role='button'
+        aria-disabled={disabled}
+        style={[styles.picker, showClear && styles.pickerBeforeClear]}
+      >
+        {leftIcon ? <View style={styles.leftIcon}>{leftIcon}</View> : null}
 
-      <View style={styles.content}>
-        {label ? <Text style={[styles.label, { color: theme.colors.textSecondary, fontFamily: theme.fontFamily.regular }, labelStyle]}>{label}</Text> : null}
-        <Text style={[styles.value, { color: value ? theme.colors.textPrimary : theme.colors.textSecondary, fontFamily: theme.fontFamily.regular }]} numberOfLines={1}>
-          {displayValue}
-        </Text>
-      </View>
+        <View style={styles.content}>
+          {label ? <Text style={[styles.label, { color: theme.colors.textSecondary, fontFamily: theme.fontFamily.regular }, labelStyle]}>{label}</Text> : null}
+          <Text style={[styles.value, { color: value ? theme.colors.textPrimary : theme.colors.textSecondary, fontFamily: theme.fontFamily.regular }]} numberOfLines={1}>
+            {displayValue}
+          </Text>
+        </View>
 
-      {rightIcon ? <View style={styles.rightIcon}>{rightIcon}</View> : null}
-      {(onClear || localValue) && displayValue !== placeholder ? <Text onPress={handleClear} style={[styles.clear, { color: theme.colors.primary, fontFamily: theme.fontFamily.regular }]}>Clear</Text> : null}
-    </Pressable>
+        {rightIcon ? <View style={styles.rightIcon}>{rightIcon}</View> : null}
+      </Pressable>
+
+      {showClear ? (
+        <Pressable
+          onPress={handleClear}
+          role='button'
+          aria-label={label ? `Clear ${label}` : 'Clear'}
+          style={styles.clearButton}
+        >
+          <Text style={[styles.clear, { color: theme.colors.primary, fontFamily: theme.fontFamily.regular }]}>Clear</Text>
+        </Pressable>
+      ) : null}
+    </View>
   )
 }
 
@@ -158,8 +181,22 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 14,
     flexDirection: 'row',
+    alignItems: 'stretch',
+  },
+  // The picker fills the box, so the whole field stays clickable as before.
+  picker: {
+    flex: 1,
+    flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
+  },
+  pickerBeforeClear: {
+    paddingRight: 0,
+  },
+  clearButton: {
+    justifyContent: 'center',
+    paddingLeft: 12,
+    paddingRight: 16,
   },
   content: {
     flex: 1,
@@ -179,7 +216,6 @@ const styles = StyleSheet.create({
     marginLeft: 12,
   },
   clear: {
-    marginLeft: 12,
     fontSize: 12,
   },
 })

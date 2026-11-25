@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { useTheme } from '../../providers'
 import { useCommonStyles } from '../../hooks/common.hooks'
 import type { RadioGroupProps } from './radio.type'
+import { spaceKeyActivates } from '../../hooks/keyboard'
 
 export const RadioGroup = ({
     options,
@@ -14,6 +15,7 @@ export const RadioGroup = ({
     textColor,
     circleColor,
     labelStyle,
+    accessibilityLabel,
     ...commonProps
 }: RadioGroupProps): JSX.Element => {
     const theme = useTheme()
@@ -22,15 +24,26 @@ export const RadioGroup = ({
     const resolvedCircleColor = circleColor ?? theme.colors.primary
 
     return (
-        <View style={[styles.group, { flexDirection: direction }, commonStyles, style]}>
+        <View
+            role='radiogroup'
+            aria-label={accessibilityLabel}
+            aria-disabled={disabled || undefined}
+            style={[styles.group, { flexDirection: direction }, commonStyles, style]}
+        >
             {options.map((option) => {
                 const checked = option.value === value
+                const optionDisabled = disabled || Boolean(option.disabled)
+                const select = () => onChange?.(option.value)
 
                 return (
                     <Pressable
                         key={option.value}
-                        disabled={disabled || option.disabled}
-                        onPress={() => onChange?.(option.value)}
+                        disabled={optionDisabled}
+                        onPress={select}
+                        role='radio'
+                        aria-checked={checked}
+                        aria-disabled={optionDisabled}
+                        {...spaceKeyActivates(select, optionDisabled)}
                         style={[styles.option, direction === 'row' && styles.optionRow, option.disabled && { opacity: 0.5 }]}
                     >
                         <View style={[styles.circle, { borderColor: checked ? resolvedCircleColor : theme.colors.border }]}>

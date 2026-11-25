@@ -30,6 +30,9 @@ export const Button = ({
     <Pressable
       onPress={onPress}
       disabled={disabled || loading}
+      role='button'
+      aria-disabled={disabled || loading}
+      aria-busy={loading}
       style={({ pressed }) => [
         styles.base,
         computed.container,
@@ -39,7 +42,9 @@ export const Button = ({
       ]}
     >
       {loading && (
-        <View style={StyleSheet.absoluteFill}>
+        // Hidden from screen readers: the button itself is announced as busy,
+        // and an unnamed spinner would be read out as an empty progress bar.
+        <View style={StyleSheet.absoluteFill} aria-hidden>
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <ActivityIndicator size='small' color={computed.indicator} />
           </View>

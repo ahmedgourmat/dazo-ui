@@ -212,6 +212,9 @@ importers:
       '@types/react':
         specifier: ^19.2.14
         version: 19.2.14
+      axe-core:
+        specifier: ^4.14.1
+        version: 4.14.1
       eslint:
         specifier: ^9.39.4
         version: 9.39.4
@@ -2208,6 +2211,10 @@ packages:
 
   axe-core@4.11.2:
     resolution: {integrity: sha512-byD6KPdvo72y/wj2T/4zGEvvlis+PsZsn/yPS3pEO+sFpcrqRpX/TJCxvVaEsNeMrfQbCr7w163YqoD9IYwHXw==}
+    engines: {node: '>=4'}
+
+  axe-core@4.14.1:
+    resolution: {integrity: sha512-FHfa+lmNjQZfJz1q8wKqIDwC6DExcHt/pkjNQb09a3NPjCKg2rhu5qb2S4r76ASyFNNtuFooJpZe37OgudVGtQ==}
     engines: {node: '>=4'}
 
   babel-jest@29.7.0:
@@ -7067,6 +7074,8 @@ snapshots:
   async-limiter@1.0.1: {}
 
   axe-core@4.11.2: {}
+
+  axe-core@4.14.1: {}
 
   babel-jest@29.7.0(@babel/core@7.29.0):
     dependencies:

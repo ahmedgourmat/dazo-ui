@@ -19,4 +19,6 @@ export interface RadioGroupProps extends Omit<CommonProps, 'children' | 'scrolla
   circleColor?: string
   style?: StyleProp<ViewStyle>
   labelStyle?: StyleProp<TextStyle>
+  /** Name screen readers announce for the whole group, e.g. "Role". */
+  accessibilityLabel?: string
 }
