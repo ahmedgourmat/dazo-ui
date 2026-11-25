@@ -4,13 +4,36 @@ import type { StyleProp, TextStyle, ViewStyle } from 'react-native'
 
 export type PickedFile = {
   name: string
+  /**
+   * Where the file can be read. From the built-in web picker this is a `blob:`
+   * URL that FileInput creates and frees again: it works until the selection
+   * changes, is cleared, or the FileInput unmounts. To keep a file longer, use
+   * `file` (e.g. upload it, or call URL.createObjectURL(file) yourself).
+   */
   uri: string
   size?: number
   mimeType?: string
+  /** Web only: the browser's File object. */
+  file?: File
 }
+
+/** What FileInput asks its picker for. */
+export type FilePickerOptions = {
+  /** The `accept` prop: comma-separated MIME types or extensions, e.g. 'image/*,.pdf'. */
+  accept?: string
+  /** The `multiple` prop. */
+  multiple: boolean
+}
+
+/** Opens a picker and resolves with the chosen files, or null/undefined when cancelled. */
+export type FilePicker = (options: FilePickerOptions) => Promise<PickedFile[] | undefined | null>
 
 export interface FileInputProps extends Omit<CommonProps, 'children' | 'scrollable' | 'style'> {
   label?: string
+  /**
+   * Text shown in the field. When set, FileInput is controlled: it shows this
+   * value and nothing else, and you update it from onFilesSelected / onClear.
+   */
   value?: string
   placeholder?: string
   accept?: string
@@ -24,5 +47,10 @@ export interface FileInputProps extends Omit<CommonProps, 'children' | 'scrollab
   onClear?: () => void
   style?: StyleProp<ViewStyle>
   labelStyle?: StyleProp<TextStyle>
-  customPicker?: () => Promise<PickedFile[] | undefined | null>
+  /**
+   * Opens your own picker instead of the built-in one. Required on iOS and
+   * Android, which have no built-in picker: with expo-document-picker installed,
+   * pass `expoDocumentPicker(DocumentPicker)`.
+   */
+  customPicker?: FilePicker
 }

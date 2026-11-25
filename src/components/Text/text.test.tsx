@@ -44,7 +44,54 @@ describe('Text', () => {
     expect(screen.getByText('Negative letters')).toBeTruthy()
   })
 
-  // Known bug, issue #38: `lines` splits words across lines with "\n" instead
-  // of limiting how many lines are shown.
-  it.todo('treats `lines` as a maximum number of lines (#38)')
+  describe('`lines` is a maximum number of lines (#38)', () => {
+    // react-native-web turns numberOfLines into CSS line clamping; jsdom has no
+    // layout, so these check the CSS instead of measuring lines.
+    const clamp = (el: HTMLElement) => getComputedStyle(el).getPropertyValue('-webkit-line-clamp')
+
+    it('keeps the text as written, without inserting line breaks', () => {
+      renderWithTheme(<Text lines={3}>Hello there world</Text>)
+
+      const text = screen.getByText('Hello there world')
+      expect(text.textContent).toBe('Hello there world')
+      expect(clamp(text)).toBe('3')
+    })
+
+    it('cuts a single line with an ellipsis when `lines` is 1', () => {
+      renderWithTheme(<Text lines={1}>One line only</Text>)
+
+      const style = getComputedStyle(screen.getByText('One line only'))
+      expect(style.whiteSpace).toBe('nowrap')
+      expect(style.textOverflow).toBe('ellipsis')
+    })
+
+    it('allows more lines than there are words', () => {
+      renderWithTheme(<Text lines={4}>Two words</Text>)
+
+      expect(clamp(screen.getByText('Two words'))).toBe('4')
+    })
+
+    it('works together with `letters`', () => {
+      renderWithTheme(
+        <Text lines={2} letters={11}>
+          Hello world, again and again
+        </Text>,
+      )
+
+      const text = screen.getByText('Hello world...')
+      expect(clamp(text)).toBe('2')
+    })
+
+    it('ignores invalid values', () => {
+      renderWithTheme(
+        <>
+          <Text lines={0}>Zero lines</Text>
+          <Text lines={-2}>Negative lines</Text>
+        </>,
+      )
+
+      expect(clamp(screen.getByText('Zero lines'))).toBe('')
+      expect(clamp(screen.getByText('Negative lines'))).toBe('')
+    })
+  })
 })

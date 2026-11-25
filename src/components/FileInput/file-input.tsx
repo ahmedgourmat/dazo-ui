@@ -1,4 +1,4 @@
-import { useCallback, useState, type JSX } from 'react'
+import { useCallback, useEffect, useRef, useState, type JSX } from 'react'
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import { useTheme } from '../../providers'
 import { useCommonStyles } from '../../hooks/common.hooks'
@@ -6,24 +6,31 @@ import type { FileInputProps, PickedFile } from './file-input.type'
 
 // The parts of the browser API the web picker uses. The library is built
 // without DOM types because it also runs on iOS and Android.
-type WebFile = { name: string; size: number; type: string }
+// File itself comes from React Native's global types.
 type WebFileInput = {
   type: string
   multiple: boolean
   accept: string
-  files: ArrayLike<WebFile> | null
+  files: ArrayLike<File> | null
   onchange: (() => void) | null
   click: () => void
 }
 type WebGlobals = {
   document?: { createElement: (tag: 'input') => WebFileInput }
-  URL?: { createObjectURL?: (file: WebFile) => string }
+  URL?: { createObjectURL?: (file: File) => string; revokeObjectURL?: (url: string) => void }
+}
+
+const revokeObjectUrls = (urls: string[]): void => {
+  const { URL: urlApi } = globalThis as unknown as WebGlobals
+  for (const url of urls) urlApi?.revokeObjectURL?.(url)
 }
 
 export const FileInput = ({
   label,
   value,
   placeholder = 'Choose a file',
+  accept,
+  multiple = false,
   disabled = false,
   leftIcon,
   rightIcon,
@@ -40,7 +47,18 @@ export const FileInput = ({
   const commonStyles = useCommonStyles(commonProps)
   const [selectedFiles, setSelectedFiles] = useState<PickedFile[]>([])
 
-  const applySelectedFiles = useCallback((files: PickedFile[]) => {
+  // blob: URLs this FileInput created for the built-in web picker. Each set is
+  // freed when the selection changes, is cleared, or the FileInput unmounts;
+  // URLs from customPicker belong to the app and are left alone.
+  const ownedUrls = useRef<string[]>([])
+  useEffect(() => () => {
+    revokeObjectUrls(ownedUrls.current)
+    ownedUrls.current = []
+  }, [])
+
+  const applySelectedFiles = useCallback((files: PickedFile[], createdUrls: string[] = []) => {
+    revokeObjectUrls(ownedUrls.current)
+    ownedUrls.current = createdUrls
     setSelectedFiles(files)
     onFilesSelected?.(files)
   }, [onFilesSelected])
@@ -54,8 +72,8 @@ export const FileInput = ({
 
     const input = doc.createElement('input')
     input.type = 'file'
-    input.multiple = Boolean(commonProps.multiple)
-    input.accept = commonProps.accept ?? ''
+    input.multiple = multiple
+    input.accept = accept ?? ''
 
     input.onchange = () => {
       const files = Array.from(input.files ?? []).map((file) => ({
@@ -63,17 +81,20 @@ export const FileInput = ({
         uri: urlApi?.createObjectURL?.(file) ?? '',
         size: file.size,
         mimeType: file.type,
+        file,
       }))
 
-      applySelectedFiles(files)
+      applySelectedFiles(files, files.map((file) => file.uri).filter(Boolean))
     }
 
     input.click()
-  }, [applySelectedFiles, commonProps.accept, commonProps.multiple])
+  }, [applySelectedFiles, accept, multiple])
 
-  const openNativePicker = useCallback(async () => {
+  const warnNoNativePicker = useCallback(() => {
     console.warn(
-      'Native file picking is disabled in the library runtime to avoid requiring expo-document-picker from the client app.'
+      'FileInput: iOS and Android have no built-in file picker. Pass one through customPicker, ' +
+        "e.g. with expo-document-picker installed: customPicker={expoDocumentPicker(DocumentPicker)} " +
+        "(import * as DocumentPicker from 'expo-document-picker'; import { expoDocumentPicker } from 'dazo-ui')."
     )
   }, [])
 
@@ -90,7 +111,7 @@ export const FileInput = ({
 
     if (customPicker) {
       try {
-        const files = await customPicker()
+        const files = await customPicker({ accept, multiple })
         if (files) {
           applySelectedFiles(files)
         }
@@ -105,19 +126,23 @@ export const FileInput = ({
       return
     }
 
-    await openNativePicker()
-  }, [autoOpenPicker, disabled, onPress, openNativePicker, openWebPicker, customPicker, applySelectedFiles])
+    warnNoNativePicker()
+  }, [autoOpenPicker, disabled, onPress, warnNoNativePicker, openWebPicker, customPicker, applySelectedFiles, accept, multiple])
 
   const handleClear = useCallback(() => {
-    setSelectedFiles([])
-    onFilesSelected?.([])
+    applySelectedFiles([])
     onClear?.()
-  }, [onClear, onFilesSelected])
+  }, [applySelectedFiles, onClear])
 
-  const localValue = selectedFiles.map((file) => file.name).join(', ')
-  const displayValue = value?.trim() || localValue || placeholder
+  // `value` is the source of truth when given (controlled): the field shows it
+  // and nothing else, so it can't disagree with the files picked here.
+  // Without it, the field shows the names of the files picked here.
+  const controlled = value !== undefined
+  const shownValue = controlled ? value.trim() : selectedFiles.map((file) => file.name).join(', ')
+  const displayValue = shownValue || placeholder
 
-  const showClear = Boolean(onClear || localValue) && displayValue !== placeholder
+  // Controlled fields only offer Clear when the app can react to it.
+  const showClear = Boolean(shownValue) && (!controlled || Boolean(onClear || onFilesSelected))
 
   // The bordered box holds two separate buttons: the picker and "Clear".
   // Clear used to sit inside the picker, and a button inside a button is
@@ -153,7 +178,7 @@ export const FileInput = ({
 
         <View style={styles.content}>
           {label ? <Text style={[styles.label, { color: theme.colors.textSecondary, fontFamily: theme.fontFamily.regular }, labelStyle]}>{label}</Text> : null}
-          <Text style={[styles.value, { color: value ? theme.colors.textPrimary : theme.colors.textSecondary, fontFamily: theme.fontFamily.regular }]} numberOfLines={1}>
+          <Text style={[styles.value, { color: shownValue ? theme.colors.textPrimary : theme.colors.textSecondary, fontFamily: theme.fontFamily.regular }]} numberOfLines={1}>
             {displayValue}
           </Text>
         </View>

@@ -156,5 +156,25 @@ export const resolveCommonStyles = (props: CommonProps, theme: Theme): ViewStyle
     return style
 }
 
+const STYLE_PROP_NAMES: ReadonlySet<string> = new Set(RULES.map(([name]) => name))
+
+/**
+ * Splits props into the style props above (padding, width, backgroundColor, …)
+ * and everything else, so a component can forward only the rest to a native
+ * component. React Native treats unknown props whose names match style keys as
+ * styles on that component, so `padding="md"` would reach it as the string 'md'.
+ */
+export const splitCommonProps = <P extends object>(
+    props: P,
+): [styleProps: Pick<P, Extract<keyof P, StyleKey>>, rest: Omit<P, StyleKey>] => {
+    const styleProps: Record<string, unknown> = {}
+    const rest: Record<string, unknown> = {}
+    for (const [name, value] of Object.entries(props)) {
+        if (STYLE_PROP_NAMES.has(name)) styleProps[name] = value
+        else rest[name] = value
+    }
+    return [styleProps as Pick<P, Extract<keyof P, StyleKey>>, rest as Omit<P, StyleKey>]
+}
+
 /** Resolves a component's style props (padding="md", backgroundColor="primary", …) against the current theme. */
 export const useCommonStyles = (props: CommonProps): ViewStyle => resolveCommonStyles(props, useTheme())

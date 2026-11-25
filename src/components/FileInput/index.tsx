@@ -1,2 +1,3 @@
 export { FileInput } from './file-input'
-export type { FileInputProps } from './file-input.type'
+export { expoDocumentPicker, type ExpoDocumentPickerModule } from './expoDocumentPicker'
+export type { FileInputProps, FilePicker, FilePickerOptions, PickedFile } from './file-input.type'
