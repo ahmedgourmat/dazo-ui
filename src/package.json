@@ -60,7 +60,10 @@
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
     "build": "pnpm clean && rolldown -c && node scripts/emit-cjs-types.js",
     "dev": "rolldown -c --watch",
-    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.test.json",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "check:package": "publint --strict && attw --pack .",
     "size": "size-limit"
   },
@@ -76,13 +79,25 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
+    "@eslint/js": "^9.39.4",
     "@size-limit/preset-small-lib": "^14.3.0",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
     "@types/react": "^19.2.14",
+    "eslint": "^9.39.4",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "globals": "^17.4.0",
+    "jsdom": "^31.0.1",
     "publint": "^0.3.25",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
     "react-native": "0.81.5",
+    "react-native-web": "^0.21.2",
     "rolldown": "^1.3.0",
     "rolldown-plugin-dts": "^0.30.0",
     "size-limit": "^14.3.0",
-    "typescript": "^5.3.0"
+    "typescript": "^5.3.0",
+    "typescript-eslint": "^8.57.0",
+    "vitest": "^4.1.2"
   }
 }

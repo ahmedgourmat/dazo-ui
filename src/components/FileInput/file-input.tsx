@@ -4,6 +4,22 @@ import { useTheme } from '../../providers'
 import { useCommonStyles } from '../../hooks/common.hooks'
 import type { FileInputProps, PickedFile } from './file-input.type'
 
+// The parts of the browser API the web picker uses. The library is built
+// without DOM types because it also runs on iOS and Android.
+type WebFile = { name: string; size: number; type: string }
+type WebFileInput = {
+  type: string
+  multiple: boolean
+  accept: string
+  files: ArrayLike<WebFile> | null
+  onchange: (() => void) | null
+  click: () => void
+}
+type WebGlobals = {
+  document?: { createElement: (tag: 'input') => WebFileInput }
+  URL?: { createObjectURL?: (file: WebFile) => string }
+}
+
 export const FileInput = ({
   label,
   value,
@@ -30,9 +46,7 @@ export const FileInput = ({
   }, [onFilesSelected])
 
   const openWebPicker = useCallback(() => {
-    const webApi = globalThis as any
-    const doc = webApi['document'] as any
-    const urlApi = webApi['URL'] as any
+    const { document: doc, URL: urlApi } = globalThis as unknown as WebGlobals
 
     if (!doc) {
       return
@@ -44,7 +58,7 @@ export const FileInput = ({
     input.accept = commonProps.accept ?? ''
 
     input.onchange = () => {
-      const files = (Array.from((input as any).files ?? []) as any[]).map((file: any) => ({
+      const files = Array.from(input.files ?? []).map((file) => ({
         name: file.name,
         uri: urlApi?.createObjectURL?.(file) ?? '',
         size: file.size,

@@ -66,8 +66,10 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
     fontSize: 15,
   },
+  // Removes the web focus ring, which keyboard users need; fixed by #34.
   noFocusRing: {
     outlineStyle: 'none',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } as any,
   leftIcon: {
     marginRight: 12,

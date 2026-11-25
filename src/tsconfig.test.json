@@ -1,0 +1,14 @@
+{
+  // Typechecks the tests. They run in a simulated browser (jsdom), so they get
+  // the DOM types that the library itself must not use (it also runs on iOS/Android).
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "isolatedDeclarations": false,
+    "declaration": false,
+    "declarationMap": false,
+    "noEmit": true
+  },
+  "include": ["**/*.test.ts", "**/*.test.tsx", "test/**/*.ts", "test/**/*.tsx", "vitest.config.ts"],
+  "exclude": ["node_modules", "dist"]
+}
