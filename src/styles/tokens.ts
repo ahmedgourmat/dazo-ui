@@ -1,3 +1,5 @@
+import { systemFont } from './systemFont'
+
 export const tokens = {
   colors: {
 
@@ -171,10 +173,12 @@ export const tokens = {
     bold:    '700' as const,
   },
 
+  // The system font on every platform; see systemFont.ts and systemFont.web.ts.
+  // Themes can set any family, e.g. { fontFamily: { regular: 'Inter' } }.
   fontFamily: {
-    regular: 'system',
-    medium:  'system',
-    bold:    'system',
+    regular: systemFont as string | undefined,
+    medium:  systemFont as string | undefined,
+    bold:    systemFont as string | undefined,
   },
 
   lineHeight: {

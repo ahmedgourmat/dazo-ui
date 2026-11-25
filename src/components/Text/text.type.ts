@@ -15,7 +15,9 @@ export interface TextProps extends Omit<CommonProps, 'style' | 'scrollable'> {
     textTransform?: TextStyle['textTransform']
     textDecorationLine?: TextStyle['textDecorationLine']
     letterSpacing?: number
+    /** At most this many lines; the rest is cut with an ellipsis (numberOfLines). */
     lines?: number
+    /** At most this many characters; longer text is cut and ends with "...". */
     letters?: number
     style?: StyleProp<TextStyle>
 }

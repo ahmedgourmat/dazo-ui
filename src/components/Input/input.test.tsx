@@ -1,7 +1,23 @@
 import { fireEvent, screen } from '@testing-library/react'
+import { createElement, forwardRef } from 'react'
 import { describe, expect, it, vi } from 'vitest'
-import { renderWithTheme } from '../../test/utils'
+import { lightTheme } from '../../styles/theme'
+import { hexToRgb, renderWithTheme } from '../../test/utils'
 import { Input } from './index'
+
+// Records the props each TextInput receives, then renders the real one.
+// react-native-web drops unknown props before they reach the page, so the DOM
+// alone can't show what iOS and Android would have been given.
+const textInputProps = vi.hoisted(() => [] as Record<string, unknown>[])
+vi.mock('react-native', async (importOriginal) => {
+  const rn = await importOriginal<typeof import('react-native')>()
+  const TextInput = forwardRef((props: Record<string, unknown>, ref) => {
+    textInputProps.push(props)
+    return createElement(rn.TextInput as React.ElementType, { ...props, ref })
+  })
+  return { ...rn, TextInput }
+})
+const lastTextInputProps = () => textInputProps[textInputProps.length - 1]
 
 describe('Input', () => {
   it('shows its value and placeholder', () => {
@@ -32,6 +48,58 @@ describe('Input', () => {
     const input = screen.getByPlaceholderText('Password') as HTMLInputElement
     expect(input.type).toBe('password')
     expect(input.maxLength).toBe(8)
+  })
+
+  describe('style props (#39)', () => {
+    const styleProps = {
+      padding: 'md',
+      marginTop: 'lg',
+      width: 240,
+      backgroundColor: 'primaryLight',
+      borderRadius: 'lg',
+      opacity: 0.9,
+    } as const
+
+    it('styles the field box with them, using theme tokens', () => {
+      renderWithTheme(<Input placeholder='Email' {...styleProps} />)
+
+      const box = getComputedStyle(screen.getByPlaceholderText('Email').parentElement as HTMLElement)
+      expect(box.paddingTop).toBe(`${lightTheme.spacing.md}px`)
+      expect(box.marginTop).toBe(`${lightTheme.spacing.lg}px`)
+      expect(box.width).toBe('240px')
+      expect(box.backgroundColor).toBe(hexToRgb(lightTheme.colors.primaryLight))
+      expect(box.borderTopLeftRadius).toBe(`${lightTheme.radius.lg}px`)
+      expect(box.opacity).toBe('0.9')
+    })
+
+    it('does not pass them to the TextInput', () => {
+      renderWithTheme(<Input placeholder='Email' {...styleProps} />)
+
+      const received = Object.keys(lastTextInputProps())
+      for (const name of Object.keys(styleProps)) expect(received).not.toContain(name)
+    })
+
+    it('still passes every TextInput prop through', () => {
+      const onSubmitEditing = vi.fn()
+      renderWithTheme(
+        <Input
+          placeholder='Email'
+          keyboardType='email-address'
+          autoCapitalize='none'
+          testID='email'
+          onSubmitEditing={onSubmitEditing}
+          padding='md'
+        />,
+      )
+
+      expect(lastTextInputProps()).toMatchObject({
+        placeholder: 'Email',
+        keyboardType: 'email-address',
+        autoCapitalize: 'none',
+        testID: 'email',
+        onSubmitEditing,
+      })
+    })
   })
 
   describe('focus ring (#34)', () => {

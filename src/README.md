@@ -39,7 +39,20 @@ If your Expo app also runs on web, add the web packages too:
 npx expo install react-dom react-native-web @expo/metro-runtime
 ```
 
-FileInput has no built-in native picker yet. On iOS and Android, pass your own picker through the `customPicker` prop, for example one built on `expo-document-picker`.
+FileInput needs a picker on iOS and Android. dazo-ui doesn't install one, but it ships a ready-made adapter for `expo-document-picker`:
+
+```bash
+npx expo install expo-document-picker
+```
+
+```tsx
+import * as DocumentPicker from 'expo-document-picker'
+import { expoDocumentPicker, FileInput } from 'dazo-ui'
+
+<FileInput multiple accept='image/*,application/pdf' customPicker={expoDocumentPicker(DocumentPicker)} />
+```
+
+Any other picker works too: `customPicker` receives `{ accept, multiple }` and resolves with the picked files, or `null` when cancelled.
 
 ### React Web (Vite/Next)
 

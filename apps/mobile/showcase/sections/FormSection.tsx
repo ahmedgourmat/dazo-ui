@@ -1,4 +1,4 @@
-import { Checkbox, FileInput, Input, RadioGroup, Select, Text } from 'dazo-ui'
+import { Checkbox, expoDocumentPicker, FileInput, Input, RadioGroup, Select, Text } from 'dazo-ui'
 import * as DocumentPicker from 'expo-document-picker'
 import { useState } from 'react'
 import { ShowcaseSection } from '../components/ShowcaseSection'
@@ -9,7 +9,7 @@ const code = `import { Checkbox, FileInput, Input, RadioGroup, Select } from 'da
 <Select value={plan} onChange={setPlan} options={plans} />
 <RadioGroup value={role} onChange={setRole} options={roles} />
 <Checkbox label='Remember me' checked={rememberMe} onChange={setRememberMe} />
-<FileInput multiple onFilesSelected={(files) => {}} />`
+<FileInput multiple customPicker={expoDocumentPicker(DocumentPicker)} onFilesSelected={(files) => {}} />`
 
 export const FormSection = (): React.JSX.Element => {
   const [email, setEmail] = useState('')
@@ -90,19 +90,7 @@ export const FormSection = (): React.JSX.Element => {
         placeholder='Select one or more files'
         accept='image/*,application/pdf'
         multiple
-        customPicker={async () => {
-          const result = await DocumentPicker.getDocumentAsync({
-            multiple: true,
-            type: ['image/*', 'application/pdf'],
-          })
-          if (result.canceled) return []
-          return result.assets.map((asset) => ({
-            name: asset.name,
-            uri: asset.uri,
-            size: asset.size,
-            mimeType: asset.mimeType,
-          }))
-        }}
+        customPicker={expoDocumentPicker(DocumentPicker)}
         onFilesSelected={(files) => {
           setPickedFileNames(files.map((file) => file.name).join(', '))
         }}

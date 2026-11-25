@@ -1,6 +1,6 @@
 import { useState, type JSX } from 'react'
 import { StyleSheet, TextInput, View, type TextStyle } from 'react-native'
-import { useCommonStyles } from '../../hooks/common.hooks'
+import { splitCommonProps, useCommonStyles } from '../../hooks/common.hooks'
 import type { InputProps } from './input.type'
 import { useInputStyles } from './input.hooks'
 
@@ -17,9 +17,12 @@ export const Input = ({
   editable = true,
   onFocus,
   onBlur,
-  ...commonAndNativeProps
+  ...rest
 }: InputProps): JSX.Element => {
-  const commonStyles = useCommonStyles(commonAndNativeProps)
+  // Style props (padding, width, backgroundColor, …) style the field's box;
+  // only the remaining TextInput props go to the TextInput.
+  const [styleProps, nativeProps] = splitCommonProps(rest)
+  const commonStyles = useCommonStyles(styleProps)
   const selectedVariant = useInputStyles({ variant, editable, textColor })
   const [focused, setFocused] = useState(false)
 
@@ -47,7 +50,7 @@ export const Input = ({
       {leftIcon ? <View style={styles.leftIcon}>{leftIcon}</View> : null}
 
       <TextInput
-        {...commonAndNativeProps}
+        {...nativeProps}
         value={value}
         editable={editable}
         onChangeText={onChangeText}

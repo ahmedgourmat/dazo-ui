@@ -134,48 +134,11 @@ export const useTextContent = ({
                 ? `${children.slice(0, safeLetters)}...`
                 : children
 
-        if (safeLines === undefined) {
-            return {
-                displayText,
-                numberOfLines: undefined,
-            }
-        }
-
-        const words = displayText.trim().split(/\s+/).filter(Boolean)
-        const wordCount = Math.max(words.length, 1)
-
-        // Max logical lines = number of words (spaces + 1).
-        const numberOfLines = Math.min(safeLines, wordCount)
-
-        if (numberOfLines <= 1 || words.length <= 1) {
-            return {
-                displayText,
-                numberOfLines,
-            }
-        }
-
-        // Force logical wrapping by distributing words across target lines.
-        const baseWordsPerLine = Math.floor(words.length / numberOfLines)
-        let remainder = words.length % numberOfLines
-        let cursor = 0
-        const chunks: string[] = []
-
-        for (let i = 0; i < numberOfLines; i += 1) {
-            const take = baseWordsPerLine + (remainder > 0 ? 1 : 0)
-            const chunk = words.slice(cursor, cursor + take).join(' ')
-            chunks.push(chunk)
-            cursor += take
-            if (remainder > 0) remainder -= 1
-        }
-
-        const wrappedText = chunks.join('\n')
-
+        // `lines` is a maximum: the text wraps where the width needs it, and
+        // anything past the last allowed line is cut with an ellipsis.
         return {
-            displayText: wrappedText,
-            numberOfLines,
+            displayText,
+            numberOfLines: safeLines,
         }
     }, [children, lines, letters])
 }
-
-
-
