@@ -1,6 +1,7 @@
 import { fireEvent, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import { isDisabled, renderWithTheme } from '../../test/utils'
+import { lightTheme } from '../../styles/theme'
+import { hexToRgb, isDisabled, renderWithTheme } from '../../test/utils'
 import { Checkbox } from './index'
 
 describe('Checkbox', () => {
@@ -69,6 +70,44 @@ describe('Checkbox', () => {
     fireEvent.click(screen.getByText('Terms'))
 
     expect(onChange).not.toHaveBeenCalled()
+  })
+
+  describe('layout props (#32)', () => {
+    const box = () => getComputedStyle(screen.getByRole('checkbox'))
+    const { spacing, radius, colors } = lightTheme
+
+    it('resolves spacing tokens instead of passing "md" through', () => {
+      renderWithTheme(<Checkbox label='Terms' padding='md' marginTop='lg' />)
+
+      expect(box().paddingTop).toBe(`${spacing.md}px`)
+      expect(box().paddingLeft).toBe(`${spacing.md}px`)
+      expect(box().marginTop).toBe(`${spacing.lg}px`)
+    })
+
+    it('lets a single side win over its shorthand, as before', () => {
+      renderWithTheme(<Checkbox label='Terms' marginVertical='sm' marginBottom={3} paddingHorizontal={5} />)
+
+      expect(box().marginTop).toBe(`${spacing.sm}px`)
+      expect(box().marginBottom).toBe('3px')
+      expect(box().paddingLeft).toBe('5px')
+      expect(box().paddingRight).toBe('5px')
+    })
+
+    it('applies the other layout props it used to ignore', () => {
+      renderWithTheme(<Checkbox label='Terms' backgroundColor='backgroundSunken' borderRadius='lg' width={200} opacity={0.5} />)
+
+      expect(box().backgroundColor).toBe(hexToRgb(colors.backgroundSunken))
+      expect(box().borderTopLeftRadius).toBe(`${radius.lg}px`)
+      expect(box().width).toBe('200px')
+      expect(box().opacity).toBe('0.5')
+    })
+
+    it('still lets `style` override them', () => {
+      renderWithTheme(<Checkbox label='Terms' padding='md' style={{ paddingTop: 1 }} />)
+
+      expect(box().paddingTop).toBe('1px')
+      expect(box().paddingBottom).toBe(`${spacing.md}px`)
+    })
   })
 
   it('falls back to `value` as the accessible name when there is no label', () => {

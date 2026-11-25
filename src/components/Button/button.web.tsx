@@ -1,5 +1,5 @@
 import type { CSSProperties, JSX } from 'react'
-import { ActivityIndicator } from 'react-native'
+import { ActivityIndicator, StyleSheet } from 'react-native'
 import { useButtonStyles } from './button.hooks'
 import type { ButtonProps } from './button.type'
 import { useCommonStyles } from '../../hooks/common.hooks'
@@ -24,6 +24,7 @@ export const Button = ({
 
   const computed = useButtonStyles({ variant, size, disabled, fullWidth })
   const commonStyles = useCommonStyles(commonProps)
+  const labelTextStyle = StyleSheet.flatten([computed.label, labelStyle])
   const resolvedLeftIcon = leftIcon ?? icon
   const resolvedRightIcon = rightIcon
 
@@ -61,8 +62,10 @@ export const Button = ({
           </span>
         ) : null}
         <span style={{
-          ...computed.label as CSSProperties,
-          ...(labelStyle as object),
+          ...labelTextStyle as CSSProperties,
+          // React Native line heights are in pixels, but a unitless CSS
+          // line-height is a multiplier: 14.95 would mean 14.95 × the font size.
+          lineHeight: typeof labelTextStyle.lineHeight === 'number' ? `${labelTextStyle.lineHeight}px` : undefined,
         }}>
           {label}
         </span>

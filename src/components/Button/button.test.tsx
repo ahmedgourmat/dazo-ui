@@ -1,5 +1,6 @@
 import { fireEvent, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
+import { lightTheme } from '../../styles/theme'
 import { isDisabled, renderWithTheme } from '../../test/utils'
 import { Button } from './index'
 
@@ -44,6 +45,43 @@ describe('Button', () => {
     expect(screen.getByText('left')).toBeTruthy()
     expect(screen.getByText('right')).toBeTruthy()
     expect(screen.getByText('legacy')).toBeTruthy()
+  })
+
+  describe('sizes (#29)', () => {
+    const cases = [
+      { size: 'sm', minHeight: 32, paddingY: 6, paddingX: 12, fontSize: lightTheme.fontSize.sm },
+      { size: 'md', minHeight: 40, paddingY: 8, paddingX: 20, fontSize: lightTheme.fontSize.md },
+      { size: 'lg', minHeight: 48, paddingY: 10, paddingX: 24, fontSize: lightTheme.fontSize.lg },
+    ] as const
+
+    for (const c of cases) {
+      it(`${c.size}: a minimum height (not a maximum) with padding that leaves room for the label`, () => {
+        renderWithTheme(<Button label='Save' size={c.size} />)
+        const button = getComputedStyle(screen.getByRole('button', { name: 'Save' }))
+        const labelLine = parseFloat(getComputedStyle(screen.getByText('Save')).lineHeight)
+
+        expect(button.minHeight).toBe(`${c.minHeight}px`)
+        expect(button.maxHeight).not.toBe(`${c.minHeight}px`)
+        expect([button.paddingTop, button.paddingBottom]).toEqual([`${c.paddingY}px`, `${c.paddingY}px`])
+        expect([button.paddingLeft, button.paddingRight]).toEqual([`${c.paddingX}px`, `${c.paddingX}px`])
+        // The label line is set in pixels (a unitless CSS value would be a multiplier)
+        // and fits inside the minimum height together with the padding.
+        expect(labelLine).toBeCloseTo(c.fontSize * 1.15, 1)
+        expect(labelLine + 2 * c.paddingY).toBeLessThanOrEqual(c.minHeight)
+      })
+    }
+
+    it('converts a lineHeight given in labelStyle to pixels too', () => {
+      renderWithTheme(<Button label='Save' labelStyle={{ lineHeight: 22 }} />)
+
+      expect(getComputedStyle(screen.getByText('Save')).lineHeight).toBe('22px')
+    })
+
+    it('draws a solid border for the outline variant', () => {
+      renderWithTheme(<Button label='Save' variant='outline' />)
+
+      expect(getComputedStyle(screen.getByRole('button', { name: 'Save' })).borderTopStyle).toBe('solid')
+    })
   })
 
   describe('accessibility (#33)', () => {

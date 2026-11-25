@@ -2,11 +2,7 @@ import { useMemo, type JSX } from 'react'
 import { useColorScheme } from 'react-native'
 import { lightTheme, darkTheme, type Theme } from '../../styles/theme'
 import { ThemeContext } from './Theme.context'
-
-
-type DeepPartial<T> = {
-  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P]
-}
+import { mergeTheme, type DeepPartial } from './mergeTheme'
 
 type ThemeProviderProps = {
   children: React.ReactNode
@@ -35,22 +31,9 @@ export const ThemeProvider = ({
     // if consumer passed overrides, deep merge them on top of the base
     if (!overrides) return base
 
-    return {
-      ...base,
-      ...overrides,
-      colors: {
-        ...base.colors,
-        ...(overrides.colors ?? {}),
-      },
-      spacing: {
-        ...base.spacing,
-        ...(overrides.spacing ?? {}),
-      },
-      fontFamily: {
-        ...base.fontFamily,
-        ...(overrides.fontFamily ?? {}),
-      },
-    } as Theme
+    // Every section (colors, spacing, radius, fontSize, fontWeight, fontFamily,
+    // lineHeight, and any you add) keeps the values you don't override.
+    return mergeTheme(base, overrides)
   }, [deviceScheme, colorScheme, overrides])
 
   return (

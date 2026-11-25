@@ -42,6 +42,12 @@ export const accessibilityProblems = async (root: Element = document.body): Prom
   )
 }
 
+/** '#9333EA' → 'rgb(147, 51, 234)', the form getComputedStyle reports colors in. */
+export const hexToRgb = (hex: string): string => {
+  const n = Number.parseInt(hex.replace('#', ''), 16)
+  return `rgb(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255})`
+}
+
 /** True when an element is disabled for both pointer and assistive-technology users. */
 export const isDisabled = (element: Element): boolean =>
   element.hasAttribute('disabled') || element.getAttribute('aria-disabled') === 'true'

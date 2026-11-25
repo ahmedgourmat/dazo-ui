@@ -3,6 +3,7 @@ import { Pressable, View, Text, StyleSheet } from 'react-native'
 import { useCheckboxStyles, useCheckboxLabelStyles } from './checkbox.hooks'
 import type { CheckboxProps } from './checkbox.type'
 import { spaceKeyActivates } from '../../hooks/keyboard'
+import { useCommonStyles } from '../../hooks/common.hooks'
 
 export const Checkbox: React.ForwardRefExoticComponent<
   CheckboxProps & React.RefAttributes<View>
@@ -22,16 +23,13 @@ export const Checkbox: React.ForwardRefExoticComponent<
       style,
       labelStyle,
       checkboxSize = 20,
-      marginBottom,
-      marginTop,
-      marginVertical,
-      marginHorizontal,
-      paddingVertical,
-      paddingHorizontal,
-      padding,
+      ...commonProps
     },
     ref
   ) => {
+    // Spacing, size, border and color props go through the same path as every
+    // other component, so tokens like padding="md" resolve to theme values.
+    const commonStyles = useCommonStyles(commonProps)
     const { boxStyle, checkmarkStyle } = useCheckboxStyles({
       checked,
       disabled,
@@ -52,26 +50,10 @@ export const Checkbox: React.ForwardRefExoticComponent<
       }
     }
 
-    // Spacing tokens like 'md' reach the style unresolved here; fixed by #32.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const containerStyle: any = [
-      styles.container,
-      {
-        marginBottom: marginBottom ?? marginVertical,
-        marginTop: marginTop ?? marginVertical,
-        marginLeft: marginHorizontal,
-        marginRight: marginHorizontal,
-        paddingVertical,
-        paddingHorizontal,
-        padding,
-      },
-      style,
-    ]
-
     return (
       <Pressable
         ref={ref}
-        style={containerStyle}
+        style={[styles.container, commonStyles, style]}
         onPress={handlePress}
         disabled={disabled}
         // role and aria-* work on iOS, Android and web; react-native-web
