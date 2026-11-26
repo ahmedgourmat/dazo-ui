@@ -150,7 +150,7 @@ describe('accent palettes', () => {
   })
 })
 
-describe('deprecated names keep working (1.x)', () => {
+describe('deprecated names keep working', () => {
   it('old color names always equal the roles that replaced them', () => {
     for (const theme of [lightTheme, darkTheme, buildTheme('dark', 'orange')]) {
       const c = theme.colors
