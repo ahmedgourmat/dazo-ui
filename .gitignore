@@ -12,3 +12,7 @@ build
 docs
 # A separate repo (ahmedgourmat/cross-platform-lib-compiler) kept next to this one locally
 cross-platform-lib-compiler/
+
+# Copied from the repo root by "prepack" (scripts/copy-root-docs.js); edit the root files
+src/README.md
+src/LICENSE

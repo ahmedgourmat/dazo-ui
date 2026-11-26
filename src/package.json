@@ -1,11 +1,39 @@
 {
   "name": "dazo-ui",
-  "version": "1.0.2",
+  "version": "2.0.0",
+  "description": "Minimal, theme-aware UI components for React Native and the web, from one API.",
+  "license": "MIT",
+  "author": "ahmedgourmat (https://github.com/ahmedgourmat)",
+  "homepage": "https://github.com/ahmedgourmat/dazo-ui#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahmedgourmat/dazo-ui.git",
+    "directory": "src"
+  },
+  "bugs": {
+    "url": "https://github.com/ahmedgourmat/dazo-ui/issues"
+  },
+  "keywords": [
+    "react-native",
+    "react-native-web",
+    "react",
+    "expo",
+    "ui",
+    "components",
+    "component-library",
+    "design-system",
+    "cross-platform",
+    "theme",
+    "dark-mode",
+    "accessibility",
+    "typescript"
+  ],
   "private": false,
   "type": "module",
   "sideEffects": false,
   "files": [
-    "dist"
+    "dist",
+    "CHANGELOG.md"
   ],
   "main": "./dist/web/index.cjs",
   "module": "./dist/web/index.js",
@@ -59,6 +87,7 @@
   "scripts": {
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
     "build": "pnpm clean && rolldown -c && node scripts/emit-cjs-types.js",
+    "prepack": "node scripts/copy-root-docs.js",
     "dev": "rolldown -c --watch",
     "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.test.json",
     "lint": "eslint .",
@@ -100,5 +129,8 @@
     "typescript": "^5.3.0",
     "typescript-eslint": "^8.57.0",
     "vitest": "^4.1.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
