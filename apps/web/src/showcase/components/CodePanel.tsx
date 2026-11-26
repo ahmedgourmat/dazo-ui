@@ -21,8 +21,8 @@ export const CodePanel = ({ title, code }: CodePanelProps) => {
   const wrapperStyle: CSSProperties = {
     borderRadius: theme.radius.md,
     border: `1px solid ${theme.colors.border}`,
-    background: theme.colors.backgroundSunken,
-    color: theme.colors.textPrimary,
+    background: theme.colors.surfaceMuted,
+    color: theme.colors.foreground,
     padding: theme.spacing.md,
     minHeight: 220,
   }

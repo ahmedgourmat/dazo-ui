@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useRef, useState, type JSX } from 'react'
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Platform, Pressable, StyleSheet, Text, View, type ViewStyle } from 'react-native'
 import { useTheme } from '../../providers'
 import { useCommonStyles } from '../../hooks/common.hooks'
+import { useFieldStyles } from '../../hooks/field.hooks'
+import { isFocusVisible, useFocusVisibleTracking } from '../../hooks/focusVisible'
+import type { InteractionState } from '../../styles/interaction'
 import type { FileInputProps, PickedFile } from './file-input.type'
 
 // The parts of the browser API the web picker uses. The library is built
@@ -33,6 +36,7 @@ export const FileInput = ({
   accept,
   multiple = false,
   disabled = false,
+  size = 'md',
   leftIcon,
   rightIcon,
   autoOpenPicker = true,
@@ -46,6 +50,12 @@ export const FileInput = ({
 }: FileInputProps): JSX.Element => {
   const theme = useTheme()
   const commonStyles = useCommonStyles(commonProps)
+  const field = useFieldStyles({ size, disabled })
+  useFocusVisibleTracking()
+  // Hover and keyboard focus on the picker show on the whole box, so they
+  // follow its rounded edge.
+  const [hovered, setHovered] = useState(false)
+  const [focused, setFocused] = useState(false)
   const [selectedFiles, setSelectedFiles] = useState<PickedFile[]>([])
 
   // blob: URLs this FileInput created for the built-in web picker. Each set is
@@ -152,18 +162,11 @@ export const FileInput = ({
     <View
       style={[
         styles.container,
-        {
-          borderColor: theme.colors.border,
-          backgroundColor: theme.colors.backgroundSurface,
-          opacity: disabled ? 0.7 : 1,
-          shadowColor: '#000000',
-          shadowOpacity: disabled ? 0 : 0.06,
-          shadowRadius: 8,
-          shadowOffset: { width: 0, height: 2 },
-          elevation: disabled ? 0 : 1,
-        },
+        field.box,
+        hovered && field.hovered,
         commonStyles,
         style,
+        isFocusVisible(focused) && field.focused,
       ]}
     >
       <Pressable
@@ -174,17 +177,21 @@ export const FileInput = ({
         // voice-control users can say what they see.
         role='button'
         aria-disabled={disabled}
-        style={[styles.picker, showClear && styles.pickerBeforeClear]}
+        hitSlop={field.hitSlop}
+        onHoverIn={() => setHovered(true)}
+        onHoverOut={() => setHovered(false)}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        // The box draws the focus ring instead.
+        style={[styles.picker, styles.noFocusRing, field.content, showClear && styles.pickerBeforeClear]}
       >
         {leftIcon ? <View style={styles.leftIcon}>{leftIcon}</View> : null}
-
         <View style={styles.content}>
-          {label ? <Text style={[styles.label, { color: theme.colors.textSecondary, fontFamily: theme.fontFamily.regular }, labelStyle]}>{label}</Text> : null}
-          <Text style={[styles.value, { color: shownValue ? theme.colors.textPrimary : theme.colors.textSecondary, fontFamily: theme.fontFamily.regular }]} numberOfLines={1}>
+          {label ? <Text style={[field.label, labelStyle]}>{label}</Text> : null}
+          <Text style={[field.value, !shownValue && { color: field.placeholderColor }]} numberOfLines={1}>
             {displayValue}
           </Text>
         </View>
-
         {rightIcon ? <View style={styles.rightIcon}>{rightIcon}</View> : null}
       </Pressable>
 
@@ -193,9 +200,25 @@ export const FileInput = ({
           onPress={handleClear}
           role='button'
           aria-label={label ? `Clear ${label}` : 'Clear'}
-          style={styles.clearButton}
+          style={({ hovered: clearHovered, focused: clearFocused }: InteractionState) => [
+            styles.clearButton,
+            { paddingRight: field.content.paddingHorizontal },
+            clearHovered && styles.clearHovered,
+            // Inside the button: the box would clip a ring outside it.
+            isFocusVisible(clearFocused) && [field.focused, { outlineOffset: -2 }],
+          ]}
         >
-          <Text style={[styles.clear, { color: theme.colors.primary, fontFamily: theme.fontFamily.regular }]}>Clear</Text>
+          <Text
+            style={{
+              color: theme.colors.foreground,
+              fontSize: theme.fontSize.sm,
+              lineHeight: theme.leading.sm,
+              fontFamily: theme.fontFamily.medium,
+              fontWeight: theme.fontWeight.medium,
+            }}
+          >
+            Clear
+          </Text>
         </Pressable>
       ) : null}
     </View>
@@ -204,45 +227,37 @@ export const FileInput = ({
 
 const styles = StyleSheet.create({
   container: {
-    minHeight: 48,
-    borderWidth: 1,
-    borderRadius: 14,
     flexDirection: 'row',
     alignItems: 'stretch',
+    overflow: 'hidden',
   },
   // The picker fills the box, so the whole field stays clickable as before.
   picker: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
   },
+  // React Native's types don't list 'none', but react-native-web passes it to CSS.
+  noFocusRing: {
+    outlineStyle: 'none',
+  } as unknown as ViewStyle,
   pickerBeforeClear: {
     paddingRight: 0,
   },
   clearButton: {
     justifyContent: 'center',
     paddingLeft: 12,
-    paddingRight: 16,
+  },
+  clearHovered: {
+    opacity: 0.7,
   },
   content: {
     flex: 1,
-    paddingVertical: 10,
-  },
-  label: {
-    fontSize: 12,
-    marginBottom: 2,
-  },
-  value: {
-    fontSize: 15,
   },
   leftIcon: {
-    marginRight: 12,
+    marginRight: 8,
   },
   rightIcon: {
-    marginLeft: 12,
-  },
-  clear: {
-    fontSize: 12,
+    marginLeft: 8,
   },
 })

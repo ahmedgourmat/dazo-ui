@@ -2,11 +2,16 @@ import { act, fireEvent, render, type RenderResult } from '@testing-library/reac
 import axe from 'axe-core'
 import type { ReactElement } from 'react'
 import { ThemeProvider } from '../providers'
-import { changeSystemScheme, type Scheme } from './match-media'
+import { changeReducedMotion, changeSystemScheme, type Scheme } from './match-media'
 
 /** Simulate the operating system switching between light and dark mode. */
 export const setSystemColorScheme = (scheme: Scheme): void => {
   act(() => changeSystemScheme(scheme))
+}
+
+/** Simulate the operating system's "reduce motion" setting changing. */
+export const setReducedMotion = (reduce: boolean): void => {
+  act(() => changeReducedMotion(reduce))
 }
 
 /**

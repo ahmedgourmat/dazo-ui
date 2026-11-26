@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import type { TextStyle, ViewStyle } from 'react-native'
 import { useTheme } from '../../providers'
+import { DISABLED_OPACITY } from '../../styles/interaction'
 
 export type CheckboxStyles = {
   boxStyle: ViewStyle
@@ -27,25 +28,25 @@ export const useCheckboxStyles = ({
     const baseBoxStyle: ViewStyle = {
       width: checkboxSize,
       height: checkboxSize,
-      borderRadius: 6,
-      borderWidth: 2,
+      borderRadius: theme.radius.sm,
+      borderWidth: theme.borderWidth.thin,
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: checked
         ? checkedColor || theme.colors.primary
-        : uncheckedColor || 'transparent',
+        : uncheckedColor || theme.colors.surface,
+      // `input` has 3:1 contrast, so an unchecked box is still easy to see.
       borderColor: checked
         ? checkedColor || theme.colors.primary
-        : disabled
-          ? theme.colors.border
-          : theme.colors.borderStrong,
-      opacity: disabled ? 0.5 : 1,
+        : theme.colors.input,
+      opacity: disabled ? DISABLED_OPACITY : 1,
     }
 
     const checkmarkStyle: TextStyle = {
-      color: checkmarkColor || theme.colors.textInverse,
+      color: checkmarkColor || theme.colors.primaryForeground,
       fontSize: checkboxSize * 0.65,
-      fontWeight: '700' as const,
+      lineHeight: checkboxSize * 0.8,
+      fontWeight: theme.fontWeight.bold,
     }
 
     return {
@@ -65,10 +66,11 @@ export const useCheckboxLabelStyles = ({
 
   return useMemo(() => {
     return {
-      color: textColor || theme.colors.textPrimary,
-      opacity: disabled ? 0.5 : 1,
+      color: textColor || theme.colors.foreground,
+      opacity: disabled ? DISABLED_OPACITY : 1,
       fontFamily: theme.fontFamily.regular,
-      fontSize: theme.fontSize.md,
+      fontSize: theme.fontSize.base,
+      lineHeight: theme.leading.base,
     }
   }, [disabled, textColor, theme])
 }

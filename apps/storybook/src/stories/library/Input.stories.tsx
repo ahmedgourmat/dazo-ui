@@ -18,6 +18,13 @@ const meta = {
     editable: {
       control: 'boolean',
     },
+    invalid: {
+      control: 'boolean',
+    },
+    size: {
+      control: 'inline-radio',
+      options: ['sm', 'md', 'lg', 'xl'],
+    },
     textColor: {
       control: 'color',
     },

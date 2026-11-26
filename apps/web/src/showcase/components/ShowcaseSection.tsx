@@ -35,7 +35,7 @@ export const ShowcaseSection = ({
         <Container
           flex={1}
           minWidth={320}
-          backgroundColor='backgroundSurface'
+          backgroundColor='surface'
           borderRadius='md'
           borderWidth={1}
           borderColor='border'

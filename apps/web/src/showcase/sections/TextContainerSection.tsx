@@ -35,15 +35,15 @@ export const TextContainerSection = () => {
       </Text>
 
       <Container flexDirection='row' flexWrap='wrap' gap='sm'>
-        <Container backgroundColor='backgroundSurface' padding='md' borderRadius='md' minWidth={150} borderWidth={1} borderColor='border'>
+        <Container backgroundColor='surface' padding='md' borderRadius='md' minWidth={150} borderWidth={1} borderColor='border'>
           <Text variant='caption'>Analytics</Text>
           <Text variant='title'>1,284</Text>
         </Container>
-        <Container backgroundColor='backgroundSurface' padding='md' borderRadius='md' minWidth={150} borderWidth={1} borderColor='border'>
+        <Container backgroundColor='surface' padding='md' borderRadius='md' minWidth={150} borderWidth={1} borderColor='border'>
           <Text variant='caption'>Revenue</Text>
           <Text variant='title'>$9.8k</Text>
         </Container>
-        <Container backgroundColor='backgroundSurface' padding='md' borderRadius='md' minWidth={150} borderWidth={1} borderColor='border'>
+        <Container backgroundColor='surface' padding='md' borderRadius='md' minWidth={150} borderWidth={1} borderColor='border'>
           <Text variant='caption'>Tasks</Text>
           <Text variant='title'>24</Text>
         </Container>

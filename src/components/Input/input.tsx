@@ -10,6 +10,8 @@ export const Input = ({
   textColor,
   onChangeText,
   variant = 'outline',
+  size = 'md',
+  invalid = false,
   leftIcon,
   rightIcon,
   style,
@@ -24,7 +26,7 @@ export const Input = ({
   // only the remaining TextInput props go to the TextInput.
   const [styleProps, nativeProps] = splitCommonProps(rest)
   const commonStyles = useCommonStyles(styleProps)
-  const selectedVariant = useInputStyles({ variant, editable, textColor })
+  const selectedVariant = useInputStyles({ variant, size, editable, invalid, textColor })
   const [focused, setFocused] = useState(false)
 
   const handleFocus: NonNullable<InputProps['onFocus']> = (event) => {
@@ -41,7 +43,6 @@ export const Input = ({
       style={[
         styles.container,
         selectedVariant.container,
-        { opacity: editable ? 1 : 0.7 },
         commonStyles,
         style,
         // Last, so a custom `style` can't hide which field has focus.
@@ -53,6 +54,9 @@ export const Input = ({
       <TextInput
         {...nativeProps}
         ref={ref}
+        // react-native-web puts this on the <input>; React Native's types
+        // don't list it, and iOS and Android ignore it.
+        {...(invalid ? { 'aria-invalid': true } as object : null)}
         value={value}
         editable={editable}
         onChangeText={onChangeText}
@@ -74,18 +78,12 @@ export const Input = ({
 
 const styles = StyleSheet.create({
   container: {
-    minHeight: 48,
-    borderWidth: 1,
-    borderRadius: 14,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
   },
   input: {
     flex: 1,
-    minHeight: 44,
     paddingVertical: 0,
-    fontSize: 15,
   },
   // The browser's own ring would sit tightly around the bare text box inside the
   // field; the container draws focusRing around the whole field instead.
@@ -95,12 +93,12 @@ const styles = StyleSheet.create({
     outlineStyle: 'none',
   } as unknown as TextStyle,
   leftIcon: {
-    marginRight: 12,
+    marginRight: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
   rightIcon: {
-    marginLeft: 12,
+    marginLeft: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },

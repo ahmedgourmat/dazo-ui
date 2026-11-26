@@ -1,5 +1,6 @@
 import type { StyleProp, ViewStyle } from 'react-native'
-import type { RadiusKey, SpacingValue } from './tokens'
+import type { ShadowKey } from './shadow'
+import type { BorderWidthKey, RadiusKey, SpacingValue } from './tokens'
 export interface CommonProps {
     children?: React.ReactNode
 
@@ -59,6 +60,8 @@ export interface CommonProps {
     // Visual
     opacity?: number
     overflow?: 'visible' | 'hidden' | 'scroll'
+    /** Elevation level from the theme: 'none' | 'sm' | 'md' | 'lg' | 'xl'. The shadow* props below override parts of it. */
+    shadow?: ShadowKey
     elevation?: number           // Android shadow
     shadowColor?: string         // iOS shadow
     shadowOpacity?: number
@@ -66,17 +69,17 @@ export interface CommonProps {
     shadowOffset?: { width: number; height: number }
 
     // Border (missing ones)
-    borderTopWidth?: number
-    borderBottomWidth?: number
-    borderLeftWidth?: number
-    borderRightWidth?: number
+    borderTopWidth?: BorderWidthKey | number
+    borderBottomWidth?: BorderWidthKey | number
+    borderLeftWidth?: BorderWidthKey | number
+    borderRightWidth?: BorderWidthKey | number
     borderTopLeftRadius?: RadiusKey | number
     borderTopRightRadius?: RadiusKey | number
     borderBottomLeftRadius?: RadiusKey | number
     borderBottomRightRadius?: RadiusKey | number
     borderStyle?: 'solid' | 'dotted' | 'dashed'
     borderRadius?: RadiusKey | number
-    borderWidth?: number
+    borderWidth?: BorderWidthKey | number
     borderColor?: string
     borderTopColor?: string
     borderBottomColor?: string

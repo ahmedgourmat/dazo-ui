@@ -15,7 +15,7 @@ const meta = {
     },
     size: {
       control: 'inline-radio',
-      options: ['xs', 'sm', 'md', 'lg', 'xl'],
+      options: ['xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl'],
     },
     color: {
       control: 'color',
@@ -30,7 +30,7 @@ const meta = {
   args: {
     children: 'A focused typographic system makes UI easier to scan and understand.',
     variant: 'default',
-    size: 'md',
+    size: 'base',
   },
 } satisfies Meta<typeof Text>
 

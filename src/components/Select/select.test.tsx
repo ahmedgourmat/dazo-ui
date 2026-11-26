@@ -114,7 +114,8 @@ describe('Select', () => {
 
       const group = screen.getByRole('radiogroup', { name: 'Plan' })
       const radios = within(group).getAllByRole('radio')
-      expect(radios.map((radio) => radio.textContent)).toEqual(['Starter', 'Pro', 'Legacy'])
+      // Named by their labels alone: the checkmark on the selected one is hidden from screen readers.
+      expect(radios).toEqual(['Starter', 'Pro', 'Legacy'].map((name) => within(group).getByRole('radio', { name })))
       expect(radios.map((radio) => radio.getAttribute('aria-checked'))).toEqual(['false', 'true', 'false'])
       expect(radios.map(isDisabled)).toEqual([false, false, true])
     })
