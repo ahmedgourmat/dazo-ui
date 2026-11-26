@@ -4,7 +4,7 @@ All notable changes to dazo-ui are listed here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow
 [Semantic Versioning](https://semver.org/).
 
-## [2.0.0] - Unreleased
+## [2.0.0] - 2026-11-26
 
 The first version built on the Dazo UI design system, with a new monochrome
 look, design tokens, accessibility built in, and a much smaller package. See
