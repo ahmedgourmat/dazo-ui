@@ -74,6 +74,7 @@ const toRenderableNode = (content: unknown): ReactNode => {
 }
 
 export const Table = <T extends Record<string, unknown>>({
+  ref,
   columns,
   data,
   keyExtractor,
@@ -129,6 +130,7 @@ export const Table = <T extends Record<string, unknown>>({
 
   const tableContent = (
     <View
+      ref={ref}
       style={[
         styles.table,
         {

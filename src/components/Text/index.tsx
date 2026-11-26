@@ -5,6 +5,7 @@ import type { TextProps } from './text.type'
 import { useTextContent, useTextStyles } from './text.hooks'
 
 export const Text = ({
+  ref,
   children,
   variant = 'default',
   size,
@@ -47,6 +48,7 @@ export const Text = ({
 
   return (
     <RNText
+      ref={ref}
       style={[styles.base, commonStyles, computedTextStyle, style]}
       numberOfLines={numberOfLines}
       ellipsizeMode='tail'

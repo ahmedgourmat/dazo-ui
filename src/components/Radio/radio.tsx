@@ -6,6 +6,7 @@ import type { RadioGroupProps } from './radio.type'
 import { spaceKeyActivates } from '../../hooks/keyboard'
 
 export const RadioGroup = ({
+    ref,
     options,
     value,
     onChange,
@@ -25,6 +26,7 @@ export const RadioGroup = ({
 
     return (
         <View
+            ref={ref}
             role='radiogroup'
             aria-label={accessibilityLabel}
             aria-disabled={disabled || undefined}

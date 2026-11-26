@@ -1,6 +1,6 @@
-import type { ReactNode } from 'react'
+import type { ReactNode, Ref } from 'react'
 import type { CommonProps } from '../../styles/commonStyling.type'
-import type { StyleProp, TextStyle, ViewStyle } from 'react-native'
+import type { StyleProp, TextStyle, ViewStyle, View } from 'react-native'
 
 export type PickedFile = {
   name: string
@@ -29,6 +29,8 @@ export type FilePickerOptions = {
 export type FilePicker = (options: FilePickerOptions) => Promise<PickedFile[] | undefined | null>
 
 export interface FileInputProps extends Omit<CommonProps, 'children' | 'scrollable' | 'style'> {
+  /** The pressable picker field. Use it to focus() or measure it. */
+  ref?: Ref<View>
   label?: string
   /**
    * Text shown in the field. When set, FileInput is controlled: it shows this

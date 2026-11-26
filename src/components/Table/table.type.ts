@@ -1,6 +1,6 @@
-import type { ReactNode } from 'react'
+import type { ReactNode, Ref } from 'react'
 import type { CommonProps } from '../../styles/commonStyling.type'
-import type { StyleProp, TextStyle, ViewStyle } from 'react-native'
+import type { StyleProp, TextStyle, ViewStyle, View } from 'react-native'
 
 export type TableAlign = 'left' | 'center' | 'right'
 
@@ -15,6 +15,8 @@ export type TableColumn<T extends Record<string, unknown>> = {
 
 export interface TableProps<T extends Record<string, unknown>>
   extends Omit<CommonProps, 'children' | 'scrollable' | 'style'> {
+  /** The View that holds the whole table. */
+  ref?: Ref<View>
   columns: TableColumn<T>[]
   data: T[]
   keyExtractor?: (row: T, index: number) => string

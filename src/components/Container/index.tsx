@@ -1,9 +1,10 @@
-import type { JSX } from 'react'
+import type { JSX, Ref } from 'react'
 import { View, ScrollView, StyleSheet } from 'react-native'
 import type { ContainerProps } from './container.type'
 import { useCommonStyles } from '../../hooks/common.hooks'
 
 export const Container = ({
+    ref,
     children,
     scrollable = false,
     style,
@@ -16,6 +17,7 @@ export const Container = ({
     if (scrollable) {
         return (
             <ScrollView
+                ref={ref as Ref<ScrollView>}
                 contentContainerStyle={[styles.container, computed, css, style]}
             >
                 {children}
@@ -24,7 +26,7 @@ export const Container = ({
     }
 
     return (
-        <View style={[styles.container, computed, css, style]}>
+        <View ref={ref as Ref<View>} style={[styles.container, computed, css, style]}>
             {children}
         </View>
     )

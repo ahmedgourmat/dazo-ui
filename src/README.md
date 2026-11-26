@@ -135,6 +135,25 @@ export function ExampleCard() {
 }
 ```
 
+### 3) Refs
+
+Every component takes a `ref` (React 19 passes it as a normal prop):
+
+| Component | `ref.current` is |
+| --- | --- |
+| Input | the `TextInput`, so you can `focus()` it |
+| Button, Checkbox, Select, FileInput | the pressable field (on web, Button's is the `<button>` element) |
+| Container | the `View`, or the `ScrollView` when `scrollable` |
+| Text | the `Text` |
+| RadioGroup, Table | the outer `View` |
+
+```tsx
+const password = useRef<TextInput>(null);
+
+<Input placeholder="Email" onSubmitEditing={() => password.current?.focus()} />
+<Input ref={password} placeholder="Password" secureTextEntry />
+```
+
 ## ThemeProvider API
 
 | Prop | Type | Default | Description |
