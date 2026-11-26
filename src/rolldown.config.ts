@@ -8,8 +8,8 @@ const external = (id: string): boolean =>
   deps.some((dep) => id === dep || id.startsWith(`${dep}/`))
 
 // Each platform build tries its own files first:
-//   import './button'  →  native build: button.native.tsx → button.tsx
-//                      →  web build:    button.web.tsx    → button.tsx
+//   import './systemFont'  →  native build: systemFont.native.ts → systemFont.ts
+//                          →  web build:    systemFont.web.ts    → systemFont.ts
 const extensions = {
   native: ['.native.tsx', '.native.ts', '.tsx', '.ts'],
   web: ['.web.tsx', '.web.ts', '.tsx', '.ts'],

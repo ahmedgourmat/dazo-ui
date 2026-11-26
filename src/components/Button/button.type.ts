@@ -3,7 +3,7 @@ import type { StyleProp, TextStyle, ViewStyle, View } from "react-native";
 import type { CommonProps } from '../../styles/commonStyling.type'
 
 export interface ButtonProps extends Omit<CommonProps, 'children' | 'scrollable' | 'style'> {
-    /** On iOS and Android the Pressable; on web the <button> element. Use it to focus() the button. */
+    /** The Pressable (a <button> element on web). Use it to focus() the button. */
     ref?: Ref<View>
     label: string;
     leftIcon?: ReactNode;
@@ -12,8 +12,10 @@ export interface ButtonProps extends Omit<CommonProps, 'children' | 'scrollable'
     onPress?: () => void;
     disabled?: boolean;
     loading?: boolean;
-    variant?: 'solid' | 'outline' | 'ghost';
-    size?: 'sm' | 'md' | 'lg';
+    /** solid: primary action. secondary: muted surface. outline: bordered. ghost: no surface until hovered. */
+    variant?: 'solid' | 'secondary' | 'outline' | 'ghost';
+    /** Height 32 / 40 / 48 / 56. Default md. */
+    size?: 'sm' | 'md' | 'lg' | 'xl';
     fullWidth?: boolean;
     style?: StyleProp<ViewStyle>;
     labelStyle?: StyleProp<TextStyle>;

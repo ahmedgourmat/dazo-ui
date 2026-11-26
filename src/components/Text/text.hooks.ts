@@ -1,7 +1,12 @@
 import { useMemo, type ReactNode } from 'react'
 import type { TextStyle } from 'react-native'
 import { useTheme } from '../../providers'
+import type { Theme, ThemeColors } from '../../styles/theme'
 import type { TextProps } from './text.type'
+
+/** A theme color name ('foregroundMuted', 'danger', …) becomes that color; anything else is kept. */
+const resolveColor = (color: string, theme: Theme): string =>
+    Object.prototype.hasOwnProperty.call(theme.colors, color) ? theme.colors[color as keyof ThemeColors] : color
 
 type UseTextStylesParams = Pick<TextProps,
     | 'variant'
@@ -36,43 +41,45 @@ export const useTextStyles = ({
     const theme = useTheme()
 
     return useMemo(() => {
-        const modeTextColor = theme.colors.textPrimary
+        const step = (key: keyof typeof theme.fontSize) => ({
+            fontSize: theme.fontSize[key],
+            lineHeight: theme.leading[key],
+        })
         const variantStyles = {
             default: {
-                fontSize: theme.fontSize.md,
-                color: modeTextColor,
+                ...step('base'),
+                color: theme.colors.foreground,
                 fontWeight: theme.fontWeight.regular,
                 fontFamily: theme.fontFamily.regular,
-                lineHeight: theme.fontSize.md * 1.6,
             },
             title: {
-                fontSize: theme.fontSize.xxl,
-                color: modeTextColor,
-                fontWeight: theme.fontWeight.bold,
-                fontFamily: theme.fontFamily.bold,
-                lineHeight: theme.fontSize.xxl * 1.25,
+                ...step('2xl'),
+                color: theme.colors.foreground,
+                fontWeight: theme.fontWeight.semibold,
+                fontFamily: theme.fontFamily.semibold,
             },
             subtitle: {
-                fontSize: theme.fontSize.lg,
-                color: modeTextColor,
+                ...step('lg'),
+                color: theme.colors.foreground,
                 fontWeight: theme.fontWeight.medium,
                 fontFamily: theme.fontFamily.medium,
-                lineHeight: theme.fontSize.lg * 1.35,
             },
             caption: {
-                fontSize: theme.fontSize.sm,
-                color: theme.colors.textSecondary,
+                ...step('sm'),
+                color: theme.colors.foregroundMuted,
                 fontWeight: theme.fontWeight.regular,
                 fontFamily: theme.fontFamily.regular,
-                lineHeight: theme.fontSize.sm * 1.45,
             },
         } as const
 
         return {
             ...variantStyles[variant],
-            ...(size && { fontSize: theme.fontSize[size] }),
-            ...(color && { color }),
-            ...(fontSize !== undefined && { fontSize }),
+            // A size from the scale brings its own line height.
+            ...(size && step(size)),
+            ...(color && { color: resolveColor(color, theme) }),
+            // A custom size without a custom line height: one that fits it,
+            // so large text isn't clipped by the variant's smaller one.
+            ...(fontSize !== undefined && { fontSize, lineHeight: Math.round(fontSize * 1.4) }),
             ...(fontWeight && { fontWeight }),
             ...(fontFamily && { fontFamily }),
             ...(fontStyle && { fontStyle }),

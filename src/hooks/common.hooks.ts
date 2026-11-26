@@ -2,7 +2,8 @@ import { StyleSheet, type ViewStyle } from 'react-native'
 import { useTheme } from '../providers'
 import type { CommonProps } from '../styles/commonStyling.type'
 import type { Theme, ThemeColors } from '../styles/theme'
-import type { RadiusKey, SpacingKey } from '../styles/tokens'
+import type { ShadowKey } from '../styles/shadow'
+import type { BorderWidthKey, RadiusKey, SpacingKey } from '../styles/tokens'
 
 type StyleKey = Exclude<keyof CommonProps, 'children' | 'scrollable' | 'style'>
 
@@ -10,11 +11,13 @@ type StyleKey = Exclude<keyof CommonProps, 'children' | 'scrollable' | 'style'>
  * How a style prop becomes a style:
  *   spacing  token ('md') → theme.spacing, numbers kept   (skipped when undefined)
  *   radius   token ('lg') → theme.radius, numbers kept    (skipped when undefined)
+ *   border   token ('thin') → theme.borderWidth, numbers kept (skipped when undefined)
+ *   shadow   token ('md') → every style in theme.shadow.md (skipped when empty)
  *   color    theme color name → theme.colors, others kept (skipped when empty)
  *   value    copied as is                                 (skipped when undefined)
  *   truthy   copied as is                                 (skipped when empty)
  */
-type Kind = 'spacing' | 'radius' | 'color' | 'value' | 'truthy'
+type Kind = 'spacing' | 'radius' | 'border' | 'shadow' | 'color' | 'value' | 'truthy'
 type Rule = readonly [name: StyleKey, kind: Kind, targets?: readonly string[]]
 
 /**
@@ -67,6 +70,8 @@ const RULES = [
     ['backgroundColor', 'color'],
     ['opacity', 'value'],
     ['overflow', 'truthy'],
+    // Before the shadow* props, so each of those can override part of it.
+    ['shadow', 'shadow'],
     ['elevation', 'value'],
     ['shadowColor', 'truthy'],
     ['shadowOpacity', 'value'],
@@ -78,11 +83,11 @@ const RULES = [
     ['borderBottomLeftRadius', 'radius'],
     ['borderBottomRightRadius', 'radius'],
     ['borderStyle', 'truthy'],
-    ['borderWidth', 'value'],
-    ['borderTopWidth', 'value'],
-    ['borderBottomWidth', 'value'],
-    ['borderLeftWidth', 'value'],
-    ['borderRightWidth', 'value'],
+    ['borderWidth', 'border'],
+    ['borderTopWidth', 'border'],
+    ['borderBottomWidth', 'border'],
+    ['borderLeftWidth', 'border'],
+    ['borderRightWidth', 'border'],
     ['borderColor', 'color'],
     ['borderTopColor', 'color'],
     ['borderBottomColor', 'color'],
@@ -100,6 +105,8 @@ const resolve = (kind: Kind, value: unknown, theme: Theme): unknown => {
     if (typeof value !== 'string') return value
     if (kind === 'spacing') return theme.spacing[value as SpacingKey]
     if (kind === 'radius') return theme.radius[value as RadiusKey]
+    if (kind === 'border') return theme.borderWidth[value as BorderWidthKey]
+    if (kind === 'shadow') return theme.shadow[value as ShadowKey]
     // A theme color name becomes that color; anything else (hex, 'transparent') is kept.
     if (kind === 'color' && Object.prototype.hasOwnProperty.call(theme.colors, value)) {
         return theme.colors[value as keyof ThemeColors] || value
@@ -112,9 +119,13 @@ const buildCommonStyles = (props: CommonProps, theme: Theme): ViewStyle => {
     const style: Record<string, unknown> = {}
     for (const [name, kind, targets] of RULES as readonly Rule[]) {
         const value = props[name]
-        const skip = kind === 'color' || kind === 'truthy' ? !value : value === undefined
+        const skip = kind === 'color' || kind === 'truthy' || kind === 'shadow' ? !value : value === undefined
         if (skip) continue
         const resolved = resolve(kind, value, theme)
+        if (kind === 'shadow') {
+            Object.assign(style, resolved)
+            continue
+        }
         for (const target of targets ?? [name]) style[target] = resolved
     }
     return style as ViewStyle

@@ -103,7 +103,7 @@ export const Table = <T extends Record<string, unknown>>({
     }
 
     if (!rowColor) {
-      return rowIndex % 2 === 1 ? theme.colors.background : 'transparent'
+      return rowIndex % 2 === 1 ? theme.colors.surfaceMuted : 'transparent'
     }
 
     if (rowIndex % 2 === 1) {
@@ -120,7 +120,7 @@ export const Table = <T extends Record<string, unknown>>({
     }
 
     if (!columnColor) {
-      return columnIndex % 2 === 1 ? applyOpacityToColor(theme.colors.backgroundSunken, 0.35) : undefined
+      return columnIndex % 2 === 1 ? applyOpacityToColor(theme.colors.secondary, 0.6) : undefined
     }
 
     return columnIndex % 2 === 1
@@ -133,14 +133,12 @@ export const Table = <T extends Record<string, unknown>>({
       ref={ref}
       style={[
         styles.table,
+        // A border rather than a shadow: the table sits on the page, not above it.
         {
+          borderWidth: theme.borderWidth.thin,
+          borderRadius: theme.radius.lg,
           borderColor: theme.colors.border,
-          backgroundColor: theme.colors.backgroundSurface,
-          shadowColor: '#000000',
-          shadowOpacity: 0.08,
-          shadowRadius: 10,
-          shadowOffset: { width: 0, height: 4 },
-          elevation: 2,
+          backgroundColor: theme.colors.surface,
         },
         commonStyles,
         style,
@@ -151,7 +149,7 @@ export const Table = <T extends Record<string, unknown>>({
           styles.header,
           {
             borderBottomColor: theme.colors.border,
-            backgroundColor: theme.colors.backgroundSunken,
+            backgroundColor: theme.colors.surfaceMuted,
           },
           headerStyle,
         ]}
@@ -163,11 +161,12 @@ export const Table = <T extends Record<string, unknown>>({
           >
             <Text
               style={[
-                styles.headerText,
                 {
                   fontSize: theme.fontSize.sm,
-                  color: theme.colors.textSecondary,
+                  lineHeight: theme.leading.sm,
+                  color: theme.colors.foregroundMuted,
                   fontFamily: theme.fontFamily.medium,
+                  fontWeight: theme.fontWeight.medium,
                 },
               ]}
             >
@@ -179,7 +178,16 @@ export const Table = <T extends Record<string, unknown>>({
 
       {data.length === 0 ? (
         <View style={styles.emptyState}>
-          <Text style={{ color: theme.colors.textSecondary, fontFamily: theme.fontFamily.regular }}>{emptyText}</Text>
+          <Text
+            style={{
+              color: theme.colors.foregroundMuted,
+              fontFamily: theme.fontFamily.regular,
+              fontSize: theme.fontSize.sm,
+              lineHeight: theme.leading.sm,
+            }}
+          >
+            {emptyText}
+          </Text>
         </View>
       ) : (
         data.map((row, rowIndex) => {
@@ -195,6 +203,8 @@ export const Table = <T extends Record<string, unknown>>({
                   borderBottomColor: theme.colors.border,
                   backgroundColor: rowBackground,
                 },
+                // The table's own border closes the last row.
+                rowIndex === data.length - 1 && styles.lastRow,
                 rowStyle,
               ]}
             >
@@ -218,10 +228,10 @@ export const Table = <T extends Record<string, unknown>>({
                     {isPrimitiveText ? (
                       <Text
                         style={[
-                          styles.cellText,
                           {
-                            fontSize: theme.fontSize.md,
-                            color: theme.colors.textPrimary,
+                            fontSize: theme.fontSize.sm,
+                            lineHeight: theme.leading.sm,
+                            color: theme.colors.foreground,
                             fontFamily: theme.fontFamily.regular,
                           },
                           cellTextStyle,
@@ -255,8 +265,6 @@ export const Table = <T extends Record<string, unknown>>({
 
 const styles = StyleSheet.create({
   table: {
-    borderWidth: 1,
-    borderRadius: 14,
     overflow: 'hidden',
   },
   header: {
@@ -269,16 +277,13 @@ const styles = StyleSheet.create({
     minHeight: 48,
     borderBottomWidth: 1,
   },
+  lastRow: {
+    borderBottomWidth: 0,
+  },
   cell: {
     paddingHorizontal: 16,
     paddingVertical: 12,
     justifyContent: 'center',
-  },
-  headerText: {
-    fontWeight: 600,
-  },
-  cellText: {
-    fontSize: 15,
   },
   emptyState: {
     minHeight: 72,

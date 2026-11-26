@@ -3,8 +3,11 @@ import { Pressable, Text, ActivityIndicator, StyleSheet, View } from 'react-nati
 import { useButtonStyles } from './button.hooks'
 import type { ButtonProps } from './button.type'
 import { useCommonStyles } from '../../hooks/common.hooks'
+import { isFocusVisible, useFocusVisibleTracking } from '../../hooks/focusVisible'
+import type { InteractionState } from '../../styles/interaction'
 
-// Native version of Button (iOS/Android). The web build uses button.web.tsx.
+// One Button for every platform. On web, react-native-web renders this
+// Pressable as a real <button> (role='button'), which Enter and Space press.
 export const Button = ({
   ref,
   label,
@@ -26,6 +29,7 @@ export const Button = ({
   const commonStyles = useCommonStyles(commonProps)
   const resolvedLeftIcon = leftIcon ?? icon
   const resolvedRightIcon = rightIcon
+  useFocusVisibleTracking()
 
   return (
     <Pressable
@@ -35,12 +39,16 @@ export const Button = ({
       role='button'
       aria-disabled={disabled || loading}
       aria-busy={loading}
-      style={({ pressed }) => [
+      // Buttons shorter than 44 still get a 44-high touch area.
+      hitSlop={computed.hitSlop}
+      style={({ pressed, hovered, focused }: InteractionState) => [
         styles.base,
         computed.container,
         commonStyles,
-        pressed && !disabled && styles.pressed,
+        hovered && computed.hovered,
+        pressed && computed.pressed,
         style,
+        isFocusVisible(focused) && computed.focused,
       ]}
     >
       {loading && (
@@ -68,9 +76,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-  },
-  pressed: {
-    opacity: 0.8,
   },
   label: {
     includeFontPadding: false,

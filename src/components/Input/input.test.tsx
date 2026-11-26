@@ -106,14 +106,14 @@ describe('Input', () => {
     // The ring is drawn on the field's box, which wraps the text box itself.
     const field = () => screen.getByPlaceholderText('Email').parentElement as HTMLElement
 
-    it('shows a ring in the primary color while the field has focus, and hides it after', () => {
+    it("shows a ring in the theme's ring color while the field has focus, and hides it after", () => {
       renderWithTheme(<Input placeholder='Email' />)
       expect(field().style.outlineStyle).toBe('')
 
       fireEvent.focus(screen.getByPlaceholderText('Email'))
       expect(field().style.outlineStyle).toBe('solid')
       expect(field().style.outlineWidth).toBe('2px')
-      expect(field().style.outlineColor).toBe('rgb(147, 51, 234)') // theme primary, #9333EA
+      expect(field().style.outlineColor).toBe(hexToRgb(lightTheme.colors.ring))
 
       fireEvent.blur(screen.getByPlaceholderText('Email'))
       expect(field().style.outlineStyle).toBe('')

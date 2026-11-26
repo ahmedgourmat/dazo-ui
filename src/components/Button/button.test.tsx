@@ -49,9 +49,11 @@ describe('Button', () => {
 
   describe('sizes (#29)', () => {
     const cases = [
+      // The control heights and the 4px spacing scale from the design system.
       { size: 'sm', minHeight: 32, paddingY: 6, paddingX: 12, fontSize: lightTheme.fontSize.sm },
-      { size: 'md', minHeight: 40, paddingY: 8, paddingX: 20, fontSize: lightTheme.fontSize.md },
-      { size: 'lg', minHeight: 48, paddingY: 10, paddingX: 24, fontSize: lightTheme.fontSize.lg },
+      { size: 'md', minHeight: 40, paddingY: 8, paddingX: 16, fontSize: lightTheme.fontSize.base },
+      { size: 'lg', minHeight: 48, paddingY: 8, paddingX: 20, fontSize: lightTheme.fontSize.lg },
+      { size: 'xl', minHeight: 56, paddingY: 12, paddingX: 24, fontSize: lightTheme.fontSize.lg },
     ] as const
 
     for (const c of cases) {
@@ -109,6 +111,16 @@ describe('Button', () => {
       renderWithTheme(<Button label='Save' loading />)
 
       expect(screen.getByRole('button', { name: 'Save' }).getAttribute('aria-busy')).toBe('true')
+    })
+
+    // react-native-web renders a Pressable with role='button' as a real
+    // <button>: keyboard users can reach it and press it with Enter or Space.
+    it('is a real <button> element on web, which cannot submit a form', () => {
+      renderWithTheme(<Button label='Save' />)
+
+      const button = screen.getByRole('button', { name: 'Save' })
+      expect(button.tagName).toBe('BUTTON')
+      expect(button.getAttribute('type')).toBe('button')
     })
 
     it('does not submit a surrounding form', () => {

@@ -3,8 +3,8 @@ import { defineConfig, type ViteUserConfig } from 'vitest/config'
 // Tests render the components with react-native-web in jsdom (a simulated browser).
 //
 // They run twice, once per platform build:
-//   web     resolves *.web.tsx first   (e.g. button.web.tsx)  — what web apps get
-//   native  resolves *.native.tsx first (e.g. button.tsx)      — what iOS/Android apps get
+//   web     resolves *.web.ts(x) first    (e.g. systemFont.web.ts) — what web apps get
+//   native  resolves *.native.ts(x) first (e.g. systemFont.ts)     — what iOS/Android apps get
 // The native run still renders through react-native-web, so it checks each
 // component's behaviour (props, callbacks, state), not how iOS or Android draws it.
 const project = (name: 'web' | 'native'): ViteUserConfig => ({

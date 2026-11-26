@@ -4,6 +4,9 @@ import { useCheckboxStyles, useCheckboxLabelStyles } from './checkbox.hooks'
 import type { CheckboxProps } from './checkbox.type'
 import { spaceKeyActivates } from '../../hooks/keyboard'
 import { useCommonStyles } from '../../hooks/common.hooks'
+import { isFocusVisible, useFocusVisibleTracking } from '../../hooks/focusVisible'
+import { useTheme } from '../../providers'
+import { focusRing, type InteractionState } from '../../styles/interaction'
 
 export const Checkbox = ({
   ref,
@@ -25,6 +28,8 @@ export const Checkbox = ({
   // Spacing, size, border and color props go through the same path as every
   // other component, so tokens like padding="md" resolve to theme values.
   const commonStyles = useCommonStyles(commonProps)
+  const theme = useTheme()
+  useFocusVisibleTracking()
   const { boxStyle, checkmarkStyle } = useCheckboxStyles({
     checked,
     disabled,
@@ -48,7 +53,13 @@ export const Checkbox = ({
   return (
     <Pressable
       ref={ref}
-      style={[styles.container, commonStyles, style]}
+      style={({ focused }: InteractionState) => [
+        styles.container,
+        { borderRadius: theme.radius.sm },
+        commonStyles,
+        style,
+        isFocusVisible(focused) && focusRing(theme),
+      ]}
       onPress={handlePress}
       disabled={disabled}
       // role and aria-* work on iOS, Android and web; react-native-web
@@ -103,6 +114,5 @@ const styles = StyleSheet.create({
   },
   label: {
     flex: 1,
-    fontSize: 15,
   },
 })

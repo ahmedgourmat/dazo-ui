@@ -12,11 +12,11 @@ const meta = {
   argTypes: {
     variant: {
       control: 'inline-radio',
-      options: ['solid', 'outline', 'ghost'],
+      options: ['solid', 'secondary', 'outline', 'ghost'],
     },
     size: {
       control: 'inline-radio',
-      options: ['sm', 'md', 'lg'],
+      options: ['sm', 'md', 'lg', 'xl'],
     },
     backgroundColor: {
       control: 'color',

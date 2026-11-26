@@ -48,14 +48,16 @@ describe('ThemeProvider', () => {
       theme: { colors: { primary: '#123456' }, spacing: { md: 20 } },
     })
 
-    expect(theme.colors).toEqual({ ...darkTheme.colors, primary: '#123456' })
+    // primaryLight and primaryDark are deprecated names that follow primary.
+    expect(theme.colors).toEqual({ ...darkTheme.colors, primary: '#123456', primaryLight: '#123456', primaryDark: '#123456' })
     expect(theme.spacing).toEqual({ ...darkTheme.spacing, md: 20 })
     expect(theme.mode).toBe('dark')
   })
 
   it('merges font family overrides into the base theme', () => {
     const theme = themeFrom({ colorScheme: 'light', theme: { fontFamily: { bold: 'Poppins-Bold' } } })
-    expect(theme.fontFamily).toEqual({ ...lightTheme.fontFamily, bold: 'Poppins-Bold' })
+    // Headings use semibold; until it has its own family it uses the bold one.
+    expect(theme.fontFamily).toEqual({ ...lightTheme.fontFamily, bold: 'Poppins-Bold', semibold: 'Poppins-Bold' })
   })
 
   describe('partial overrides keep the rest of every section (#31)', () => {

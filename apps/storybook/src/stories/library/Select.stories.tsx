@@ -17,6 +17,10 @@ const meta = {
     layout: 'centered',
   },
   argTypes: {
+    size: {
+      control: 'inline-radio',
+      options: ['sm', 'md', 'lg', 'xl'],
+    },
     disabled: {
       control: 'boolean',
     },

@@ -1,26 +1,40 @@
-// src/components/Button/Button.hooks.ts
 import { useMemo } from 'react'
 import { useTheme } from '../../providers'
+import { DISABLED_OPACITY, focusRing } from '../../styles/interaction'
 import type { ButtonProps } from './button.type'
-import type { TextStyle, ViewStyle } from 'react-native'
-
-export type ButtonSizeStyle = {
-    minHeight: number
-    paddingVertical: number
-    paddingHorizontal: number
-    fontSize: number
-}
+import type { Insets, TextStyle, ViewStyle } from 'react-native'
 
 export type ButtonStyles = {
     container: ViewStyle
+    /** Added on top of `container` while the pointer is over the button (web only). */
+    hovered: ViewStyle
+    /** Added on top of `container` while the button is pressed. */
+    pressed: ViewStyle
+    /** Added on top of `container` while the button has keyboard focus (web only). */
+    focused: ViewStyle
     label: TextStyle
     indicator: string
-    currentSize: ButtonSizeStyle
+    /** Extra touch area around buttons shorter than 44, the iOS minimum (native only). */
+    hitSlop: Insets
 }
 
 type UseButtonStylesParams = Pick<ButtonProps,
     'variant' | 'size' | 'disabled' | 'fullWidth'
 >
+
+// [vertical padding, horizontal padding, font size] as steps of the theme's
+// space and fontSize scales. Heights come from theme.controlHeight.
+// minHeight keeps the control heights (32 / 40 / 48 / 56) but lets the button
+// grow when the label needs more room: a second line, or a larger system
+// font size. The padding plus one line of label fits inside each height:
+// 14 × 1.15 + 2×6 ≈ 28 ≤ 32, 16 × 1.15 + 2×8 ≈ 34 ≤ 40,
+// 18 × 1.15 + 2×8 ≈ 37 ≤ 48, 18 × 1.15 + 2×12 ≈ 45 ≤ 56.
+const SIZES = {
+    sm: [1.5, 3, 'sm'],
+    md: [2, 4, 'base'],
+    lg: [2, 5, 'lg'],
+    xl: [3, 6, 'lg'],
+} as const
 
 export const useButtonStyles = ({
     variant = 'solid',
@@ -32,103 +46,48 @@ export const useButtonStyles = ({
     const theme = useTheme()
 
     return useMemo(() => {
-        // minHeight keeps the designed heights (32 / 40 / 48) but lets the button
-        // grow when the label needs more room: a second line, or a larger system
-        // font size. The vertical padding plus one line of label fits inside each
-        // height: 15 + 2×6 = 27 ≤ 32, 17.3 + 2×8 ≈ 33 ≤ 40, 19.6 + 2×10 ≈ 40 ≤ 48.
-        const sizeStyles = {
-            sm: {
-                minHeight: 32,
-                paddingVertical: 6,
-                paddingHorizontal: 12,
-                fontSize: theme.fontSize.sm,
-            },
-            md: {
-                minHeight: 40,
-                paddingVertical: 8,
-                paddingHorizontal: 20,
-                fontSize: theme.fontSize.md,
-            },
-            lg: {
-                minHeight: 48,
-                paddingVertical: 10,
-                paddingHorizontal: 24,
-                fontSize: theme.fontSize.lg,
-            },
-        } as const
-        const currentSize = sizeStyles[size]
+        const { colors, space } = theme
+        const [paddingY, paddingX, fontStep] = SIZES[size]
+        const minHeight = theme.controlHeight[size]
+        const fontSize = theme.fontSize[fontStep]
 
-        const variantStyles = {
-            solid: {
-                container: {
-                    backgroundColor: disabled
-                        ? theme.colors.textDisabled
-                        : theme.colors.primary,
-                    borderWidth: 0,
-                    shadowColor: '#000000',
-                    shadowOpacity: disabled ? 0 : 0.2,
-                    shadowRadius: 3,
-                    shadowOffset: { width: 0, height: 1 },
-                    elevation: disabled ? 0 : 2,
-                },
-                label: {
-                    color: theme.colors.textInverse,
-                },
-                indicator: theme.colors.textInverse,
-            },
-            outline: {
-                container: {
-                    backgroundColor: 'transparent',
-                    borderWidth: 2,
-                    borderColor: disabled
-                        ? theme.colors.border
-                        : theme.colors.primary,
-                },
-                label: {
-                    color: theme.colors.textPrimary,
-                },
-                indicator: theme.colors.textPrimary,
-            },
-            ghost: {
-                container: {
-                    backgroundColor: 'transparent' as const,
-                    borderWidth: 0,
-                    shadowOpacity: 0,
-                    elevation: 0,
-                },
-                label: {
-                    color: theme.colors.textSecondary,
-                },
-                indicator: theme.colors.textSecondary,
-            },
-        } as const
+        // [background (and border), text, hover]. Solid and secondary buttons
+        // lighten a little on hover; the quieter ones get the secondary surface.
+        const lighten: ViewStyle = { opacity: 0.9 }
+        const surface: ViewStyle = { backgroundColor: colors.secondary }
+        const [background, color, hovered]: readonly [string, string, ViewStyle] = ({
+            solid: [colors.primary, colors.primaryForeground, lighten],
+            secondary: [colors.secondary, colors.secondaryForeground, lighten],
+            outline: ['transparent', colors.foreground, surface],
+            ghost: ['transparent', colors.foreground, surface],
+        } as const)[variant]
+        const touchGap = Math.max(0, (44 - minHeight) / 2)
 
         return {
             container: {
-                // Each side is written out (not paddingVertical/Horizontal) so the
-                // web Button, which hands these styles to a DOM <button>, can use
-                // them as CSS too.
-                minHeight: currentSize.minHeight,
-                paddingTop: currentSize.paddingVertical,
-                paddingBottom: currentSize.paddingVertical,
-                paddingLeft: currentSize.paddingHorizontal,
-                paddingRight: currentSize.paddingHorizontal,
-                ...variantStyles[variant].container,
-                // Native draws solid borders by default; a DOM <button> would
-                // otherwise use the browser's 3D "outset" border.
-                borderStyle: 'solid',
+                minHeight,
+                paddingVertical: space[paddingY],
+                paddingHorizontal: space[paddingX],
+                backgroundColor: background,
+                // Every variant has the same 1px border, so they line up when side by side.
+                borderWidth: theme.borderWidth.thin,
+                borderColor: variant === 'outline' ? colors.borderStrong : background,
                 borderRadius: theme.radius.md,
+                opacity: disabled ? DISABLED_OPACITY : 1,
                 alignSelf: fullWidth ? 'stretch' : 'flex-start',
-            } as ViewStyle,
-            label: {
-                ...variantStyles[variant].label,
-                fontSize: currentSize.fontSize,
-                fontWeight: theme.fontWeight.medium,
-                fontFamily: theme.fontFamily.medium,
-                lineHeight: currentSize.fontSize * 1.15,
             },
-            indicator: variantStyles[variant].indicator,
-            currentSize,
+            hovered: disabled ? {} : hovered,
+            pressed: disabled ? {} : { opacity: 0.8 },
+            focused: focusRing(theme),
+            label: {
+                color,
+                fontSize,
+                fontWeight: theme.fontWeight.semibold,
+                fontFamily: theme.fontFamily.semibold,
+                lineHeight: fontSize * 1.15,
+            },
+            indicator: color,
+            hitSlop: { top: touchGap, bottom: touchGap },
         }
     }, [theme, variant, size, disabled, fullWidth])
 }

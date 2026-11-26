@@ -4,6 +4,7 @@ import { ShowcaseSection } from '../components/ShowcaseSection'
 const code = `import { Button } from 'dazo-ui'
 
 <Button label='Solid' onPress={() => {}} />
+<Button variant='secondary' label='Secondary' onPress={() => {}} />
 <Button variant='outline' label='Outline' onPress={() => {}} />
 <Button variant='ghost' label='Ghost' onPress={() => {}} />
 <Button size='sm' label='Small' onPress={() => {}} />
@@ -21,6 +22,7 @@ export const ButtonsSection = (): React.JSX.Element => {
     >
       <Container flexDirection='column' flexWrap='wrap' gap='sm'>
         <Button label='Solid' onPress={() => {}} />
+        <Button variant='secondary' label='Secondary' onPress={() => {}} />
         <Button variant='outline' label='Outline' onPress={() => {}} />
         <Button variant='ghost' label='Ghost' onPress={() => {}} />
         <Button size='sm' label='Small' onPress={() => {}} />

@@ -1,7 +1,11 @@
 import { useMemo, useState, type JSX } from 'react'
-import { FlatList, Modal, Pressable, StyleSheet, Text, View } from 'react-native'
+import { FlatList, Modal, Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import { useTheme } from '../../providers'
 import { useCommonStyles } from '../../hooks/common.hooks'
+import { useFieldStyles } from '../../hooks/field.hooks'
+import { isFocusVisible, useFocusVisibleTracking } from '../../hooks/focusVisible'
+import { useReducedMotion } from '../../hooks/motion'
+import { DISABLED_OPACITY, focusRing, type InteractionState } from '../../styles/interaction'
 import type { SelectProps, SelectOption } from './select.type'
 import { spaceKeyActivates } from '../../hooks/keyboard'
 
@@ -13,6 +17,7 @@ export const Select = ({
   options,
   onChange,
   disabled = false,
+  size = 'md',
   leftIcon,
   rightIcon,
   style,
@@ -20,7 +25,11 @@ export const Select = ({
   ...commonProps
 }: SelectProps): JSX.Element => {
   const theme = useTheme()
+  const { colors, space } = theme
   const commonStyles = useCommonStyles(commonProps)
+  const field = useFieldStyles({ size, disabled })
+  const reduceMotion = useReducedMotion()
+  useFocusVisibleTracking()
   const [open, setOpen] = useState(false)
 
   const selectedOption = useMemo<SelectOption | undefined>(
@@ -30,6 +39,8 @@ export const Select = ({
 
   const displayValue = selectedOption?.label ?? placeholder
   const menuName = label ?? placeholder
+  // Rows are easier to tap on a phone, and more compact under a mouse.
+  const optionHeight = Platform.OS === 'web' ? theme.controlHeight.md : theme.controlHeight.lg
 
   return (
     <>
@@ -42,58 +53,54 @@ export const Select = ({
         role='button'
         aria-expanded={open}
         aria-disabled={disabled}
-        style={[
+        hitSlop={field.hitSlop}
+        style={({ hovered, focused }: InteractionState) => [
           styles.container,
-          {
-            borderColor: theme.colors.border,
-            backgroundColor: theme.colors.backgroundSurface,
-            opacity: disabled ? 0.7 : 1,
-            shadowColor: '#000000',
-            shadowOpacity: disabled ? 0 : 0.06,
-            shadowRadius: 8,
-            shadowOffset: { width: 0, height: 2 },
-            elevation: disabled ? 0 : 1,
-          },
+          field.box,
+          hovered && field.hovered,
           commonStyles,
           style,
+          isFocusVisible(focused) && field.focused,
         ]}
       >
-        {leftIcon ? <View style={styles.leftIcon}>{leftIcon}</View> : null}
-
-        <View style={styles.content}>
-          {label ? <Text style={[styles.label, { color: theme.colors.textSecondary, fontFamily: theme.fontFamily.regular }, labelStyle]}>{label}</Text> : null}
-          <Text style={[styles.value, { color: selectedOption ? theme.colors.textPrimary : theme.colors.textSecondary, fontFamily: theme.fontFamily.regular }]} numberOfLines={1}>
+        {leftIcon ? <View style={[styles.leftIcon, { marginLeft: field.content.paddingHorizontal }]}>{leftIcon}</View> : null}
+        <View style={[styles.content, field.content]}>
+          {label ? <Text style={[field.label, labelStyle]}>{label}</Text> : null}
+          <Text style={[field.value, !selectedOption && { color: field.placeholderColor }]} numberOfLines={1}>
             {displayValue}
           </Text>
         </View>
-
-        {rightIcon ? <View style={styles.rightIcon}>{rightIcon}</View> : null}
+        <View style={[styles.rightIcon, { marginRight: field.content.paddingHorizontal }]}>
+          {rightIcon ?? (
+            // Decoration: aria-expanded already says this opens a menu.
+            <Text aria-hidden style={{ color: field.iconColor, fontSize: theme.fontSize.sm }}>{'▾'}</Text>
+          )}
+        </View>
       </Pressable>
 
       <Modal
         transparent
         visible={open}
-        animationType="fade"
+        animationType={reduceMotion ? 'none' : 'fade'}
         onRequestClose={() => setOpen(false)}
         // On web, react-native-web turns the modal into a dialog once it has
         // opened; this gives that dialog a name. React Native's Modal type
         // doesn't list the prop, and iOS/Android ignore it.
         {...({ 'aria-label': menuName } as object)}
       >
-        <View style={styles.overlay}>
+        <View style={[styles.overlay, { padding: space[5] }]}>
           {/* The menu comes first so that, on web, opening moves focus to the
               first option rather than to the backdrop. */}
           <View
             style={[
               styles.menu,
+              theme.shadow.lg,
               {
-                backgroundColor: theme.colors.backgroundSurface,
-                borderColor: theme.colors.border,
-                shadowColor: '#000000',
-                shadowOpacity: 0.2,
-                shadowRadius: 18,
-                shadowOffset: { width: 0, height: 8 },
-                elevation: 5,
+                backgroundColor: colors.surfaceElevated,
+                borderColor: colors.border,
+                borderWidth: theme.borderWidth.thin,
+                borderRadius: theme.radius.lg,
+                padding: space[1],
               },
             ]}
           >
@@ -118,21 +125,44 @@ export const Select = ({
                     aria-checked={isSelected}
                     aria-disabled={Boolean(item.disabled)}
                     {...spaceKeyActivates(pick, item.disabled)}
-                    style={[
+                    style={({ hovered, pressed, focused }: InteractionState) => [
                       styles.option,
-                      isSelected && { backgroundColor: theme.colors.backgroundSunken },
-                      item.disabled && { opacity: 0.5 },
+                      {
+                        minHeight: optionHeight,
+                        paddingHorizontal: space[3],
+                        borderRadius: theme.radius.sm,
+                      },
+                      (isSelected || hovered || pressed) && !item.disabled && { backgroundColor: colors.secondary },
+                      item.disabled && { opacity: DISABLED_OPACITY },
+                      // Inside the row: the menu clips anything outside it.
+                      isFocusVisible(focused) && [focusRing(theme), { outlineOffset: -2 }],
                     ]}
                   >
                     {item.icon ? <View style={styles.optionIcon}>{item.icon}</View> : null}
-                    <Text style={{ color: theme.colors.textPrimary, fontFamily: theme.fontFamily.regular }}>{item.label}</Text>
+                    <Text
+                      style={[
+                        styles.optionLabel,
+                        {
+                          color: colors.foreground,
+                          fontSize: theme.fontSize.base,
+                          lineHeight: theme.leading.base,
+                          fontFamily: isSelected ? theme.fontFamily.medium : theme.fontFamily.regular,
+                          fontWeight: isSelected ? theme.fontWeight.medium : theme.fontWeight.regular,
+                        },
+                      ]}
+                    >
+                      {item.label}
+                    </Text>
+                    {/* The selected option is marked by more than its color. */}
+                    {isSelected ? (
+                      <Text aria-hidden style={{ color: colors.foreground, fontSize: theme.fontSize.sm, marginLeft: space[2] }}>{'✓'}</Text>
+                    ) : null}
                   </Pressable>
                 )
               }}
             />
             </View>
           </View>
-
           {/* Tapping outside the menu closes it. The backdrop sits behind the
               menu and is hidden from screen readers; they close the menu by
               picking an option, Escape (web) or Back (Android). */}
@@ -151,53 +181,41 @@ export const Select = ({
 
 const styles = StyleSheet.create({
   container: {
-    minHeight: 48,
-    borderWidth: 1,
-    borderRadius: 14,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
   },
   content: {
     flex: 1,
-    paddingVertical: 10,
+    justifyContent: 'center',
   },
-  label: {
-    fontSize: 12,
-    marginBottom: 2,
-  },
-  value: {
-    fontSize: 15,
-  },
+  // The content's padding already spaces the icons from the text.
   leftIcon: {
-    marginRight: 12,
+    marginRight: -4,
   },
   rightIcon: {
-    marginLeft: 12,
+    marginLeft: -4,
   },
   overlay: {
     flex: 1,
     justifyContent: 'center',
-    padding: 20,
   },
   // Fills the overlay (absoluteFill) behind the menu.
   backdrop: {
-    backgroundColor: 'rgba(0,0,0,0.35)',
+    backgroundColor: 'rgba(0,0,0,0.4)',
   },
   menu: {
     zIndex: 1,
-    borderWidth: 1,
-    borderRadius: 18,
     overflow: 'hidden',
     maxHeight: 320,
   },
   option: {
-    minHeight: 48,
-    paddingHorizontal: 16,
     flexDirection: 'row',
     alignItems: 'center',
   },
+  optionLabel: {
+    flex: 1,
+  },
   optionIcon: {
-    marginRight: 12,
+    marginRight: 8,
   },
 })

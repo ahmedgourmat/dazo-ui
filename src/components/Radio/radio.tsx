@@ -4,6 +4,8 @@ import { useTheme } from '../../providers'
 import { useCommonStyles } from '../../hooks/common.hooks'
 import type { RadioGroupProps } from './radio.type'
 import { spaceKeyActivates } from '../../hooks/keyboard'
+import { isFocusVisible, useFocusVisibleTracking } from '../../hooks/focusVisible'
+import { DISABLED_OPACITY, focusRing, type InteractionState } from '../../styles/interaction'
 
 export const RadioGroup = ({
     ref,
@@ -21,8 +23,9 @@ export const RadioGroup = ({
 }: RadioGroupProps): JSX.Element => {
     const theme = useTheme()
     const commonStyles = useCommonStyles(commonProps)
-    const resolvedTextColor = textColor ?? theme.colors.textPrimary
+    const resolvedTextColor = textColor ?? theme.colors.foreground
     const resolvedCircleColor = circleColor ?? theme.colors.primary
+    useFocusVisibleTracking()
 
     return (
         <View
@@ -46,13 +49,39 @@ export const RadioGroup = ({
                         aria-checked={checked}
                         aria-disabled={optionDisabled}
                         {...spaceKeyActivates(select, optionDisabled)}
-                        style={[styles.option, direction === 'row' && styles.optionRow, option.disabled && { opacity: 0.5 }]}
+                        style={({ focused }: InteractionState) => [
+                            styles.option,
+                            { borderRadius: theme.radius.sm },
+                            direction === 'row' && styles.optionRow,
+                            optionDisabled && { opacity: DISABLED_OPACITY },
+                            isFocusVisible(focused) && focusRing(theme),
+                        ]}
                     >
-                        <View style={[styles.circle, { borderColor: checked ? resolvedCircleColor : theme.colors.border }]}>
+                        {/* `input` has 3:1 contrast, so an unselected circle is still easy to see. */}
+                        <View
+                            style={[
+                                styles.circle,
+                                {
+                                    borderWidth: theme.borderWidth.thin,
+                                    borderColor: checked ? resolvedCircleColor : theme.colors.input,
+                                    backgroundColor: theme.colors.surface,
+                                },
+                            ]}
+                        >
                             {checked ? <View style={[styles.dot, { backgroundColor: resolvedCircleColor }]} /> : null}
                         </View>
                         {option.icon ? <View style={styles.optionIcon}>{option.icon}</View> : null}
-                        <Text style={[styles.label, { color: resolvedTextColor, fontFamily: theme.fontFamily.regular }, labelStyle]}>{option.label}</Text>
+                        <Text
+                            style={[
+                                {
+                                    color: resolvedTextColor,
+                                    fontFamily: theme.fontFamily.regular,
+                                    fontSize: theme.fontSize.base,
+                                    lineHeight: theme.leading.base,
+                                },
+                                labelStyle,
+                            ]}
+                        >{option.label}</Text>
                     </Pressable>
                 )
             })}
@@ -76,7 +105,6 @@ const styles = StyleSheet.create({
         width: 20,
         height: 20,
         borderRadius: 10,
-        borderWidth: 2,
         alignItems: 'center',
         justifyContent: 'center',
         marginRight: 12,
@@ -88,8 +116,5 @@ const styles = StyleSheet.create({
     },
     optionIcon: {
         marginRight: 8,
-    },
-    label: {
-        fontSize: 15,
     },
 })

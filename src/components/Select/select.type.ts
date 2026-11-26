@@ -18,7 +18,10 @@ export interface SelectProps extends Omit<CommonProps, 'children' | 'scrollable'
   options: SelectOption[]
   onChange?: (value: string) => void
   disabled?: boolean
+  /** Height 32 / 40 / 48 / 56 (it grows to fit a label). Default md. */
+  size?: 'sm' | 'md' | 'lg' | 'xl'
   leftIcon?: ReactNode
+  /** Replaces the default chevron. */
   rightIcon?: ReactNode
   style?: StyleProp<ViewStyle>
   labelStyle?: StyleProp<TextStyle>

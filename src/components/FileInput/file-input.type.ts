@@ -41,6 +41,8 @@ export interface FileInputProps extends Omit<CommonProps, 'children' | 'scrollab
   accept?: string
   multiple?: boolean
   disabled?: boolean
+  /** Height 32 / 40 / 48 / 56 (it grows to fit a label). Default md. */
+  size?: 'sm' | 'md' | 'lg' | 'xl'
   leftIcon?: ReactNode
   rightIcon?: ReactNode
   autoOpenPicker?: boolean

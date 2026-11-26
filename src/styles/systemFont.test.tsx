@@ -17,12 +17,13 @@ describe('default font family (#41)', () => {
   })
 
   it('is a CSS system font stack on web, ending in a generic family', () => {
-    expect(webSystemFont).toMatch(/^system-ui,/)
+    // Inter where the app loads it or the user has it, then the system font.
+    expect(webSystemFont).toMatch(/^Inter, ui-sans-serif, system-ui,/)
     expect(webSystemFont).toMatch(/, sans-serif$/)
   })
 
   it('is what the theme uses for every weight in this build', () => {
-    expect(lightTheme.fontFamily).toEqual({ regular: systemFont, medium: systemFont, bold: systemFont })
+    expect(lightTheme.fontFamily).toEqual({ regular: systemFont, medium: systemFont, semibold: systemFont, bold: systemFont })
   })
 
   // In the web run this is the stack above; in the native run the family is
