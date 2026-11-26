@@ -26,6 +26,7 @@ const revokeObjectUrls = (urls: string[]): void => {
 }
 
 export const FileInput = ({
+  ref,
   label,
   value,
   placeholder = 'Choose a file',
@@ -166,6 +167,7 @@ export const FileInput = ({
       ]}
     >
       <Pressable
+        ref={ref}
         onPress={handlePress}
         disabled={disabled}
         // No aria-label: the name comes from the visible label and value, so

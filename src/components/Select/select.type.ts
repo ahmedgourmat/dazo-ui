@@ -1,6 +1,6 @@
-import type { ReactNode } from 'react'
+import type { ReactNode, Ref } from 'react'
 import type { CommonProps } from '../../styles/commonStyling.type'
-import type { StyleProp, TextStyle, ViewStyle } from 'react-native'
+import type { StyleProp, TextStyle, ViewStyle, View } from 'react-native'
 
 export type SelectOption = {
   label: string
@@ -10,6 +10,8 @@ export type SelectOption = {
 }
 
 export interface SelectProps extends Omit<CommonProps, 'children' | 'scrollable' | 'style'> {
+  /** The pressable field that opens the menu. Use it to focus() or measure it. */
+  ref?: Ref<View>
   label?: string
   placeholder?: string
   value?: string

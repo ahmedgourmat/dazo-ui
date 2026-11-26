@@ -6,6 +6,7 @@ import type { SelectProps, SelectOption } from './select.type'
 import { spaceKeyActivates } from '../../hooks/keyboard'
 
 export const Select = ({
+  ref,
   label,
   placeholder = 'Select an option',
   value,
@@ -33,6 +34,7 @@ export const Select = ({
   return (
     <>
       <Pressable
+        ref={ref}
         onPress={disabled ? undefined : () => setOpen(true)}
         disabled={disabled}
         // No aria-label: the name comes from the visible label and value

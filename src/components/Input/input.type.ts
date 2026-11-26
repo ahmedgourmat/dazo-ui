@@ -1,10 +1,12 @@
-import type { ReactNode } from 'react'
+import type { ReactNode, Ref } from 'react'
 import type { CommonProps } from '../../styles/commonStyling.type'
-import type { StyleProp, TextInputProps, TextStyle, ViewStyle } from 'react-native'
+import type { StyleProp, TextInputProps, TextStyle, ViewStyle, TextInput } from 'react-native'
 
 type NativeInputProps = Omit<TextInputProps, 'style' | 'value' | 'onChangeText'>
 
 export interface InputProps extends Omit<CommonProps, 'children' | 'scrollable' | 'style'>, NativeInputProps {
+  /** The TextInput itself, so you can focus() it, e.g. to move to the next field. */
+  ref?: Ref<TextInput>
   value?: string
   onChangeText?: (text: string) => void
   variant?: 'solid' | 'outline' | 'ghost'

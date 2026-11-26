@@ -6,6 +6,7 @@ import { useCommonStyles } from '../../hooks/common.hooks'
 
 // Native version of Button (iOS/Android). The web build uses button.web.tsx.
 export const Button = ({
+  ref,
   label,
   onPress,
   disabled = false,
@@ -28,6 +29,7 @@ export const Button = ({
 
   return (
     <Pressable
+      ref={ref}
       onPress={onPress}
       disabled={disabled || loading}
       role='button'

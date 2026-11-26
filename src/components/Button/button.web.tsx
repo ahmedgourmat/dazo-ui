@@ -1,4 +1,4 @@
-import type { CSSProperties, JSX } from 'react'
+import type { CSSProperties, JSX, Ref } from 'react'
 import { ActivityIndicator, StyleSheet } from 'react-native'
 import { useButtonStyles } from './button.hooks'
 import type { ButtonProps } from './button.type'
@@ -7,6 +7,7 @@ import { useCommonStyles } from '../../hooks/common.hooks'
 // Web version of Button. The web build picks this file over button.tsx,
 // so this DOM code never ships in iOS/Android bundles.
 export const Button = ({
+  ref,
   label,
   onPress,
   disabled = false,
@@ -30,6 +31,9 @@ export const Button = ({
 
   return (
     <button
+      // The ref is typed as a React Native View for every platform; on web it is
+      // this <button> element, like a react-native-web View is its DOM element.
+      ref={ref as unknown as Ref<HTMLButtonElement>}
       // Without this, a button inside a <form> submits the form when clicked.
       type='button'
       onClick={onPress}

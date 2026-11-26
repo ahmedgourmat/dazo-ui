@@ -5,6 +5,7 @@ import type { InputProps } from './input.type'
 import { useInputStyles } from './input.hooks'
 
 export const Input = ({
+  ref,
   value,
   textColor,
   onChangeText,
@@ -51,6 +52,7 @@ export const Input = ({
 
       <TextInput
         {...nativeProps}
+        ref={ref}
         value={value}
         editable={editable}
         onChangeText={onChangeText}
