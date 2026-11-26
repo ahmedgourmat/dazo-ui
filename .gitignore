@@ -10,3 +10,5 @@ coverage
 build
 .turbo
 docs
+# A separate repo (ahmedgourmat/cross-platform-lib-compiler) kept next to this one locally
+cross-platform-lib-compiler/
