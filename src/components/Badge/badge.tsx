@@ -1,9 +1,11 @@
 import { useMemo, type JSX } from 'react'
 import { StyleSheet, Text, View, type TextStyle, type ViewStyle } from 'react-native'
-import { useCommonStyles } from '../../hooks/common.hooks'
+import { splitCommonProps, useCommonStyles } from '../../hooks/common.hooks'
 import { useTheme } from '../../providers'
 import { toneColors } from '../../styles/color'
 import type { BadgeProps } from './badge.type'
+import { HIDDEN_TEXT, SkeletonBox } from '../Skeleton/skeleton-box'
+import { withSkeleton } from '../Skeleton/with-skeleton'
 
 /**
  * A short status label. The text carries the meaning; color adds to it.
@@ -11,7 +13,7 @@ import type { BadgeProps } from './badge.type'
  * 4.5:1 in both modes. Subtle and outline badges keep the text neutral and
  * show the tone as a dot, because status colors are too light for small text.
  */
-export const Badge = ({
+const BadgeBase = ({
   ref,
   testID,
   children,
@@ -79,3 +81,32 @@ const styles = StyleSheet.create({
     borderRadius: 3,
   },
 })
+
+// Inside <Skeleton loading>: a pill as wide as the label.
+const BadgeSkeleton = (props: BadgeProps): JSX.Element => {
+  const theme = useTheme()
+  const { children, size = 'md', style, labelStyle } = props
+  const commonStyles = useCommonStyles(splitCommonProps(props)[0])
+  const fontStep = size === 'sm' ? 'xs' : 'sm'
+
+  return (
+    <SkeletonBox
+      style={[
+        styles.box,
+        {
+          minHeight: size === 'sm' ? 20 : 24,
+          paddingHorizontal: size === 'sm' ? theme.space[1.5] : theme.space[2],
+          borderRadius: theme.radius.full,
+        },
+        commonStyles,
+        style,
+      ]}
+    >
+      <Text style={[{ fontSize: theme.fontSize[fontStep], lineHeight: theme.leading[fontStep] }, labelStyle, HIDDEN_TEXT]} numberOfLines={1}>
+        {typeof children === 'string' || typeof children === 'number' ? children : ' '}
+      </Text>
+    </SkeletonBox>
+  )
+}
+
+export const Badge: (props: BadgeProps) => JSX.Element = withSkeleton(BadgeBase, BadgeSkeleton)

@@ -1,6 +1,6 @@
 import { act, fireEvent, render, type RenderResult } from '@testing-library/react'
 import axe from 'axe-core'
-import type { ReactElement } from 'react'
+import type { ReactElement, ReactNode } from 'react'
 import { ThemeProvider } from '../providers'
 import { changeReducedMotion, changeSystemScheme, type Scheme } from './match-media'
 
@@ -57,6 +57,11 @@ export const hexToRgb = (hex: string): string => {
 export const isDisabled = (element: Element): boolean =>
   element.hasAttribute('disabled') || element.getAttribute('aria-disabled') === 'true'
 
-/** Render inside a ThemeProvider forced to light mode, so results don't depend on the OS. */
-export const renderWithTheme = (ui: ReactElement): RenderResult =>
-  render(<ThemeProvider colorScheme='light'>{ui}</ThemeProvider>)
+const LightTheme = ({ children }: { children: ReactNode }) => <ThemeProvider colorScheme='light'>{children}</ThemeProvider>
+
+/**
+ * Render inside a ThemeProvider forced to light mode, so results don't depend
+ * on the OS. The provider is the `wrapper`, so `rerender` keeps it and updates
+ * the same tree instead of mounting a new one.
+ */
+export const renderWithTheme = (ui: ReactElement): RenderResult => render(ui, { wrapper: LightTheme })

@@ -1,19 +1,22 @@
 import type { JSX } from 'react'
 import { Pressable, View, Text, StyleSheet } from 'react-native'
 import { useCheckboxStyles, useCheckboxLabelStyles } from './checkbox.hooks'
+import { formFieldProps, useFormField } from '../FormField/form-field.context'
 import type { CheckboxProps } from './checkbox.type'
 import { spaceKeyActivates } from '../../hooks/keyboard'
-import { useCommonStyles } from '../../hooks/common.hooks'
+import { splitCommonProps, useCommonStyles } from '../../hooks/common.hooks'
 import { isFocusVisible, useFocusVisibleTracking } from '../../hooks/focusVisible'
 import { useTheme } from '../../providers'
 import { focusRing, type InteractionState } from '../../styles/interaction'
+import { HIDDEN_TEXT, SkeletonBox } from '../Skeleton/skeleton-box'
+import { withSkeleton } from '../Skeleton/with-skeleton'
 
-export const Checkbox = ({
+const CheckboxBase = ({
   ref,
   label,
   checked = false,
   onChange,
-  disabled = false,
+  disabled: disabledProp = false,
   value,
   checkedColor,
   uncheckedColor,
@@ -29,6 +32,8 @@ export const Checkbox = ({
   // other component, so tokens like padding="md" resolve to theme values.
   const commonStyles = useCommonStyles(commonProps)
   const theme = useTheme()
+  const formField = useFormField()
+  const disabled = disabledProp || Boolean(formField?.disabled)
   useFocusVisibleTracking()
   const { boxStyle, checkmarkStyle } = useCheckboxStyles({
     checked,
@@ -68,6 +73,7 @@ export const Checkbox = ({
       aria-checked={checked}
       aria-disabled={disabled}
       aria-label={label || value}
+      {...formFieldProps(formField, 'own', { requiredAllowed: true })}
       {...spaceKeyActivates(handlePress, disabled)}
     >
       <View style={styles.content}>
@@ -91,6 +97,8 @@ export const Checkbox = ({
 const styles = StyleSheet.create({
   container: {
     alignItems: 'flex-start',
+    // The 44-point touch height is centered on the row, not left as a gap below it.
+    justifyContent: 'center',
     minHeight: 44,
   },
   content: {
@@ -116,3 +124,26 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 })
+
+// Inside <Skeleton loading>: the box and the label's width.
+const CheckboxSkeleton = (props: CheckboxProps): JSX.Element => {
+  const theme = useTheme()
+  const { label, checkboxSize = 20, style, labelStyle, textColor } = props
+  const commonStyles = useCommonStyles(splitCommonProps(props)[0])
+  const labelStyles = useCheckboxLabelStyles({ textColor })
+
+  return (
+    <View aria-hidden style={[styles.container, commonStyles, style]}>
+      <View style={styles.content}>
+        <SkeletonBox style={[styles.box, { width: checkboxSize, height: checkboxSize, borderRadius: theme.radius.sm }]} />
+        {label ? (
+          <SkeletonBox style={{ borderRadius: theme.radius.sm, flexShrink: 1 }}>
+            <Text style={[labelStyles, labelStyle, HIDDEN_TEXT]}>{label}</Text>
+          </SkeletonBox>
+        ) : null}
+      </View>
+    </View>
+  )
+}
+
+export const Checkbox: (props: CheckboxProps) => JSX.Element = withSkeleton(CheckboxBase, CheckboxSkeleton)

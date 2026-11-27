@@ -1,18 +1,21 @@
 import type { JSX } from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { useTheme } from '../../providers'
-import { useCommonStyles } from '../../hooks/common.hooks'
+import { splitCommonProps, useCommonStyles } from '../../hooks/common.hooks'
 import type { RadioGroupProps } from './radio.type'
+import { formFieldProps, useFormField } from '../FormField/form-field.context'
 import { spaceKeyActivates } from '../../hooks/keyboard'
 import { isFocusVisible, useFocusVisibleTracking } from '../../hooks/focusVisible'
 import { DISABLED_OPACITY, focusRing, type InteractionState } from '../../styles/interaction'
+import { HIDDEN_TEXT, SkeletonBox } from '../Skeleton/skeleton-box'
+import { withSkeleton } from '../Skeleton/with-skeleton'
 
-export const RadioGroup = ({
+const RadioGroupBase = ({
     ref,
     options,
     value,
     onChange,
-    disabled = false,
+    disabled: disabledProp = false,
     direction = 'column',
     style,
     textColor,
@@ -23,6 +26,8 @@ export const RadioGroup = ({
 }: RadioGroupProps): JSX.Element => {
     const theme = useTheme()
     const commonStyles = useCommonStyles(commonProps)
+    const formField = useFormField()
+    const disabled = disabledProp || Boolean(formField?.disabled)
     const resolvedTextColor = textColor ?? theme.colors.foreground
     const resolvedCircleColor = circleColor ?? theme.colors.primary
     useFocusVisibleTracking()
@@ -32,6 +37,7 @@ export const RadioGroup = ({
             ref={ref}
             role='radiogroup'
             aria-label={accessibilityLabel}
+            {...formFieldProps(formField, 'group', { hasOwnName: Boolean(accessibilityLabel) })}
             aria-disabled={disabled || undefined}
             style={[styles.group, { flexDirection: direction }, commonStyles, style]}
         >
@@ -118,3 +124,30 @@ const styles = StyleSheet.create({
         marginRight: 8,
     },
 })
+
+// Inside <Skeleton loading>: a circle and a label width for each option.
+const RadioGroupSkeleton = (props: RadioGroupProps): JSX.Element => {
+    const theme = useTheme()
+    const { options, direction = 'column', style, labelStyle } = props
+    const commonStyles = useCommonStyles(splitCommonProps(props)[0])
+    const font = {
+        fontSize: theme.fontSize.base,
+        lineHeight: theme.leading.base,
+        fontFamily: theme.fontFamily.regular,
+    }
+
+    return (
+        <View aria-hidden style={[styles.group, { flexDirection: direction }, commonStyles, style]}>
+            {options.map((option) => (
+                <View key={option.value} style={[styles.option, direction === 'row' && styles.optionRow]}>
+                    <SkeletonBox style={styles.circle} />
+                    <SkeletonBox style={{ borderRadius: theme.radius.sm }}>
+                        <Text style={[font, labelStyle, HIDDEN_TEXT]}>{option.label}</Text>
+                    </SkeletonBox>
+                </View>
+            ))}
+        </View>
+    )
+}
+
+export const RadioGroup: (props: RadioGroupProps) => JSX.Element = withSkeleton(RadioGroupBase, RadioGroupSkeleton)

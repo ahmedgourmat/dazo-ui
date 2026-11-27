@@ -58,6 +58,9 @@ Every component, new or changed, meets all of the following. Issues for new comp
 - **`testID`:** passed to the same element as the `ref`.
 - **Style props:** accepts the shared style props (`CommonProps`) and resolves them with `useCommonStyles`. A component that also passes props to a native element (like Input) splits them first with `splitCommonProps`.
 - **Docs in the types:** every prop has a JSDoc comment, and the defaults are stated.
+- **Form controls read the FormField around them** with `useFormField()`:
+  - merge its `invalid` and `disabled` with their own props;
+  - spread `formFieldProps(field, kind)` on the element screen readers focus, so it's named by the label and described by the helper text or error.
 - **No new runtime dependencies.** Native integrations, such as a date picker, are optional adapters passed in by the app, like `FileInput`'s `customPicker` / `expoDocumentPicker`.
 
 ### 3. Theming
@@ -77,6 +80,11 @@ Every component, new or changed, meets all of the following. Issues for new comp
 ### 5. States
 - **Shared looks:** hover (web), pressed, focus, disabled (`DISABLED_OPACITY`), and, where they apply, loading, invalid, selected and read-only.
 - **How to get them:** hover and focus come from Pressable's style callback (`InteractionState`). React Native only passes `pressed`, so hover never shows on touch screens.
+- **Skeleton mode:** inside `<Skeleton loading>`, the component draws a placeholder in its exact size and shape.
+  - **How:** export it as `withSkeleton(NameBase, NameSkeleton)`. The placeholder uses `SkeletonBox` with the same layout styles and tokens as the real component, and applies the style props.
+  - **Text:** where a size depends on text (labels, values), render that text in `HIDDEN_TEXT`, so the width matches.
+  - **No layout jump:** check that the loading and loaded versions have the same height.
+  - **Exceptions:** pure layout components (Container, Divider) render as they are.
 
 ### 6. Performance and size
 - **Styles:** static styles in `StyleSheet.create`, and theme-dependent styles in `useMemo` keyed on the theme.

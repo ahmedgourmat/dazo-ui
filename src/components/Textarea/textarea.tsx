@@ -5,11 +5,14 @@ import { useControllableState } from '../../hooks/controllable'
 import { useTheme } from '../../providers'
 import { useInputStyles } from '../Input/input.hooks'
 import type { TextareaProps } from './textarea.type'
+import { formFieldProps, useFormField } from '../FormField/form-field.context'
+import { FieldSkeleton } from '../Skeleton/field-skeleton'
+import { withSkeleton } from '../Skeleton/with-skeleton'
 
 // The line height that matches each size's text (Input: sm 14, md/lg 16, xl 18).
 const LINE_STEP = { sm: 'sm', md: 'base', lg: 'base', xl: 'lg' } as const
 
-export const Textarea = ({
+const TextareaBase = ({
   ref,
   value,
   defaultValue,
@@ -17,7 +20,7 @@ export const Textarea = ({
   textColor,
   variant = 'outline',
   size = 'md',
-  invalid = false,
+  invalid: invalidProp = false,
   rows = 3,
   maxRows,
   showCount = false,
@@ -25,7 +28,7 @@ export const Textarea = ({
   style,
   inputStyle,
   placeholderTextColor,
-  editable = true,
+  editable: editableProp = true,
   onFocus,
   onBlur,
   onContentSizeChange,
@@ -34,6 +37,10 @@ export const Textarea = ({
   // Style props (padding, width, margin, …) style the field's box;
   // only the remaining TextInput props go to the TextInput.
   const [styleProps, nativeProps] = splitCommonProps(rest)
+  // A FormField around the field can mark it invalid or disabled too.
+  const formField = useFormField()
+  const invalid = invalidProp || Boolean(formField?.invalid)
+  const editable = editableProp && !formField?.disabled
   const commonStyles = useCommonStyles(styleProps)
   const theme = useTheme()
   const field = useInputStyles({ variant, size, editable, invalid, textColor })
@@ -87,6 +94,7 @@ export const Textarea = ({
         // don't list aria-describedby, and iOS and Android ignore it.
         {...(showCount ? ({ 'aria-describedby': countId } as object) : null)}
         {...(invalid ? ({ 'aria-invalid': true } as object) : null)}
+        {...formFieldProps(formField, 'text', { ownDescriptionId: showCount ? countId : undefined })}
         style={[
           field.input,
           styles.input,
@@ -130,3 +138,17 @@ const styles = StyleSheet.create({
     outlineStyle: 'none',
   } as unknown as TextStyle,
 })
+
+// Inside <Skeleton loading>: the field's box at the height it starts with.
+const TextareaSkeleton = (props: TextareaProps): JSX.Element => {
+  const theme = useTheme()
+  const { rows = 3, size = 'md', showCount = false } = props
+  const height =
+    rows * theme.leading[LINE_STEP[size]] +
+    2 * theme.space[2] +
+    2 * theme.borderWidth.thin +
+    (showCount ? theme.space[1] + theme.leading.xs : 0)
+  return <FieldSkeleton props={props} height={height} />
+}
+
+export const Textarea: (props: TextareaProps) => JSX.Element = withSkeleton(TextareaBase, TextareaSkeleton)

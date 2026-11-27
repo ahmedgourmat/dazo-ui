@@ -24,13 +24,18 @@ export type FieldStyles = {
   hitSlop: Insets
 }
 
-const VALUE_SIZE = { sm: 'sm', md: 'base', lg: 'base', xl: 'lg' } as const
+/** The text size of a field's value at each control size. */
+export const VALUE_SIZE = { sm: 'sm', md: 'base', lg: 'base', xl: 'lg' } as const
 
 /**
  * The look shared by fields that open something when pressed (Select,
  * FileInput): the same edge, height, radius and text sizes as Input.
  */
-export const useFieldStyles = ({ size = 'md', disabled = false }: { size?: ControlSize; disabled?: boolean }): FieldStyles => {
+export const useFieldStyles = ({
+  size = 'md',
+  disabled = false,
+  invalid = false,
+}: { size?: ControlSize; disabled?: boolean; invalid?: boolean }): FieldStyles => {
   const theme = useTheme()
 
   return useMemo(() => {
@@ -42,7 +47,7 @@ export const useFieldStyles = ({ size = 'md', disabled = false }: { size?: Contr
       box: {
         minHeight: controlHeight[size],
         borderWidth: theme.borderWidth.thin,
-        borderColor: colors.input,
+        borderColor: invalid ? colors.danger : colors.input,
         borderRadius: theme.radius.md,
         backgroundColor: colors.surface,
         opacity: disabled ? DISABLED_OPACITY : 1,
@@ -70,5 +75,5 @@ export const useFieldStyles = ({ size = 'md', disabled = false }: { size?: Contr
       iconColor: colors.foregroundMuted,
       hitSlop: { top: touchGap, bottom: touchGap, left: 0, right: 0 },
     }
-  }, [disabled, size, theme])
+  }, [disabled, invalid, size, theme])
 }

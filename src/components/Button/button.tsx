@@ -2,13 +2,15 @@ import type { JSX } from 'react'
 import { Pressable, Text, ActivityIndicator, StyleSheet, View } from 'react-native'
 import { useButtonStyles } from './button.hooks'
 import type { ButtonProps } from './button.type'
-import { useCommonStyles } from '../../hooks/common.hooks'
+import { splitCommonProps, useCommonStyles } from '../../hooks/common.hooks'
 import { isFocusVisible, useFocusVisibleTracking } from '../../hooks/focusVisible'
 import type { InteractionState } from '../../styles/interaction'
+import { HIDDEN_TEXT, SkeletonBox } from '../Skeleton/skeleton-box'
+import { withSkeleton } from '../Skeleton/with-skeleton'
 
 // One Button for every platform. On web, react-native-web renders this
 // Pressable as a real <button> (role='button'), which Enter and Space press.
-export const Button = ({
+const ButtonBase = ({
   ref,
   label,
   onPress,
@@ -86,4 +88,25 @@ const styles = StyleSheet.create({
   rightIcon: {
     marginLeft: 8,
   },
+  hidden: {
+    opacity: 0,
+  },
 })
+
+// Inside <Skeleton loading>: the same box and label width, without the button.
+const ButtonSkeleton = (props: ButtonProps): JSX.Element => {
+  const { label, size = 'md', fullWidth = false, style, labelStyle } = props
+  const computed = useButtonStyles({ size, fullWidth })
+  const commonStyles = useCommonStyles(splitCommonProps(props)[0])
+  const leftIcon = props.leftIcon ?? props.icon
+
+  return (
+    <SkeletonBox style={[styles.base, computed.container, commonStyles, style]}>
+      {leftIcon ? <View style={[styles.leftIcon, styles.hidden]}>{leftIcon}</View> : null}
+      <Text style={[styles.label, computed.label, labelStyle, HIDDEN_TEXT]}>{label}</Text>
+      {props.rightIcon ? <View style={[styles.rightIcon, styles.hidden]}>{props.rightIcon}</View> : null}
+    </SkeletonBox>
+  )
+}
+
+export const Button: (props: ButtonProps) => JSX.Element = withSkeleton(ButtonBase, ButtonSkeleton)

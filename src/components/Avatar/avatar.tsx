@@ -1,8 +1,10 @@
 import { useState, type JSX } from 'react'
 import { Image, StyleSheet, Text, View } from 'react-native'
-import { useCommonStyles } from '../../hooks/common.hooks'
+import { splitCommonProps, useCommonStyles } from '../../hooks/common.hooks'
 import { useTheme } from '../../providers'
 import type { AvatarProps } from './avatar.type'
+import { SkeletonBox } from '../Skeleton/skeleton-box'
+import { withSkeleton } from '../Skeleton/with-skeleton'
 
 const SIZES = { xs: 24, sm: 32, md: 40, lg: 48, xl: 64 } as const
 
@@ -18,7 +20,7 @@ export const initialsOf = (name: string): string => {
   return `${first}${last}`.toLocaleUpperCase()
 }
 
-export const Avatar = ({
+const AvatarBase = ({
   ref,
   testID,
   name,
@@ -93,3 +95,27 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
 })
+
+// Inside <Skeleton loading>: the same circle or rounded square.
+const AvatarSkeleton = (props: AvatarProps): JSX.Element => {
+  const theme = useTheme()
+  const { size = 'md', shape = 'circle', style } = props
+  const commonStyles = useCommonStyles(splitCommonProps(props)[0])
+  const dimension = SIZES[size]
+
+  return (
+    <SkeletonBox
+      style={[
+        {
+          width: dimension,
+          height: dimension,
+          borderRadius: shape === 'circle' ? dimension / 2 : Math.min(theme.radius.md, dimension / 4),
+        },
+        commonStyles,
+        style,
+      ]}
+    />
+  )
+}
+
+export const Avatar: (props: AvatarProps) => JSX.Element = withSkeleton(AvatarBase, AvatarSkeleton)

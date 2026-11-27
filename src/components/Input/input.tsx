@@ -2,22 +2,26 @@ import { useState, type JSX } from 'react'
 import { StyleSheet, TextInput, View, type TextStyle } from 'react-native'
 import { splitCommonProps, useCommonStyles } from '../../hooks/common.hooks'
 import type { InputProps } from './input.type'
+import { formFieldProps, useFormField } from '../FormField/form-field.context'
 import { useInputStyles } from './input.hooks'
+import { FieldSkeleton } from '../Skeleton/field-skeleton'
+import { withSkeleton } from '../Skeleton/with-skeleton'
+import { useTheme } from '../../providers'
 
-export const Input = ({
+const InputBase = ({
   ref,
   value,
   textColor,
   onChangeText,
   variant = 'outline',
   size = 'md',
-  invalid = false,
+  invalid: invalidProp = false,
   leftIcon,
   rightIcon,
   style,
   inputStyle,
   placeholderTextColor,
-  editable = true,
+  editable: editableProp = true,
   onFocus,
   onBlur,
   ...rest
@@ -25,6 +29,10 @@ export const Input = ({
   // Style props (padding, width, backgroundColor, …) style the field's box;
   // only the remaining TextInput props go to the TextInput.
   const [styleProps, nativeProps] = splitCommonProps(rest)
+  // A FormField around the input can mark it invalid or disabled too.
+  const formField = useFormField()
+  const invalid = invalidProp || Boolean(formField?.invalid)
+  const editable = editableProp && !formField?.disabled
   const commonStyles = useCommonStyles(styleProps)
   const selectedVariant = useInputStyles({ variant, size, editable, invalid, textColor })
   const [focused, setFocused] = useState(false)
@@ -57,6 +65,7 @@ export const Input = ({
         // react-native-web puts this on the <input>; React Native's types
         // don't list it, and iOS and Android ignore it.
         {...(invalid ? { 'aria-invalid': true } as object : null)}
+        {...formFieldProps(formField, 'text')}
         value={value}
         editable={editable}
         onChangeText={onChangeText}
@@ -103,3 +112,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 })
+
+// Inside <Skeleton loading>: the field's box at its height.
+const InputSkeleton = (props: InputProps): JSX.Element => {
+  const theme = useTheme()
+  return <FieldSkeleton props={props} height={theme.controlHeight[props.size ?? 'md']} />
+}
+
+export const Input: (props: InputProps) => JSX.Element = withSkeleton(InputBase, InputSkeleton)

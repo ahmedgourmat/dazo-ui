@@ -13,8 +13,9 @@ A small, theme-aware component library for **React Native and the web**. One API
 - **One API on every platform.** The same components and props on iOS, Android and the web (through react-native-web).
 - **A real design system.** Semantic color roles, a type scale, a 4px spacing scale, and sizes, radius, elevation and motion tokens.
 - **Light, dark and system themes** from the start, with optional accent colors and overrides for any token.
+- **Loading states built in.** Wrap a screen in `<Skeleton loading>` and every component draws a placeholder in its exact shape.
 - **Accessible by default.** Roles and states for screen readers, a keyboard focus ring on web, 44-point touch targets on iOS and Android, and WCAG AA contrast checked in tests.
-- **Small.** About 11 kB minified and brotlied for the whole library, and 2.5–3.5 kB for a single component. Each component can be imported on its own, and there are no runtime dependencies.
+- **Small.** About 12.5 kB minified and brotlied for the whole library, and 2.5–4 kB for a single component. Each component can be imported on its own, and there are no runtime dependencies.
 - **Typed.** Written in TypeScript, with types for every prop and token.
 
 ## Contents
@@ -241,6 +242,37 @@ Also takes `striped`, `stripedColumn`, `horizontalScroll` (on by default) and `e
 - `color`: a theme color name or any color
 - `lines` limits the number of lines; `letters` cuts the text after that many characters.
 
+### FormField
+
+Wraps one control with a label, helper text and error message, and wires them for screen readers. The control is named by the label and described by the helper text or error, and it's marked invalid, required or disabled:
+
+```tsx
+<FormField label="Email" helperText="We'll never share it." error={errors.email} required>
+  <Input value={email} onChangeText={setEmail} keyboardType="email-address" />
+</FormField>
+```
+
+- **The error** replaces the helper text, turns the control's edge red, and is announced when it appears.
+- **`required`** shows a star and tells screen readers.
+- **`disabled`** disables the control inside.
+- **Every dazo-ui control** reads the field: Input, Textarea, Select, FileInput, Checkbox, Switch and RadioGroup. Checkbox and Switch keep their own label, and the field describes them.
+- **Your own controls** can use `useFormField()` to get the field's label, description ids and state.
+
+With react-hook-form:
+
+```tsx
+<Controller
+  control={control}
+  name="email"
+  rules={{ required: 'Enter your email' }}
+  render={({ field, fieldState }) => (
+    <FormField label="Email" error={fieldState.error?.message} required>
+      <Input value={field.value} onChangeText={field.onChange} onBlur={field.onBlur} ref={field.ref} />
+    </FormField>
+  )}
+/>
+```
+
 ### Textarea
 
 ```tsx
@@ -281,6 +313,26 @@ A multiline Input with the same `variant`, `size` and `invalid` props. It shows 
 ```
 
 Shows the image, or the person's initials ("Ada Lovelace" → AL) when there is no image or it fails to load. `size`: `xs` 24 · `sm` 32 · `md` 40 · `lg` 48 · `xl` 64. `shape`: `circle` · `rounded`. The `name` is what screen readers read; without one the avatar is decorative.
+
+### Skeleton
+
+Wrap a screen in `Skeleton` while its data loads. Every dazo-ui component inside draws a placeholder in its own size and shape, and screen readers hear one "Loading":
+
+```tsx
+<Skeleton loading={isLoading}>
+  <Avatar name={user?.name ?? 'Ada Lovelace'} />
+  <Text variant="title">{user?.name ?? 'Placeholder name'}</Text>
+  <Badge tone="success">Active</Badge>
+  <Switch label="Notifications" />
+  <Button label="Save" />
+</Skeleton>
+```
+
+- **Exact shapes:** a Switch becomes a pill the size of its track, an Avatar a circle, Text a block as big as the text, and fields boxes at their height. When `loading` turns false, the content appears in the same place with no layout jump.
+- **Text placeholders** take their width from the text you pass, so give Text some placeholder text while the real text loads.
+- **Your own components** can draw a placeholder too, with `useSkeleton()`, which is true while loading.
+- **Without children,** `Skeleton` is a single block, for content that isn't a dazo-ui component: `<Skeleton width={120} height={16} />`, `<Skeleton circle size={40} />` or `<Skeleton lines={3} />`.
+- **Motion:** placeholders pulse gently, and stay still when the user asks for less motion.
 
 ### Progress and Spinner
 

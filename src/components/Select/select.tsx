@@ -1,22 +1,25 @@
-import { useMemo, useState, type JSX } from 'react'
+import { useId, useMemo, useState, type JSX } from 'react'
 import { FlatList, Modal, Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import { useTheme } from '../../providers'
 import { useCommonStyles } from '../../hooks/common.hooks'
-import { useFieldStyles } from '../../hooks/field.hooks'
+import { useFieldStyles, VALUE_SIZE } from '../../hooks/field.hooks'
 import { isFocusVisible, useFocusVisibleTracking } from '../../hooks/focusVisible'
 import { useReducedMotion } from '../../hooks/motion'
 import { DISABLED_OPACITY, focusRing, type InteractionState } from '../../styles/interaction'
 import type { SelectProps, SelectOption } from './select.type'
+import { formFieldProps, useFormField } from '../FormField/form-field.context'
 import { spaceKeyActivates } from '../../hooks/keyboard'
+import { FieldSkeleton } from '../Skeleton/field-skeleton'
+import { withSkeleton } from '../Skeleton/with-skeleton'
 
-export const Select = ({
+const SelectBase = ({
   ref,
   label,
   placeholder = 'Select an option',
   value,
   options,
   onChange,
-  disabled = false,
+  disabled: disabledProp = false,
   size = 'md',
   leftIcon,
   rightIcon,
@@ -27,7 +30,10 @@ export const Select = ({
   const theme = useTheme()
   const { colors, space } = theme
   const commonStyles = useCommonStyles(commonProps)
-  const field = useFieldStyles({ size, disabled })
+  const formField = useFormField()
+  const disabled = disabledProp || Boolean(formField?.disabled)
+  const field = useFieldStyles({ size, disabled, invalid: formField?.invalid })
+  const valueId = useId()
   const reduceMotion = useReducedMotion()
   useFocusVisibleTracking()
   const [open, setOpen] = useState(false)
@@ -53,6 +59,7 @@ export const Select = ({
         role='button'
         aria-expanded={open}
         aria-disabled={disabled}
+        {...formFieldProps(formField, 'value', { valueId, value: displayValue })}
         hitSlop={field.hitSlop}
         style={({ hovered, focused }: InteractionState) => [
           styles.container,
@@ -66,7 +73,7 @@ export const Select = ({
         {leftIcon ? <View style={[styles.leftIcon, { marginLeft: field.content.paddingHorizontal }]}>{leftIcon}</View> : null}
         <View style={[styles.content, field.content]}>
           {label ? <Text style={[field.label, labelStyle]}>{label}</Text> : null}
-          <Text style={[field.value, !selectedOption && { color: field.placeholderColor }]} numberOfLines={1}>
+          <Text nativeID={valueId} style={[field.value, !selectedOption && { color: field.placeholderColor }]} numberOfLines={1}>
             {displayValue}
           </Text>
         </View>
@@ -219,3 +226,15 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
 })
+
+// Inside <Skeleton loading>: the field's box, as high as with its label.
+const SelectSkeleton = (props: SelectProps): JSX.Element => {
+  const theme = useTheme()
+  const size = props.size ?? 'md'
+  const withLabel = props.label
+    ? 2 * theme.space[1.5] + theme.leading.xs + theme.leading[VALUE_SIZE[size]] + 2 * theme.borderWidth.thin
+    : 0
+  return <FieldSkeleton props={props} height={Math.max(theme.controlHeight[size], withLabel)} />
+}
+
+export const Select: (props: SelectProps) => JSX.Element = withSkeleton(SelectBase, SelectSkeleton)

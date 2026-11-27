@@ -1,7 +1,9 @@
 import { isValidElement, type ReactNode, type JSX } from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useTheme } from '../../providers'
-import { useCommonStyles } from '../../hooks/common.hooks'
+import { splitCommonProps, useCommonStyles } from '../../hooks/common.hooks'
+import { SkeletonBox } from '../Skeleton/skeleton-box'
+import { useSkeleton } from '../Skeleton/skeleton.context'
 import type { TableAlign, TableColumn, TableProps } from './table.type'
 
 const applyOpacityToColor = (color: string, opacity: number) => {
@@ -73,7 +75,7 @@ const toRenderableNode = (content: unknown): ReactNode => {
   return String(content)
 }
 
-export const Table = <T extends Record<string, unknown>>({
+const TableBase = <T extends Record<string, unknown>>({
   ref,
   columns,
   data,
@@ -292,3 +294,56 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
 })
+
+/** Rows shown while loading when there is no data yet. */
+const SKELETON_ROWS = 3
+
+// Inside <Skeleton loading>: the table's frame and header, with a bar in each
+// cell. As many rows as `data` has (when refreshing), or three while it's empty.
+const TableSkeleton = <T extends Record<string, unknown>>(props: TableProps<T>): JSX.Element => {
+  const theme = useTheme()
+  const { columns, data, style, headerStyle, rowStyle } = props
+  const commonStyles = useCommonStyles(splitCommonProps(props)[0])
+  const rows = data.length > 0 ? data.length : SKELETON_ROWS
+  const bar = (width: `${number}%`) => <SkeletonBox style={{ width, height: 12, borderRadius: theme.radius.sm }} />
+
+  return (
+    <View
+      aria-hidden
+      style={[
+        styles.table,
+        {
+          borderWidth: theme.borderWidth.thin,
+          borderRadius: theme.radius.lg,
+          borderColor: theme.colors.border,
+          backgroundColor: theme.colors.surface,
+        },
+        commonStyles,
+        style,
+      ]}
+    >
+      <View style={[styles.header, { borderBottomColor: theme.colors.border, backgroundColor: theme.colors.surfaceMuted }, headerStyle]}>
+        {columns.map((column) => (
+          <View key={`header-${column.key}`} style={[styles.cell, getCellSizing(column), getAlignStyles(column.align)]}>
+            {bar('50%')}
+          </View>
+        ))}
+      </View>
+      {Array.from({ length: rows }, (_, rowIndex) => (
+        <View
+          key={rowIndex}
+          style={[styles.row, { borderBottomColor: theme.colors.border }, rowIndex === rows - 1 && styles.lastRow, rowStyle]}
+        >
+          {columns.map((column) => (
+            <View key={`${rowIndex}-${column.key}`} style={[styles.cell, getCellSizing(column), getAlignStyles(column.align)]}>
+              {bar('70%')}
+            </View>
+          ))}
+        </View>
+      ))}
+    </View>
+  )
+}
+
+export const Table = <T extends Record<string, unknown>>(props: TableProps<T>): JSX.Element =>
+  useSkeleton() ? <TableSkeleton {...props} /> : <TableBase {...props} />

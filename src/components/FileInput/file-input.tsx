@@ -1,11 +1,14 @@
-import { useCallback, useEffect, useRef, useState, type JSX } from 'react'
+import { useCallback, useEffect, useId, useRef, useState, type JSX } from 'react'
 import { Platform, Pressable, StyleSheet, Text, View, type ViewStyle } from 'react-native'
 import { useTheme } from '../../providers'
 import { useCommonStyles } from '../../hooks/common.hooks'
-import { useFieldStyles } from '../../hooks/field.hooks'
+import { useFieldStyles, VALUE_SIZE } from '../../hooks/field.hooks'
 import { isFocusVisible, useFocusVisibleTracking } from '../../hooks/focusVisible'
 import type { InteractionState } from '../../styles/interaction'
 import type { FileInputProps, PickedFile } from './file-input.type'
+import { formFieldProps, useFormField } from '../FormField/form-field.context'
+import { FieldSkeleton } from '../Skeleton/field-skeleton'
+import { withSkeleton } from '../Skeleton/with-skeleton'
 
 // The parts of the browser API the web picker uses. The library is built
 // without DOM types because it also runs on iOS and Android.
@@ -28,14 +31,14 @@ const revokeObjectUrls = (urls: string[]): void => {
   for (const url of urls) urlApi?.revokeObjectURL?.(url)
 }
 
-export const FileInput = ({
+const FileInputBase = ({
   ref,
   label,
   value,
   placeholder = 'Choose a file',
   accept,
   multiple = false,
-  disabled = false,
+  disabled: disabledProp = false,
   size = 'md',
   leftIcon,
   rightIcon,
@@ -50,7 +53,10 @@ export const FileInput = ({
 }: FileInputProps): JSX.Element => {
   const theme = useTheme()
   const commonStyles = useCommonStyles(commonProps)
-  const field = useFieldStyles({ size, disabled })
+  const formField = useFormField()
+  const disabled = disabledProp || Boolean(formField?.disabled)
+  const field = useFieldStyles({ size, disabled, invalid: formField?.invalid })
+  const valueId = useId()
   useFocusVisibleTracking()
   // Hover and keyboard focus on the picker show on the whole box, so they
   // follow its rounded edge.
@@ -177,6 +183,7 @@ export const FileInput = ({
         // voice-control users can say what they see.
         role='button'
         aria-disabled={disabled}
+        {...formFieldProps(formField, 'value', { valueId, value: displayValue })}
         hitSlop={field.hitSlop}
         onHoverIn={() => setHovered(true)}
         onHoverOut={() => setHovered(false)}
@@ -188,7 +195,7 @@ export const FileInput = ({
         {leftIcon ? <View style={styles.leftIcon}>{leftIcon}</View> : null}
         <View style={styles.content}>
           {label ? <Text style={[field.label, labelStyle]}>{label}</Text> : null}
-          <Text style={[field.value, !shownValue && { color: field.placeholderColor }]} numberOfLines={1}>
+          <Text nativeID={valueId} style={[field.value, !shownValue && { color: field.placeholderColor }]} numberOfLines={1}>
             {displayValue}
           </Text>
         </View>
@@ -261,3 +268,15 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 })
+
+// Inside <Skeleton loading>: the field's box, as high as with its label.
+const FileInputSkeleton = (props: FileInputProps): JSX.Element => {
+  const theme = useTheme()
+  const size = props.size ?? 'md'
+  const withLabel = props.label
+    ? 2 * theme.space[1.5] + theme.leading.xs + theme.leading[VALUE_SIZE[size]] + 2 * theme.borderWidth.thin
+    : 0
+  return <FieldSkeleton props={props} height={Math.max(theme.controlHeight[size], withLabel)} />
+}
+
+export const FileInput: (props: FileInputProps) => JSX.Element = withSkeleton(FileInputBase, FileInputSkeleton)

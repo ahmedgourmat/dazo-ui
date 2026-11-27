@@ -1,17 +1,19 @@
 import { useEffect, useState, type JSX } from 'react'
 import { Animated, Easing, Platform, StyleSheet, View } from 'react-native'
-import { useCommonStyles } from '../../hooks/common.hooks'
+import { splitCommonProps, useCommonStyles } from '../../hooks/common.hooks'
 import { useReducedMotion } from '../../hooks/motion'
 import { useTheme } from '../../providers'
 import { toneColors } from '../../styles/color'
 import type { ProgressProps } from './progress.type'
+import { SkeletonBox } from '../Skeleton/skeleton-box'
+import { withSkeleton } from '../Skeleton/with-skeleton'
 
 /** Share of the track the moving bar covers when the progress is unknown. */
 const UNKNOWN_SHARE = 0.4
 /** One sweep of the moving bar, in ms. Longer than the motion tokens on purpose: it repeats. */
 const SWEEP = 1200
 
-export const Progress = ({
+const ProgressBase = ({
   ref,
   testID,
   value,
@@ -123,3 +125,21 @@ const styles = StyleSheet.create({
     animationIterationCount: 'infinite',
   } as object,
 })
+
+// Inside <Skeleton loading>: the empty track.
+const ProgressSkeleton = (props: ProgressProps): JSX.Element => {
+  const theme = useTheme()
+  const commonStyles = useCommonStyles(splitCommonProps(props)[0])
+  return (
+    <SkeletonBox
+      style={[
+        styles.track,
+        { height: props.size === 'sm' ? 4 : 8, borderRadius: theme.radius.full },
+        commonStyles,
+        props.style,
+      ]}
+    />
+  )
+}
+
+export const Progress: (props: ProgressProps) => JSX.Element = withSkeleton(ProgressBase, ProgressSkeleton)

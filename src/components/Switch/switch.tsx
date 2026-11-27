@@ -1,6 +1,6 @@
 import { useEffect, useState, type JSX } from 'react'
 import { Animated, Easing, Platform, Pressable, StyleSheet, Text, View } from 'react-native'
-import { useCommonStyles } from '../../hooks/common.hooks'
+import { splitCommonProps, useCommonStyles } from '../../hooks/common.hooks'
 import { useControllableState } from '../../hooks/controllable'
 import { isFocusVisible, useFocusVisibleTracking } from '../../hooks/focusVisible'
 import { spaceKeyActivates } from '../../hooks/keyboard'
@@ -8,19 +8,22 @@ import { useReducedMotion } from '../../hooks/motion'
 import { useTheme } from '../../providers'
 import { DISABLED_OPACITY, cssTransition, focusRing, type InteractionState } from '../../styles/interaction'
 import type { SwitchProps } from './switch.type'
+import { formFieldProps, useFormField } from '../FormField/form-field.context'
+import { HIDDEN_TEXT, SkeletonBox } from '../Skeleton/skeleton-box'
+import { withSkeleton } from '../Skeleton/with-skeleton'
 
 const SIZES = {
   sm: { width: 32, height: 18, thumb: 14 },
   md: { width: 44, height: 24, thumb: 20 },
 } as const
 
-export const Switch = ({
+const SwitchBase = ({
   ref,
   testID,
   checked,
   defaultChecked = false,
   onChange,
-  disabled = false,
+  disabled: disabledProp = false,
   label,
   labelPosition = 'start',
   size = 'md',
@@ -33,6 +36,8 @@ export const Switch = ({
   const { colors, motion } = theme
   const commonStyles = useCommonStyles(commonProps)
   const reduceMotion = useReducedMotion()
+  const formField = useFormField()
+  const disabled = disabledProp || Boolean(formField?.disabled)
   useFocusVisibleTracking()
   const [on, setOn] = useControllableState(checked, defaultChecked, onChange)
   const toggle = () => {
@@ -82,6 +87,7 @@ export const Switch = ({
       aria-checked={on}
       aria-disabled={disabled}
       aria-label={label ?? accessibilityLabel}
+      {...formFieldProps(formField, 'own')}
       hitSlop={{ top: touchGap, bottom: touchGap }}
       {...spaceKeyActivates(toggle, disabled)}
       style={({ focused }: InteractionState) => [
@@ -160,3 +166,41 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
 })
+
+// Inside <Skeleton loading>: the label's width and the track, laid out as the switch is.
+const SwitchSkeleton = (props: SwitchProps): JSX.Element => {
+  const theme = useTheme()
+  const { label, labelPosition = 'start', size = 'md', style, labelStyle } = props
+  const commonStyles = useCommonStyles(splitCommonProps(props)[0])
+  const track = SIZES[size]
+  const text = label ? (
+    <SkeletonBox style={[styles.label, { borderRadius: theme.radius.sm }]}>
+      <Text
+        style={[
+          { fontSize: theme.fontSize.base, lineHeight: theme.leading.base, fontFamily: theme.fontFamily.regular },
+          labelStyle,
+          HIDDEN_TEXT,
+        ]}
+      >
+        {label}
+      </Text>
+    </SkeletonBox>
+  ) : null
+  const control = <SkeletonBox style={{ width: track.width, height: track.height, borderRadius: track.height / 2 }} />
+
+  return (
+    <View
+      aria-hidden
+      style={[
+        styles.row,
+        { gap: theme.space[3], justifyContent: label && labelPosition === 'start' ? 'space-between' : 'flex-start' },
+        commonStyles,
+        style,
+      ]}
+    >
+      {labelPosition === 'start' ? <>{text}{control}</> : <>{control}{text}</>}
+    </View>
+  )
+}
+
+export const Switch: (props: SwitchProps) => JSX.Element = withSkeleton(SwitchBase, SwitchSkeleton)

@@ -19,7 +19,19 @@ All notable changes to dazo-ui are listed here. The format follows
 - `Divider`: a horizontal, vertical or labelled separator ([#76](https://github.com/ahmedgourmat/dazo-ui/issues/76)).
 - Theme colors `dangerForeground`, `successForeground`, `warningForeground` and `infoForeground`, for
   text on a status color, checked to reach 4.5:1 in both modes.
+- `Skeleton`: wrap a screen in `<Skeleton loading>` and every dazo-ui component inside draws a
+  placeholder in its exact size and shape, with no layout jump when the content arrives. It also works
+  as a standalone block (`width`/`height`, `circle`, `lines`). `useSkeleton()` lets your own
+  components draw a placeholder ([#72](https://github.com/ahmedgourmat/dazo-ui/issues/72)).
+- `FormField`: a label, helper text and error around any control, with the accessibility wiring
+  done for you (labelled by, described by, invalid, required, disabled; errors announced). Every
+  control reads it, and `useFormField()` lets your own controls do the same
+  ([#68](https://github.com/ahmedgourmat/dazo-ui/issues/68)).
 - Prop types for every new component, and the `Tone` type.
+
+### Fixed
+
+- Checkbox centers its row in its 44-point touch height, instead of leaving the extra space below it.
 
 ## [2.0.0] - 2026-11-26
 

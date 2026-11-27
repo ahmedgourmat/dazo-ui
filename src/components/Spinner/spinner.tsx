@@ -1,9 +1,11 @@
 import type { JSX } from 'react'
 import { ActivityIndicator, StyleSheet, View } from 'react-native'
-import { useCommonStyles } from '../../hooks/common.hooks'
+import { splitCommonProps, useCommonStyles } from '../../hooks/common.hooks'
 import { useTheme } from '../../providers'
 import { resolveColor } from '../../styles/color'
 import type { SpinnerProps } from './spinner.type'
+import { SkeletonBox } from '../Skeleton/skeleton-box'
+import { withSkeleton } from '../Skeleton/with-skeleton'
 
 // iOS only draws 'small' (20) and 'large' (36), so sm is a scaled 'small'.
 // Using the same values everywhere keeps the sizes identical on every platform.
@@ -17,7 +19,7 @@ const SIZES = {
  * A themed loading indicator. It keeps spinning when the user asks for less
  * motion: it is essential feedback, and it doesn't move across the screen.
  */
-export const Spinner = ({
+const SpinnerBase = ({
   ref,
   testID,
   size = 'md',
@@ -57,3 +59,18 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
 })
+
+const DIAMETERS = { sm: 16, md: 20, lg: 36 } as const
+
+// Inside <Skeleton loading>: a circle the size of the indicator.
+const SpinnerSkeleton = (props: SpinnerProps): JSX.Element => {
+  const diameter = DIAMETERS[props.size ?? 'md']
+  const commonStyles = useCommonStyles(splitCommonProps(props)[0])
+  return (
+    <SkeletonBox
+      style={[styles.container, { width: diameter, height: diameter, borderRadius: diameter / 2 }, commonStyles, props.style]}
+    />
+  )
+}
+
+export const Spinner: (props: SpinnerProps) => JSX.Element = withSkeleton(SpinnerBase, SpinnerSkeleton)
