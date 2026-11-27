@@ -257,7 +257,11 @@ export const Table = <T extends Record<string, unknown>>({
   }
 
   return (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={{ flexGrow: 1 }}
+    >
       <View style={{ minWidth: '100%' }}>{tableContent}</View>
     </ScrollView>
   )
