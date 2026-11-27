@@ -14,7 +14,7 @@ A small, theme-aware component library for **React Native and the web**. One API
 - **A real design system.** Semantic color roles, a type scale, a 4px spacing scale, and sizes, radius, elevation and motion tokens.
 - **Light, dark and system themes** from the start, with optional accent colors and overrides for any token.
 - **Accessible by default.** Roles and states for screen readers, a keyboard focus ring on web, 44-point touch targets on iOS and Android, and WCAG AA contrast checked in tests.
-- **Small.** About 8.5 kB minified and brotlied for the whole library. Each component can be imported on its own, and there are no runtime dependencies.
+- **Small.** About 11 kB minified and brotlied for the whole library, and 2.5–3.5 kB for a single component. Each component can be imported on its own, and there are no runtime dependencies.
 - **Typed.** Written in TypeScript, with types for every prop and token.
 
 ## Contents
@@ -241,6 +241,69 @@ Also takes `striped`, `stripedColumn`, `horizontalScroll` (on by default) and `e
 - `color`: a theme color name or any color
 - `lines` limits the number of lines; `letters` cuts the text after that many characters.
 
+### Textarea
+
+```tsx
+<Textarea value={bio} onChangeText={setBio} placeholder="Tell us about yourself" rows={3} maxRows={8} maxLength={280} showCount />
+```
+
+A multiline Input with the same `variant`, `size` and `invalid` props. It shows `rows` lines, grows with its text up to `maxRows`, then scrolls. `showCount` shows "120 / 280" under the text, linked to the field for screen readers. Without `value` it keeps its own text (`defaultValue`).
+
+### Switch
+
+```tsx
+<Switch label="Push notifications" checked={enabled} onChange={setEnabled} />
+<Switch label="Dark mode" defaultChecked size="sm" labelPosition="end" />
+```
+
+- Controlled with `checked` and `onChange`, or uncontrolled with `defaultChecked`.
+- `labelPosition`: `start` (label first, switch at the far end, as in a settings row; the default) · `end`
+- `size`: `sm` · `md`
+- Use `accessibilityLabel` when there is no visible label.
+
+### Badge
+
+```tsx
+<Badge>New</Badge>
+<Badge tone="success">Paid</Badge>
+<Badge tone="warning" variant="subtle">Pending</Badge>
+```
+
+- `tone`: `neutral` · `danger` · `success` · `warning` · `info`
+- `variant`: `solid` (filled with the tone) · `subtle` · `outline` (both neutral, with a dot in the tone's color)
+- `size`: `sm` · `md`; `icon` replaces the dot.
+
+### Avatar
+
+```tsx
+<Avatar name="Ada Lovelace" src={user.photoUrl} />
+<Avatar name="Alan Turing" size="lg" shape="rounded" />
+```
+
+Shows the image, or the person's initials ("Ada Lovelace" → AL) when there is no image or it fails to load. `size`: `xs` 24 · `sm` 32 · `md` 40 · `lg` 48 · `xl` 64. `shape`: `circle` · `rounded`. The `name` is what screen readers read; without one the avatar is decorative.
+
+### Progress and Spinner
+
+```tsx
+<Progress value={3} max={5} label="Step 3 of 5" />
+<Progress label="Syncing" />   {/* no value: unknown progress */}
+<Spinner label="Loading messages" />
+```
+
+- Progress takes `tone` and `size` (`sm` 4 · `md` 8). Without a `value`, the bar sweeps back and forth; it stands still when the user asks for less motion.
+- Spinner takes `size` (`sm` · `md` · `lg`) and `color` (a theme color name or any color).
+- Both are announced as progress indicators with their `label`.
+
+### Divider
+
+```tsx
+<Divider />
+<Divider label="or" />
+<Divider orientation="vertical" />   {/* inside a row */}
+```
+
+A 1px line in the `border` color, announced as a separator. Use `decorative` to hide it from screen readers.
+
 ### Container
 
 A `View` that takes the style props. Add `scrollable` to make it a `ScrollView`.
@@ -312,8 +375,9 @@ The default theme is monochrome: white and near-white surfaces in light mode, ne
 | `primary` / `primaryForeground` | `#171717` / `#FFFFFF` | `#FAFAFA` / `#171717` | Main actions |
 | `secondary` / `secondaryForeground` | `#F5F5F5` / `#171717` | `#262626` / `#FAFAFA` | Secondary actions |
 | `danger` · `success` · `warning` · `info` | red · green · amber · blue 600 | the same, 400 | Status |
+| `dangerForeground` … `infoForeground` | white · `#0A0A0A` · `#0A0A0A` · white | `#0A0A0A` | Text on a status color |
 
-The contrast of every text, focus-ring and field-edge pair is tested against WCAG 2.2 AA, in both modes and with every accent. `success` and `warning` reach only about 3.2:1 on white: enough for icons and borders, but not for small text.
+The contrast of every text, focus-ring and field-edge pair is tested against WCAG 2.2 AA, in both modes and with every accent. `success` and `warning` reach only about 3.2:1 on white: enough for icons and borders, but not for small text. Put text on a status color with its `…Foreground` role, as solid Badges do.
 
 ### Typography
 
@@ -364,11 +428,11 @@ Every component takes a `ref`, which React 19 passes as a normal prop:
 
 | Component | `ref.current` is |
 |---|---|
-| Input | the `TextInput`, so you can `focus()` it |
-| Button, Checkbox, Select, FileInput | the pressable control |
+| Input, Textarea | the `TextInput`, so you can `focus()` it |
+| Button, Checkbox, Switch, Select, FileInput | the pressable control |
 | Container | the `View`, or the `ScrollView` when `scrollable` |
 | Text | the `Text` |
-| RadioGroup, Table | the outer `View` |
+| RadioGroup, Table, Avatar, Badge, Divider, Progress, Spinner | the outer `View` |
 
 ```tsx
 const password = useRef<TextInput>(null)
@@ -379,7 +443,7 @@ const password = useRef<TextInput>(null)
 
 ## TypeScript
 
-Every component's props are typed, and these types are exported: `Theme`, `ThemeColors`, `ThemeMode`, `ThemeAccent`, `AccentName`, `AccentPalette`, `ControlSize`, `FontSizeKey`, `ShadowKey`, `SpaceStep`, `PickedFile`, `FilePicker`, `FilePickerOptions` and `ExpoDocumentPickerModule`.
+Every component's props are typed, and these types are exported: every component's props (`ButtonProps`, `SwitchProps`, …), `Tone`, `Theme`, `ThemeColors`, `ThemeMode`, `ThemeAccent`, `AccentName`, `AccentPalette`, `ControlSize`, `FontSizeKey`, `ShadowKey`, `SpaceStep`, `PickedFile`, `FilePicker`, `FilePickerOptions` and `ExpoDocumentPickerModule`.
 
 ## Upgrading from 1.x
 

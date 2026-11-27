@@ -4,6 +4,23 @@ All notable changes to dazo-ui are listed here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- `Textarea`: a multiline field with Input's look. It grows between `rows` and `maxRows`, and `showCount`
+  shows a character count linked to the field ([#69](https://github.com/ahmedgourmat/dazo-ui/issues/69)).
+- `Switch`: an on/off toggle, controlled or uncontrolled, with a `role="switch"`, Space key support and an
+  animated thumb that respects reduced motion ([#70](https://github.com/ahmedgourmat/dazo-ui/issues/70)).
+- `Spinner`: a themed loading indicator, announced with its label ([#71](https://github.com/ahmedgourmat/dazo-ui/issues/71)).
+- `Progress`: a progress bar for known and unknown progress ([#73](https://github.com/ahmedgourmat/dazo-ui/issues/73)).
+- `Badge`: a status label in five tones and three variants ([#74](https://github.com/ahmedgourmat/dazo-ui/issues/74)).
+- `Avatar`: an image with an initials fallback ([#75](https://github.com/ahmedgourmat/dazo-ui/issues/75)).
+- `Divider`: a horizontal, vertical or labelled separator ([#76](https://github.com/ahmedgourmat/dazo-ui/issues/76)).
+- Theme colors `dangerForeground`, `successForeground`, `warningForeground` and `infoForeground`, for
+  text on a status color, checked to reach 4.5:1 in both modes.
+- Prop types for every new component, and the `Tone` type.
+
 ## [2.0.0] - 2026-11-26
 
 The first version built on the Dazo UI design system, with a new monochrome
@@ -148,6 +165,7 @@ one changes both. They will be removed in a future major version.
   plus `useTheme`, `lightTheme` and `darkTheme`.
 - Style props (`padding="md"`, `backgroundColor="primary"`, …) that resolve theme tokens.
 
+[Unreleased]: https://github.com/ahmedgourmat/dazo-ui/compare/v2.0.0...HEAD
 [2.0.0]: https://github.com/ahmedgourmat/dazo-ui/compare/v1.0.2...v2.0.0
 [1.0.2]: https://github.com/ahmedgourmat/dazo-ui/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/ahmedgourmat/dazo-ui/compare/v1.0.0...v1.0.1

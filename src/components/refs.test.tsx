@@ -3,7 +3,7 @@ import { createRef, useRef } from 'react'
 import type { ScrollView, Text as RNText, TextInput, View } from 'react-native'
 import { describe, expect, it, vi } from 'vitest'
 import { renderWithTheme } from '../test/utils'
-import { Button, Checkbox, Container, FileInput, Input, RadioGroup, Select, Table, Text } from '../index'
+import { Avatar, Badge, Button, Checkbox, Container, Divider, FileInput, Input, Progress, RadioGroup, Select, Spinner, Switch, Table, Text, Textarea } from '../index'
 
 // Issue #48. In React 19 `ref` is a normal prop, so every component takes one
 // and hands it to the element that matters most. react-native-web makes that
@@ -113,6 +113,47 @@ describe('every component forwards its ref (#48)', () => {
     )
 
     expect(ref.current).toBe(screen.getByText('Inside').parentElement)
+  })
+
+  it('Textarea: the TextInput itself, so it can be focused', () => {
+    const ref = createRef<TextInput>()
+    renderWithTheme(<Textarea ref={ref} placeholder='Bio' />)
+
+    expect(ref.current).toBe(screen.getByPlaceholderText('Bio'))
+    ref.current?.focus()
+    expect(document.activeElement).toBe(screen.getByPlaceholderText('Bio'))
+  })
+
+  it('Switch: the pressable switch, so it can be focused', () => {
+    const ref = createRef<View>()
+    renderWithTheme(<Switch ref={ref} label='Wi-Fi' />)
+
+    expect(ref.current).toBe(screen.getByRole('switch', { name: 'Wi-Fi' }))
+    ref.current?.focus()
+    expect(document.activeElement).toBe(screen.getByRole('switch', { name: 'Wi-Fi' }))
+  })
+
+  it('Spinner, Progress, Avatar, Badge and Divider: their outer View', () => {
+    const spinner = createRef<View>()
+    const progress = createRef<View>()
+    const avatar = createRef<View>()
+    const badge = createRef<View>()
+    const divider = createRef<View>()
+    renderWithTheme(
+      <>
+        <Spinner ref={spinner} label='Loading' />
+        <Progress ref={progress} value={10} label='Upload' />
+        <Avatar ref={avatar} name='Ada Lovelace' />
+        <Badge ref={badge} testID='badge'>New</Badge>
+        <Divider ref={divider} />
+      </>,
+    )
+
+    expect(spinner.current).toBe(screen.getByRole('progressbar', { name: 'Loading' }))
+    expect(progress.current).toBe(screen.getByRole('progressbar', { name: 'Upload' }))
+    expect(avatar.current).toBe(screen.getByRole('img', { name: 'Ada Lovelace' }))
+    expect(badge.current).toBe(screen.getByTestId('badge'))
+    expect(divider.current).toBe(screen.getByRole('separator'))
   })
 
   it('Container: the ScrollView when scrollable, with its scroll methods', () => {

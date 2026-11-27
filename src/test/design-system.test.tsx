@@ -103,6 +103,10 @@ describe('contrast (WCAG 2.2 AA), measured rather than assumed', () => {
         expect(contrast(c.primaryForeground, c.primary)).toBeGreaterThanOrEqual(4.5)
         expect(contrast(c.secondaryForeground, c.secondary)).toBeGreaterThanOrEqual(4.5)
         expect(contrast(c.danger, c.background)).toBeGreaterThanOrEqual(4.5)
+        // Text on a status color (solid Badge, and later Alert and Toast).
+        for (const tone of ['danger', 'success', 'warning', 'info'] as const) {
+          expect(contrast(c[`${tone}Foreground`], c[tone])).toBeGreaterThanOrEqual(4.5)
+        }
         // Focus rings, field edges and selected controls: 3:1.
         for (const page of pages) {
           expect(contrast(c.ring, page)).toBeGreaterThanOrEqual(3)

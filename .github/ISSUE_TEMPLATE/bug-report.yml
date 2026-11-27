@@ -1,0 +1,35 @@
+name: Bug report
+description: Something in dazo-ui doesn't work as documented.
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you saw, and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: How to reproduce
+      description: The smallest code that shows the problem.
+      render: tsx
+    validations:
+      required: true
+  - type: dropdown
+    id: platforms
+    attributes:
+      label: Platforms
+      multiple: true
+      options: [iOS, Android, Web]
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: dazo-ui, react, react-native, react-native-web, Expo SDK (if used)
+      placeholder: dazo-ui 2.0.0, react 19.1.0, react-native 0.81.5, Expo SDK 54
+    validations:
+      required: true

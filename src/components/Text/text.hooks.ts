@@ -1,12 +1,8 @@
 import { useMemo, type ReactNode } from 'react'
 import type { TextStyle } from 'react-native'
 import { useTheme } from '../../providers'
-import type { Theme, ThemeColors } from '../../styles/theme'
+import { resolveColor } from '../../styles/color'
 import type { TextProps } from './text.type'
-
-/** A theme color name ('foregroundMuted', 'danger', …) becomes that color; anything else is kept. */
-const resolveColor = (color: string, theme: Theme): string =>
-    Object.prototype.hasOwnProperty.call(theme.colors, color) ? theme.colors[color as keyof ThemeColors] : color
 
 type UseTextStylesParams = Pick<TextProps,
     | 'variant'

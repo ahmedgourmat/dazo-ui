@@ -1,5 +1,6 @@
 import { Container, ThemeProvider } from 'dazo-ui'
 import { ButtonsSection } from './showcase/sections/ButtonsSection'
+import { FeedbackSection } from './showcase/sections/FeedbackSection'
 import { FormSection } from './showcase/sections/FormSection'
 import { HeroSection } from './showcase/sections/HeroSection'
 import { TableSection } from './showcase/sections/TableSection'
@@ -25,6 +26,7 @@ export default function App(): React.JSX.Element {
           <ButtonsSection />
           <TextContainerSection />
           <FormSection />
+          <FeedbackSection />
           <TableSection />
         </Container>
       </Container>

@@ -49,6 +49,14 @@ export interface ThemeColors {
   success: string
   warning: string
   info: string
+  /** Text and icons placed on `danger`. */
+  dangerForeground: string
+  /** Text and icons placed on `success`. */
+  successForeground: string
+  /** Text and icons placed on `warning`. */
+  warningForeground: string
+  /** Text and icons placed on `info`. */
+  infoForeground: string
 
   /** @deprecated Use `surface`. Follows it. */
   backgroundSurface: string
@@ -166,6 +174,12 @@ const semanticColors = (mode: ThemeMode, accent: ThemeAccent): SemanticColors =>
     success: light ? palette.green[600] : palette.green[400],
     warning: light ? palette.amber[600] : palette.amber[400],
     info: light ? palette.blue[600] : palette.blue[400],
+    // White only where it reaches 4.5:1; the lighter green and amber, and
+    // every dark-mode status color, take near-black text.
+    dangerForeground: light ? palette.white : gray[950],
+    successForeground: gray[950],
+    warningForeground: gray[950],
+    infoForeground: light ? palette.white : gray[950],
     ...accentColors(mode, accent),
   }
 }

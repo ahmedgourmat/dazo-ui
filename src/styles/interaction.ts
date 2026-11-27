@@ -13,6 +13,17 @@ export const focusRing = (theme: Theme): ViewStyle => ({
 })
 
 /**
+ * A CSS transition, for the web: react-native-web passes these style keys to
+ * CSS. React Native's types don't list them, and iOS and Android ignore them.
+ */
+export const cssTransition = (property: string, duration: number, easing: readonly number[]): ViewStyle =>
+  ({
+    transitionProperty: property,
+    transitionDuration: `${duration}ms`,
+    transitionTimingFunction: `cubic-bezier(${easing.join(', ')})`,
+  }) as ViewStyle
+
+/**
  * Pressable's style callback state. React Native passes only `pressed`;
  * react-native-web also passes `hovered` and `focused`, so hover styles
  * apply on web and never on touch screens.

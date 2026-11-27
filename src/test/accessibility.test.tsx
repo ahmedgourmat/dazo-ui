@@ -1,6 +1,13 @@
 import { fireEvent, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import {
+  Avatar,
+  Badge,
+  Divider,
+  Progress,
+  Spinner,
+  Switch,
+  Textarea,
   Button,
   Checkbox,
   Container,
@@ -94,6 +101,47 @@ describe('automated accessibility checks (axe-core)', () => {
           ]}
           data={[{ name: 'Ada', role: 'Admin' }]}
         />
+      </Container>,
+    )
+    expect(await accessibilityProblems()).toEqual([])
+  })
+
+  it('Switch: off, on, disabled and without a visible label', async () => {
+    renderWithTheme(
+      <>
+        <Switch label='Notifications' />
+        <Switch label='Dark mode' defaultChecked />
+        <Switch label='Airplane mode' disabled />
+        <Switch accessibilityLabel='Location' />
+      </>,
+    )
+    expect(await accessibilityProblems()).toEqual([])
+  })
+
+  it('Textarea: empty, with a count, and invalid', async () => {
+    renderWithTheme(
+      <>
+        <Textarea aria-label='Bio' />
+        <Textarea aria-label='Message' defaultValue='Hi' maxLength={100} showCount />
+        <Textarea aria-label='Notes' invalid />
+      </>,
+    )
+    expect(await accessibilityProblems()).toEqual([])
+  })
+
+  it('Spinner, Progress (known and unknown), Avatar, Badge and Divider', async () => {
+    renderWithTheme(
+      <Container padding='md'>
+        <Spinner />
+        <Progress value={40} label='Uploading' />
+        <Progress label='Syncing' />
+        <Avatar name='Ada Lovelace' />
+        <Avatar />
+        <Badge tone='success'>Paid</Badge>
+        <Badge tone='warning' variant='subtle'>Pending</Badge>
+        <Divider />
+        <Divider label='or' />
+        <Divider decorative />
       </Container>,
     )
     expect(await accessibilityProblems()).toEqual([])

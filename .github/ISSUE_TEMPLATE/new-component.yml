@@ -1,0 +1,39 @@
+name: New component
+description: Propose a component that dazo-ui doesn't have yet.
+title: "<Name>: "
+labels: ["enhancement", "area:components"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Every component follows the [component standard](https://github.com/ahmedgourmat/dazo-ui/blob/main/CONTRIBUTING.md#component-standard): iOS, Android and web, accessibility, dark mode, controlled and uncontrolled, `ref` and `testID`, tests and docs. Describe what is specific to this one.
+  - type: textarea
+    id: why
+    attributes:
+      label: Why
+      description: What apps need it for, and what they do today without it.
+    validations:
+      required: true
+  - type: textarea
+    id: api
+    attributes:
+      label: Proposed API
+      description: A short usage example and the main props.
+      render: tsx
+    validations:
+      required: true
+  - type: textarea
+    id: platforms
+    attributes:
+      label: Platform notes
+      description: How it should behave on iOS, Android and the web, where they differ.
+  - type: textarea
+    id: accessibility
+    attributes:
+      label: Accessibility
+      description: Role, states and keyboard behavior (link the matching ARIA pattern if there is one).
+  - type: textarea
+    id: depends
+    attributes:
+      label: Depends on
+      description: Other issues that must be done first.

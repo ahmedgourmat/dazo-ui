@@ -1,26 +1,20 @@
 [
-  {
-    "name": "web: whole library",
-    "path": "dist/web/index.js",
-    "import": "*",
-    "limit": "8.6 kB"
-  },
-  {
-    "name": "web: Button only",
-    "path": "dist/web/index.js",
-    "import": "{ Button }",
-    "limit": "3.2 kB"
-  },
-  {
-    "name": "native: whole library",
-    "path": "dist/native/index.js",
-    "import": "*",
-    "limit": "8.4 kB"
-  },
-  {
-    "name": "native: Button only",
-    "path": "dist/native/index.js",
-    "import": "{ Button }",
-    "limit": "3 kB"
-  }
+  { "name": "web: whole library", "path": "dist/web/index.js", "import": "*", "limit": "11 kB" },
+  { "name": "web: Button only", "path": "dist/web/index.js", "import": "{ Button }", "limit": "3.2 kB" },
+  { "name": "web: Avatar only", "path": "dist/web/index.js", "import": "{ Avatar }", "limit": "2.75 kB" },
+  { "name": "web: Badge only", "path": "dist/web/index.js", "import": "{ Badge }", "limit": "2.8 kB" },
+  { "name": "web: Divider only", "path": "dist/web/index.js", "import": "{ Divider }", "limit": "2.6 kB" },
+  { "name": "web: Progress only", "path": "dist/web/index.js", "import": "{ Progress }", "limit": "2.95 kB" },
+  { "name": "web: Spinner only", "path": "dist/web/index.js", "import": "{ Spinner }", "limit": "2.5 kB" },
+  { "name": "web: Switch only", "path": "dist/web/index.js", "import": "{ Switch }", "limit": "3.4 kB" },
+  { "name": "web: Textarea only", "path": "dist/web/index.js", "import": "{ Textarea }", "limit": "3.35 kB" },
+  { "name": "native: whole library", "path": "dist/native/index.js", "import": "*", "limit": "10.8 kB" },
+  { "name": "native: Button only", "path": "dist/native/index.js", "import": "{ Button }", "limit": "3 kB" },
+  { "name": "native: Avatar only", "path": "dist/native/index.js", "import": "{ Avatar }", "limit": "2.65 kB" },
+  { "name": "native: Badge only", "path": "dist/native/index.js", "import": "{ Badge }", "limit": "2.65 kB" },
+  { "name": "native: Divider only", "path": "dist/native/index.js", "import": "{ Divider }", "limit": "2.5 kB" },
+  { "name": "native: Progress only", "path": "dist/native/index.js", "import": "{ Progress }", "limit": "2.85 kB" },
+  { "name": "native: Spinner only", "path": "dist/native/index.js", "import": "{ Spinner }", "limit": "2.4 kB" },
+  { "name": "native: Switch only", "path": "dist/native/index.js", "import": "{ Switch }", "limit": "3.2 kB" },
+  { "name": "native: Textarea only", "path": "dist/native/index.js", "import": "{ Textarea }", "limit": "3.25 kB" }
 ]

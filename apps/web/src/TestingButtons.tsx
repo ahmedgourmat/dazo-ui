@@ -1,5 +1,6 @@
 import { Container } from 'dazo-ui'
 import { ButtonsSection } from './showcase/sections/ButtonsSection'
+import { FeedbackSection } from './showcase/sections/FeedbackSection'
 import { FormSection } from './showcase/sections/FormSection'
 import { HeroSection } from './showcase/sections/HeroSection'
 import { TableSection } from './showcase/sections/TableSection'
@@ -16,6 +17,7 @@ const TestingButtons = () => {
         <ButtonsSection />
         <TextContainerSection />
         <FormSection />
+        <FeedbackSection />
         <TableSection />
       </Container>
     </Container>
