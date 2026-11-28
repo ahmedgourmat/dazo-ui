@@ -18,10 +18,24 @@ const extensions = {
 type Platform = keyof typeof extensions
 type Format = 'es' | 'cjs'
 
+// dazo-ui/server and dazo-ui/next only make sense on the web (server rendering
+// through react-native-web), so the native builds leave them out.
+const inputs = {
+  native: { index: 'index.ts' },
+  web: { index: 'index.ts', 'server/index': 'server/index.tsx', 'server/next': 'server/next.tsx' },
+} as const
+
 const build = (platform: Platform, format: Format, types = false): RolldownOptions => ({
-  input: { index: 'index.ts' },
+  input: { ...inputs[platform] },
   platform: 'neutral',
   external,
+  // dazo-ui/next starts with 'use client' so Next.js runs it on the client side of
+  // the tree. Rolldown keeps the directive (one output file per module) but warns
+  // that bundling could drop it; that warning is expected for this one file.
+  onLog(level, log, handler) {
+    if (log.code === 'MODULE_LEVEL_DIRECTIVE' && /server[\\/]next\.tsx$/.test(log.id ?? '')) return
+    handler(level, log)
+  },
   resolve: { extensions: [...extensions[platform]] },
   transform: { jsx: 'react-jsx' },
   // .d.ts files are generated once, by Oxc (isolatedDeclarations is on in tsconfig.json).

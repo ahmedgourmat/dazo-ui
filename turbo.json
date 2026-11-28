@@ -20,6 +20,10 @@
     "test": {
       "dependsOn": ["^build"]
     },
+    "test:visual": {
+      "dependsOn": ["^build"],
+      "cache": false
+    },
     "check:package": {
       "dependsOn": ["build"]
     },

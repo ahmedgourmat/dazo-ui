@@ -1,5 +1,5 @@
 import { fireEvent, screen } from '@testing-library/react'
-import { createRef, useRef } from 'react'
+import { createRef, useRef, type JSX } from 'react'
 import type { ScrollView, Text as RNText, TextInput, View } from 'react-native'
 import { describe, expect, it, vi } from 'vitest'
 import { renderWithTheme } from '../test/utils'
@@ -166,5 +166,42 @@ describe('every component forwards its ref (#48)', () => {
 
     expect(typeof ref.current?.scrollTo).toBe('function')
     expect(typeof ref.current?.scrollToEnd).toBe('function')
+  })
+})
+
+// Issue #79. End-to-end tools (Detox, Maestro, Playwright) find elements by
+// testID. Every component takes one and puts it on the element its ref points
+// to; react-native-web renders it as data-testid.
+describe('every component takes a testID, on the same element as its ref (#79)', () => {
+  type Case = [name: string, render: (ref: { current: unknown }, testID: string) => JSX.Element]
+  const options = [{ label: 'Pro', value: 'pro' }]
+  const cases: Case[] = [
+    ['Button', (ref, id) => <Button ref={ref as never} testID={id} label='Save' />],
+    ['Checkbox', (ref, id) => <Checkbox ref={ref as never} testID={id} label='Remember me' />],
+    ['Container', (ref, id) => <Container ref={ref as never} testID={id}><Text>Inside</Text></Container>],
+    ['Container (scrollable)', (ref, id) => <Container ref={ref as never} testID={id} scrollable><Text>Inside</Text></Container>],
+    ['FileInput', (ref, id) => <FileInput ref={ref as never} testID={id} label='Attachment' />],
+    ['Input', (ref, id) => <Input ref={ref as never} testID={id} placeholder='Email' />],
+    ['RadioGroup', (ref, id) => <RadioGroup ref={ref as never} testID={id} options={options} />],
+    ['Select', (ref, id) => <Select ref={ref as never} testID={id} label='Plan' options={options} />],
+    ['Table', (ref, id) => <Table ref={ref as never} testID={id} columns={[{ key: 'name', title: 'Name' }]} data={[{ name: 'Ada' }]} />],
+    ['Table (no horizontal scroll)', (ref, id) => <Table ref={ref as never} testID={id} horizontalScroll={false} columns={[{ key: 'name', title: 'Name' }]} data={[{ name: 'Ada' }]} />],
+    ['Text', (ref, id) => <Text ref={ref as never} testID={id}>Hello</Text>],
+    ['Textarea', (ref, id) => <Textarea ref={ref as never} testID={id} placeholder='Bio' />],
+    ['Switch', (ref, id) => <Switch ref={ref as never} testID={id} label='Wi-Fi' />],
+    ['Spinner', (ref, id) => <Spinner ref={ref as never} testID={id} />],
+    ['Progress', (ref, id) => <Progress ref={ref as never} testID={id} value={10} />],
+    ['Avatar', (ref, id) => <Avatar ref={ref as never} testID={id} name='Ada Lovelace' />],
+    ['Badge', (ref, id) => <Badge ref={ref as never} testID={id}>New</Badge>],
+    ['Divider', (ref, id) => <Divider ref={ref as never} testID={id} />],
+  ]
+
+  it.each(cases)('%s', (_, render) => {
+    const ref = createRef<unknown>()
+    renderWithTheme(render(ref, 'target'))
+
+    const element = screen.getByTestId('target')
+    expect(element.getAttribute('data-testid')).toBe('target')
+    expect(element).toBe(ref.current)
   })
 })

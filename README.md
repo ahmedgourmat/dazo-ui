@@ -118,6 +118,47 @@ const nextConfig: NextConfig = {
 export default nextConfig
 ```
 
+Then add `<DazoStyles />` to the root layout. Without it, server-rendered pages arrive without their styles and look broken until JavaScript loads:
+
+```tsx
+// app/layout.tsx
+import { DazoStyles } from 'dazo-ui/next'
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        <DazoStyles />
+        {children}
+      </body>
+    </html>
+  )
+}
+```
+
+### Server rendering without the App Router
+
+react-native-web creates its CSS while the page renders, so on the server it has to be collected and sent with the HTML. `dazo-ui/server` does that for any server renderer. Render the page first, then add `getStyleElement()` to the `<head>`. It takes an optional `nonce` for a Content-Security-Policy; so does `<DazoStyles />`.
+
+```tsx
+// Next.js Pages Router: pages/_document.tsx
+import Document, { type DocumentContext } from 'next/document'
+import { getStyleElement } from 'dazo-ui/server'
+
+export default class MyDocument extends Document {
+  static async getInitialProps(ctx: DocumentContext) {
+    const initialProps = await Document.getInitialProps(ctx)
+    return { ...initialProps, styles: <>{initialProps.styles}{getStyleElement()}</> }
+  }
+}
+```
+
+```tsx
+// Any other server: render, then read the CSS
+const html = renderToString(<App />)
+const css = getStyleElement() // or getStyleSheet() for { id, textContent }
+```
+
 ## Quick start
 
 Wrap your app once in `ThemeProvider`, then use the components:
@@ -188,10 +229,14 @@ const [email, setEmail] = useState('')
 
 Opens a menu of options. Also takes `placeholder`, `size`, `disabled`, `leftIcon` and `rightIcon` (which replaces the chevron).
 
+- Controlled with `value` and `onChange`, or uncontrolled with `defaultValue` (`<Select defaultValue="pro" … />`).
+- Pass `value={null}` to clear a controlled Select back to its placeholder. `undefined` means uncontrolled.
+
 ### Checkbox and RadioGroup
 
 ```tsx
 <Checkbox label="Send me product updates" checked={updates} onChange={setUpdates} />
+<Checkbox label="Remember me" defaultChecked />
 
 <RadioGroup
   accessibilityLabel="Billing"
@@ -204,6 +249,9 @@ Opens a menu of options. Also takes `placeholder`, `size`, `disabled`, `leftIcon
   ]}
 />
 ```
+
+- Controlled with `checked` / `value` and `onChange`, or uncontrolled with `defaultChecked` / `defaultValue`: then they keep their own state, and `onChange` still reports every change.
+- Pass `value={null}` to clear a controlled RadioGroup.
 
 ### FileInput
 
@@ -493,6 +541,12 @@ const password = useRef<TextInput>(null)
 <Input ref={password} placeholder="Password" secureTextEntry />
 ```
 
+Every component also takes a `testID`, set on the same element as the `ref`, so end-to-end tests can find it: Detox and Maestro use `testID` on iOS and Android, and on the web it renders as `data-testid` for Playwright or Testing Library.
+
+```tsx
+<Button testID="checkout-submit" label="Pay now" onPress={pay} />
+```
+
 ## TypeScript
 
 Every component's props are typed, and these types are exported: every component's props (`ButtonProps`, `SwitchProps`, …), `Tone`, `Theme`, `ThemeColors`, `ThemeMode`, `ThemeAccent`, `AccentName`, `AccentPalette`, `ControlSize`, `FontSizeKey`, `ShadowKey`, `SpaceStep`, `PickedFile`, `FilePicker`, `FilePickerOptions` and `ExpoDocumentPickerModule`.
@@ -511,12 +565,15 @@ Issues and pull requests are welcome. This repository is a pnpm workspace manage
 | `apps/web` | Vite showcase |
 | `apps/mobile` | Expo showcase |
 | `apps/storybook` | Storybook |
+| `apps/native-tests` | Tests of the native build, rendered by React Native |
+| `apps/visual` | Screenshot tests of every component, in light and dark |
 
 ```bash
 pnpm install
 pnpm dev                          # every app in watch mode
 pnpm --filter web dev             # one app: web, mobile or storybook
 pnpm --filter dazo-ui test        # library tests (web and native builds)
+pnpm turbo run test:visual        # screenshot tests (see CONTRIBUTING.md)
 pnpm turbo run typecheck lint test build check:package size   # what CI runs
 ```
 

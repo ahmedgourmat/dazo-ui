@@ -92,3 +92,47 @@ describe('RadioGroup', () => {
     expect(screen.getByText('shield')).toBeTruthy()
   })
 })
+
+// Issue #80: works with `value` + `onChange`, or on its own from `defaultValue`.
+describe('RadioGroup: controlled and uncontrolled (#80)', () => {
+  const checked = () => screen.queryAllByRole('radio').filter((r) => r.getAttribute('aria-checked') === 'true').map((r) => r.textContent)
+
+  it('uncontrolled: selects the picked option itself and reports it', () => {
+    const onChange = vi.fn()
+    renderWithTheme(<RadioGroup options={options} onChange={onChange} />)
+    expect(checked()).toEqual([])
+
+    fireEvent.click(screen.getByText('Editor'))
+
+    expect(checked()).toEqual(['Editor'])
+    expect(onChange).toHaveBeenCalledWith('editor')
+  })
+
+  it('uncontrolled: starts from defaultValue', () => {
+    renderWithTheme(<RadioGroup options={options} defaultValue='admin' />)
+
+    expect(checked()).toEqual(['Admin'])
+    fireEvent.click(screen.getByText('Editor'))
+    expect(checked()).toEqual(['Editor'])
+  })
+
+  it('controlled: shows `value` and only reports changes', () => {
+    const onChange = vi.fn()
+    const { rerender } = renderWithTheme(<RadioGroup options={options} value='admin' onChange={onChange} />)
+
+    fireEvent.click(screen.getByText('Editor'))
+    expect(onChange).toHaveBeenCalledWith('editor')
+    expect(checked()).toEqual(['Admin'])
+
+    rerender(<RadioGroup options={options} value='editor' onChange={onChange} />)
+    expect(checked()).toEqual(['Editor'])
+  })
+
+  it('controlled: null clears the selection', () => {
+    const { rerender } = renderWithTheme(<RadioGroup options={options} value='admin' />)
+
+    rerender(<RadioGroup options={options} value={null} />)
+
+    expect(checked()).toEqual([])
+  })
+})

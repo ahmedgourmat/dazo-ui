@@ -6,6 +6,8 @@ import type { FontSizeKey } from '../../styles/tokens'
 export interface TextProps extends Omit<CommonProps, 'style' | 'scrollable'> {
     /** The Text element. */
     ref?: Ref<Text>
+    /** Finds the component in end-to-end tests (Detox, Maestro, Playwright). Set on the same element as `ref`; on the web it becomes `data-testid`. */
+    testID?: string
     children?: React.ReactNode
     /** default: body text (16/24). title: 24/32 semibold. subtitle: 18/28 medium. caption: 14/20 muted. */
     variant?: 'default' | 'title' | 'subtitle' | 'caption'

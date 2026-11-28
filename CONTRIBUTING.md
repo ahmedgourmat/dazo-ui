@@ -4,6 +4,7 @@ Thanks for helping. Issues and pull requests are welcome: bug fixes, new compone
 
 - [Getting started](#getting-started)
 - [Repository layout](#repository-layout)
+- [Tests](#tests)
 - [Component standard](#component-standard)
 - [Adding a component](#adding-a-component)
 - [Pull requests](#pull-requests)
@@ -16,6 +17,8 @@ You need Node 24 and pnpm 9.
 ```bash
 pnpm install
 pnpm --filter dazo-ui test          # library tests, run for the web and the native build
+pnpm --filter native-tests test     # the native build, rendered by React Native itself
+pnpm --filter visual test:visual    # screenshots of every component (see Tests below)
 pnpm --filter web dev               # web showcase (Vite)
 pnpm --filter mobile dev            # Expo showcase
 pnpm --filter storybook storybook   # Storybook
@@ -38,8 +41,50 @@ pnpm turbo run typecheck lint test build check:package size
 | `src/test` | Test setup, helpers and cross-component tests (accessibility, design system) |
 | `apps/web`, `apps/mobile` | Showcases for the web and Expo |
 | `apps/storybook` | Storybook |
+| `apps/native-tests` | Jest tests of the native build, rendered by React Native |
+| `apps/visual` | A page with every component and state, and its Playwright screenshot tests |
 
 The package is built twice. The web build prefers `*.web.ts(x)` files and the native build prefers `*.native.ts(x)`. Use a platform file only when the code really differs; most components are a single file that works everywhere through react-native-web.
+
+## Tests
+
+There are three suites. CI runs all of them on every pull request.
+
+| Suite | Where | What it catches |
+|---|---|---|
+| Library tests (Vitest) | `src/**/*.test.tsx` | Behavior, props, keyboard, accessibility (axe), refs. Renders through react-native-web in a simulated browser, so `Platform.OS` is always `web`. |
+| Native tests (Jest) | `apps/native-tests/tests` | The native build (`dist/native`) rendered by React Native 0.81 with React Native Testing Library: roles and states as VoiceOver and TalkBack get them, and the iOS/Android-only code (FormField's labels and hints, `Animated` animations, shadows, the FileInput picker warning). |
+| Screenshots (Playwright) | `apps/visual` | How everything looks: every component and state in light and dark, plus keyboard focus, hover and an open Select. |
+
+### Native tests
+
+```bash
+pnpm turbo run test --filter=native-tests   # builds dazo-ui first
+```
+
+They load the built package, so after changing `src`, rebuild it (`pnpm --filter dazo-ui build`) or run them through Turbo as above. The first run compiles React Native and takes about half a minute.
+
+### Screenshots
+
+The page in `apps/visual/src/Fixtures.tsx` shows every component in every state. The tests take one screenshot per section and compare it with the reference in `apps/visual/tests/__screenshots__`.
+
+```bash
+npx playwright install chromium               # once
+pnpm turbo run test:visual --filter=visual    # builds dazo-ui and the page, then compares
+```
+
+The references are made on Linux, in the Docker image CI uses (`mcr.microsoft.com/playwright:v1.65.1-noble`), because fonts and anti-aliasing differ between systems. On Windows and macOS the tests compare against a separate, git-ignored folder (`__screenshots__/win32`, `__screenshots__/darwin`): create it with `npx playwright test --update-snapshots` before your change, then run the tests after it to see what moved.
+
+**When a change is meant to look different,** update the references and commit them with the change:
+
+- **With Docker:** `pnpm --filter visual test:visual:update`.
+- **Without Docker:** run the **Update screenshots** workflow on your branch (Actions → Update screenshots → Run workflow), download its `screenshots` artifact, and copy the PNGs into `apps/visual/tests/__screenshots__`.
+
+Review the new images before committing: they are what every later change is compared against.
+
+**When CI fails on a screenshot,** download the `screenshot-diffs` artifact from the run and open `playwright-report/index.html`: it shows the expected, actual and difference images side by side.
+
+**New component or state:** add it to `Fixtures.tsx` (in the right section, or a new section listed in `tests/components.spec.ts`), then update the references.
 
 ## Component standard
 
@@ -54,6 +99,8 @@ Every component, new or changed, meets all of the following. Issues for new comp
   - `size`: `sm` · `md` · `lg` · `xl`, following `theme.controlHeight`.
   - Also `variant`, `disabled`, `label`, `leftIcon` / `rightIcon`, `style`, and `<part>Style` for inner parts (`labelStyle`).
 - **Controlled and uncontrolled:** `value` with `onChange`, or `defaultValue` alone (`checked` / `defaultChecked` for toggles).
+  - Build it with `useControllableState(value, defaultValue, onChange)` from `hooks/controllable`, so every component behaves the same.
+  - `undefined` means uncontrolled. A component where nothing can be selected (Select, RadioGroup) also takes `null`: controlled, with nothing selected, so a form can clear it.
 - **`ref`:** a normal prop (React 19, no `forwardRef`), passed to the element that matters most. Document what `ref.current` is.
 - **`testID`:** passed to the same element as the `ref`.
 - **Style props:** accepts the shared style props (`CommonProps`) and resolves them with `useCommonStyles`. A component that also passes props to a native element (like Input) splits them first with `splitCommonProps`.
@@ -95,7 +142,8 @@ Every component, new or changed, meets all of the following. Issues for new comp
 - **Behavior:** `<name>.test.tsx` in the component folder covers rendering, every prop, controlled and uncontrolled use, keyboard and the callbacks. Tests run in both the `web` and `native` projects.
 - **Accessibility:** the component's main states are added to `src/test/accessibility.test.tsx` (axe-core).
 - **Ref:** added to `src/components/refs.test.tsx`.
-- **Visual:** anything that depends on a real browser (layout, fonts, focus visuals) is checked in Chrome, and screenshots go in the pull request.
+- **Native:** its roles, states and any iOS/Android-only code are covered in `apps/native-tests`.
+- **Visual:** every state that looks different is on the screenshot page (`apps/visual/src/Fixtures.tsx`), and the reference screenshots are updated. See [Screenshots](#screenshots).
 
 ### 8. Documentation
 - **Library:** exported from `src/index.ts` along with its prop types.
@@ -124,7 +172,7 @@ src/components/Switch/
 - **Branch** off `main` and keep each pull request to one issue. Write `Closes #<number>` in the description.
 - **Commit messages** use [Conventional Commits](https://www.conventionalcommits.org/): `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`, `ci:`.
 - **Breaking changes** to the public API are called out in the description and in the CHANGELOG, and they wait for the next major version.
-- **Visual changes** come with before and after screenshots, in light and dark mode.
+- **Visual changes** come with updated reference screenshots (see [Screenshots](#screenshots)); the diff in the pull request shows the before and after.
 
 ## Releasing (maintainers)
 

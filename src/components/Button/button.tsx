@@ -12,6 +12,7 @@ import { withSkeleton } from '../Skeleton/with-skeleton'
 // Pressable as a real <button> (role='button'), which Enter and Space press.
 const ButtonBase = ({
   ref,
+  testID,
   label,
   onPress,
   disabled = false,
@@ -36,6 +37,7 @@ const ButtonBase = ({
   return (
     <Pressable
       ref={ref}
+      testID={testID}
       onPress={onPress}
       disabled={disabled || loading}
       role='button'

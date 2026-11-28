@@ -9,6 +9,7 @@ import { useTheme } from '../../providers'
 
 const TextBase = ({
   ref,
+  testID,
   children,
   variant = 'default',
   size,
@@ -52,6 +53,7 @@ const TextBase = ({
   return (
     <RNText
       ref={ref}
+      testID={testID}
       style={[styles.base, commonStyles, computedTextStyle, style]}
       numberOfLines={numberOfLines}
       ellipsizeMode='tail'

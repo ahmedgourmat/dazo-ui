@@ -9,14 +9,17 @@ import { DISABLED_OPACITY, focusRing, type InteractionState } from '../../styles
 import type { SelectProps, SelectOption } from './select.type'
 import { formFieldProps, useFormField } from '../FormField/form-field.context'
 import { spaceKeyActivates } from '../../hooks/keyboard'
+import { useControllableState } from '../../hooks/controllable'
 import { FieldSkeleton } from '../Skeleton/field-skeleton'
 import { withSkeleton } from '../Skeleton/with-skeleton'
 
 const SelectBase = ({
   ref,
+  testID,
   label,
   placeholder = 'Select an option',
   value,
+  defaultValue,
   options,
   onChange,
   disabled: disabledProp = false,
@@ -37,10 +40,12 @@ const SelectBase = ({
   const reduceMotion = useReducedMotion()
   useFocusVisibleTracking()
   const [open, setOpen] = useState(false)
+  // null is a controlled "nothing selected", so a form can clear the field.
+  const [selected, setSelected] = useControllableState<string | null>(value, defaultValue ?? null)
 
   const selectedOption = useMemo<SelectOption | undefined>(
-    () => options.find((option) => option.value === value),
-    [options, value],
+    () => options.find((option) => option.value === selected),
+    [options, selected],
   )
 
   const displayValue = selectedOption?.label ?? placeholder
@@ -52,6 +57,7 @@ const SelectBase = ({
     <>
       <Pressable
         ref={ref}
+        testID={testID}
         onPress={disabled ? undefined : () => setOpen(true)}
         disabled={disabled}
         // No aria-label: the name comes from the visible label and value
@@ -118,8 +124,9 @@ const SelectBase = ({
               keyExtractor={(item) => item.value}
               keyboardShouldPersistTaps="handled"
               renderItem={({ item }) => {
-                const isSelected = item.value === value
+                const isSelected = item.value === selected
                 const pick = () => {
+                  setSelected(item.value)
                   onChange?.(item.value)
                   setOpen(false)
                 }

@@ -10,6 +10,8 @@
   { "name": "web: Spinner only", "path": "dist/web/index.js", "import": "{ Spinner }", "limit": "3.1 kB" },
   { "name": "web: Switch only", "path": "dist/web/index.js", "import": "{ Switch }", "limit": "4.25 kB" },
   { "name": "web: Textarea only", "path": "dist/web/index.js", "import": "{ Textarea }", "limit": "4.2 kB" },
+  { "name": "web: dazo-ui/server", "path": "dist/web/server/index.js", "import": "{ getStyleElement }", "limit": "0.3 kB" },
+  { "name": "web: dazo-ui/next", "path": "dist/web/server/next.js", "import": "{ DazoStyles }", "limit": "0.4 kB" },
   { "name": "native: whole library", "path": "dist/native/index.js", "import": "*", "limit": "13.05 kB" },
   { "name": "native: Button only", "path": "dist/native/index.js", "import": "{ Button }", "limit": "3.65 kB" },
   { "name": "native: Avatar only", "path": "dist/native/index.js", "import": "{ Avatar }", "limit": "3.25 kB" },

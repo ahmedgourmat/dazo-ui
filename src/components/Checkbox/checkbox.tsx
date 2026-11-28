@@ -4,6 +4,7 @@ import { useCheckboxStyles, useCheckboxLabelStyles } from './checkbox.hooks'
 import { formFieldProps, useFormField } from '../FormField/form-field.context'
 import type { CheckboxProps } from './checkbox.type'
 import { spaceKeyActivates } from '../../hooks/keyboard'
+import { useControllableState } from '../../hooks/controllable'
 import { splitCommonProps, useCommonStyles } from '../../hooks/common.hooks'
 import { isFocusVisible, useFocusVisibleTracking } from '../../hooks/focusVisible'
 import { useTheme } from '../../providers'
@@ -13,8 +14,10 @@ import { withSkeleton } from '../Skeleton/with-skeleton'
 
 const CheckboxBase = ({
   ref,
+  testID,
   label,
-  checked = false,
+  checked: checkedProp,
+  defaultChecked = false,
   onChange,
   disabled: disabledProp = false,
   value,
@@ -35,6 +38,7 @@ const CheckboxBase = ({
   const formField = useFormField()
   const disabled = disabledProp || Boolean(formField?.disabled)
   useFocusVisibleTracking()
+  const [checked, setChecked] = useControllableState(checkedProp, defaultChecked, onChange)
   const { boxStyle, checkmarkStyle } = useCheckboxStyles({
     checked,
     disabled,
@@ -50,14 +54,13 @@ const CheckboxBase = ({
   })
 
   const handlePress = () => {
-    if (!disabled && onChange) {
-      onChange(!checked)
-    }
+    if (!disabled) setChecked(!checked)
   }
 
   return (
     <Pressable
       ref={ref}
+      testID={testID}
       style={({ focused }: InteractionState) => [
         styles.container,
         { borderRadius: theme.radius.sm },

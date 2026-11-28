@@ -28,10 +28,26 @@ All notable changes to dazo-ui are listed here. The format follows
   control reads it, and `useFormField()` lets your own controls do the same
   ([#68](https://github.com/ahmedgourmat/dazo-ui/issues/68)).
 - Prop types for every new component, and the `Tone` type.
+- `testID` on every component, set on the same element as its `ref`, so Detox, Maestro and Playwright
+  (`data-testid` on the web) can find it. Button, Checkbox, Container, FileInput, RadioGroup, Select,
+  Table and Text didn't accept it before ([#79](https://github.com/ahmedgourmat/dazo-ui/issues/79)).
+- Checkbox, RadioGroup and Select work uncontrolled: `defaultChecked` (Checkbox) and `defaultValue`
+  (RadioGroup, Select) set the starting state, and the component keeps it from there. Before, they changed
+  only when the app passed a new `checked` / `value`. A controlled RadioGroup or Select also takes
+  `value={null}` to clear the selection ([#80](https://github.com/ahmedgourmat/dazo-ui/issues/80)).
+- Server rendering without an unstyled flash ([#77](https://github.com/ahmedgourmat/dazo-ui/issues/77)):
+  - `dazo-ui/next`: `<DazoStyles />` for the Next.js App Router. Put it in the root layout and pages
+    arrive styled, before JavaScript loads.
+  - `dazo-ui/server`: `getStyleElement()` and `getStyleSheet()` for any other server renderer (the
+    Pages Router's `_document`, Remix, your own `renderToString`).
+  - Both are web-only and take an optional CSP `nonce`. `next` is an optional peer dependency, and
+    the React Native bundle doesn't change.
 
 ### Fixed
 
 - Checkbox centers its row in its 44-point touch height, instead of leaving the extra space below it.
+- Progress is one accessibility element on iOS and Android, so VoiceOver and TalkBack stop on it and
+  read its value. Before, they skipped it ([#81](https://github.com/ahmedgourmat/dazo-ui/issues/81)).
 
 ## [2.0.0] - 2026-11-26
 

@@ -12,8 +12,14 @@ export type RadioOption = {
 export interface RadioGroupProps extends Omit<CommonProps, 'children' | 'scrollable' | 'style'> {
   /** The View that holds the options. */
   ref?: Ref<View>
+  /** Finds the component in end-to-end tests (Detox, Maestro, Playwright). Set on the same element as `ref`; on the web it becomes `data-testid`. */
+  testID?: string
   options: RadioOption[]
-  value?: string
+  /** The selected option's value, when you control it (with `onChange`). `null` means nothing is selected. */
+  value?: string | null
+  /** The option selected at first when you don't control it. */
+  defaultValue?: string
+  /** Called with the option's value when the user picks it. */
   onChange?: (value: string) => void
   disabled?: boolean
   direction?: 'row' | 'column'

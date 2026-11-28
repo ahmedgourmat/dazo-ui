@@ -45,10 +45,13 @@ const dark = fakeQuery('(prefers-color-scheme: dark)')
 const reducedMotion = fakeQuery('(prefers-reduced-motion: reduce)')
 const queries = new Map([dark, reducedMotion].map((fake) => [fake.query.media, fake.query]))
 
-Object.defineProperty(window, 'matchMedia', {
-  configurable: true,
-  value: (media: string) => queries.get(media) ?? fakeQuery(media).query,
-})
+// Server-rendering tests run in plain Node (`@vitest-environment node`), with no window.
+if (typeof window !== 'undefined') {
+  Object.defineProperty(window, 'matchMedia', {
+    configurable: true,
+    value: (media: string) => queries.get(media) ?? fakeQuery(media).query,
+  })
+}
 
 /** Change the fake OS setting and notify react-native-web. Wrap in act() when components are mounted. */
 export const changeSystemScheme = (scheme: Scheme): void => dark.set(scheme === 'dark')

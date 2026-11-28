@@ -5,6 +5,7 @@ import { splitCommonProps, useCommonStyles } from '../../hooks/common.hooks'
 import type { RadioGroupProps } from './radio.type'
 import { formFieldProps, useFormField } from '../FormField/form-field.context'
 import { spaceKeyActivates } from '../../hooks/keyboard'
+import { useControllableState } from '../../hooks/controllable'
 import { isFocusVisible, useFocusVisibleTracking } from '../../hooks/focusVisible'
 import { DISABLED_OPACITY, focusRing, type InteractionState } from '../../styles/interaction'
 import { HIDDEN_TEXT, SkeletonBox } from '../Skeleton/skeleton-box'
@@ -12,8 +13,10 @@ import { withSkeleton } from '../Skeleton/with-skeleton'
 
 const RadioGroupBase = ({
     ref,
+    testID,
     options,
     value,
+    defaultValue,
     onChange,
     disabled: disabledProp = false,
     direction = 'column',
@@ -31,10 +34,13 @@ const RadioGroupBase = ({
     const resolvedTextColor = textColor ?? theme.colors.foreground
     const resolvedCircleColor = circleColor ?? theme.colors.primary
     useFocusVisibleTracking()
+    // null is a controlled "nothing selected", so a form can clear the group.
+    const [selected, setSelected] = useControllableState<string | null>(value, defaultValue ?? null)
 
     return (
         <View
             ref={ref}
+            testID={testID}
             role='radiogroup'
             aria-label={accessibilityLabel}
             {...formFieldProps(formField, 'group', { hasOwnName: Boolean(accessibilityLabel) })}
@@ -42,9 +48,12 @@ const RadioGroupBase = ({
             style={[styles.group, { flexDirection: direction }, commonStyles, style]}
         >
             {options.map((option) => {
-                const checked = option.value === value
+                const checked = option.value === selected
                 const optionDisabled = disabled || Boolean(option.disabled)
-                const select = () => onChange?.(option.value)
+                const select = () => {
+                    setSelected(option.value)
+                    onChange?.(option.value)
+                }
 
                 return (
                     <Pressable

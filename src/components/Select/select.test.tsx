@@ -187,3 +187,51 @@ describe('Select', () => {
     expect(onChange).toHaveBeenCalledWith('o9')
   })
 })
+
+// Issue #80: works with `value` + `onChange`, or on its own from `defaultValue`.
+describe('Select: controlled and uncontrolled (#80)', () => {
+  const pick = (from: string, option: string) => {
+    open(from)
+    fireEvent.click(screen.getByText(option))
+    finishModalAnimations()
+  }
+
+  it('uncontrolled: shows the picked option and reports it', () => {
+    const onChange = vi.fn()
+    renderWithTheme(<Select options={options} onChange={onChange} />)
+
+    pick('Select an option', 'Pro')
+
+    expect(screen.getByText('Pro')).toBeTruthy()
+    expect(screen.queryByText('Select an option')).toBeNull()
+    expect(onChange).toHaveBeenCalledWith('pro')
+  })
+
+  it('uncontrolled: starts from defaultValue', () => {
+    renderWithTheme(<Select options={options} defaultValue='starter' />)
+
+    expect(screen.getByText('Starter')).toBeTruthy()
+    pick('Starter', 'Pro')
+    expect(screen.getByText('Pro')).toBeTruthy()
+  })
+
+  it('controlled: shows `value` and only reports changes', () => {
+    const onChange = vi.fn()
+    const { rerender } = renderWithTheme(<Select options={options} value='starter' onChange={onChange} />)
+
+    pick('Starter', 'Pro')
+    expect(onChange).toHaveBeenCalledWith('pro')
+    expect(screen.getByText('Starter')).toBeTruthy()
+
+    rerender(<Select options={options} value='pro' onChange={onChange} />)
+    expect(screen.getByText('Pro')).toBeTruthy()
+  })
+
+  it('controlled: null clears the field back to the placeholder', () => {
+    const { rerender } = renderWithTheme(<Select options={options} value='pro' />)
+
+    rerender(<Select options={options} value={null} />)
+
+    expect(screen.getByText('Select an option')).toBeTruthy()
+  })
+})

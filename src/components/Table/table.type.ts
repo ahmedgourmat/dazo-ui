@@ -17,6 +17,8 @@ export interface TableProps<T extends Record<string, unknown>>
   extends Omit<CommonProps, 'children' | 'scrollable' | 'style'> {
   /** The View that holds the whole table. */
   ref?: Ref<View>
+  /** Finds the component in end-to-end tests (Detox, Maestro, Playwright). Set on the same element as `ref`; on the web it becomes `data-testid`. */
+  testID?: string
   columns: TableColumn<T>[]
   data: T[]
   keyExtractor?: (row: T, index: number) => string

@@ -39,6 +39,12 @@
   "module": "./dist/web/index.js",
   "react-native": "./dist/native/index.js",
   "types": "./dist/web/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "server": ["./dist/web/server/index.d.ts"],
+      "next": ["./dist/web/server/next.d.ts"]
+    }
+  },
   "exports": {
     ".": {
       "react-native": {
@@ -82,6 +88,34 @@
         "default": "./dist/web/index.js"
       }
     },
+    "./server": {
+      "import": {
+        "types": "./dist/web/server/index.d.ts",
+        "default": "./dist/web/server/index.js"
+      },
+      "require": {
+        "types": "./dist/web/server/index.d.cts",
+        "default": "./dist/web/server/index.cjs"
+      },
+      "default": {
+        "types": "./dist/web/server/index.d.ts",
+        "default": "./dist/web/server/index.js"
+      }
+    },
+    "./next": {
+      "import": {
+        "types": "./dist/web/server/next.d.ts",
+        "default": "./dist/web/server/next.js"
+      },
+      "require": {
+        "types": "./dist/web/server/next.d.cts",
+        "default": "./dist/web/server/next.cjs"
+      },
+      "default": {
+        "types": "./dist/web/server/next.d.ts",
+        "default": "./dist/web/server/next.js"
+      }
+    },
     "./package.json": "./package.json"
   },
   "scripts": {
@@ -97,11 +131,15 @@
     "size": "size-limit"
   },
   "peerDependencies": {
+    "next": ">=13.4.0",
     "react": ">=19.0.0",
     "react-native": ">=0.81.5",
     "react-native-web": ">=0.19.0"
   },
   "peerDependenciesMeta": {
+    "next": {
+      "optional": true
+    },
     "react-native-web": {
       "optional": true
     }

@@ -5,6 +5,7 @@ import { useCommonStyles } from '../../hooks/common.hooks'
 
 export const Container = ({
     ref,
+    testID,
     children,
     scrollable = false,
     style,
@@ -18,6 +19,7 @@ export const Container = ({
         return (
             <ScrollView
                 ref={ref as Ref<ScrollView>}
+                testID={testID}
                 contentContainerStyle={[styles.container, computed, css, style]}
             >
                 {children}
@@ -26,7 +28,7 @@ export const Container = ({
     }
 
     return (
-        <View ref={ref as Ref<View>} style={[styles.container, computed, css, style]}>
+        <View ref={ref as Ref<View>} testID={testID} style={[styles.container, computed, css, style]}>
             {children}
         </View>
     )

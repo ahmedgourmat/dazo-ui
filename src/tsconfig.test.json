@@ -9,6 +9,6 @@
     "declarationMap": false,
     "noEmit": true
   },
-  "include": ["**/*.test.ts", "**/*.test.tsx", "test/**/*.ts", "test/**/*.tsx", "vitest.config.ts"],
+  "include": ["**/*.test.ts", "**/*.test.tsx", "test/**/*.ts", "test/**/*.tsx", "vitest.config.ts", "server/*.d.ts"],
   "exclude": ["node_modules", "dist"]
 }

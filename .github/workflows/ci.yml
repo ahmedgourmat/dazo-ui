@@ -38,7 +38,8 @@ jobs:
 
       # typecheck: library + its tests + mobile app (web/storybook typecheck inside their build)
       # lint:      library + web and storybook apps (ESLint)
-      # test:      library component tests (Vitest), run once for the web and once for the native files
+      # test:      library component tests (Vitest), run once for the web and once for the native files,
+      #            and apps/native-tests: the native build rendered by React Native itself (Jest)
       # build:     library (Rolldown) + web and storybook apps (Vite)
       # check:package: publint + arethetypeswrong on the packed library
       # size:      size-limit budgets in src/.size-limit.json
@@ -61,3 +62,37 @@ jobs:
       # Builds dazo-ui first, then bundles apps/mobile the way a real
       # React Native app consumes the package (react-native export condition).
       - run: pnpm turbo run bundle:android --filter=mobile
+
+  visual:
+    name: Screenshots (Playwright)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # The reference screenshots come from this image (fonts, Chromium build),
+    # so they match pixel for pixel. Keep the version in step with
+    # @playwright/test in apps/visual and apps/visual/scripts/update-in-docker.mjs.
+    container:
+      image: mcr.microsoft.com/playwright:v1.65.1-noble
+      options: --user 1001 --ipc=host
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Builds dazo-ui, then the fixture page, and compares every screenshot
+      # with apps/visual/tests/__screenshots__.
+      - run: pnpm turbo run test:visual --filter=visual
+
+      # On a difference: the report shows expected, actual and the diff side by side.
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: screenshot-diffs
+          path: |
+            apps/visual/playwright-report
+            apps/visual/test-results
+          retention-days: 14

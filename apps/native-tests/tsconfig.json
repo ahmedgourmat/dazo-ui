@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "lib": ["ESNext"],
+    "types": ["react-native"],
+    "noEmit": true,
+    "declaration": false,
+    "declarationMap": false
+  },
+  "include": ["tests/**/*.ts", "tests/**/*.tsx"]
+}

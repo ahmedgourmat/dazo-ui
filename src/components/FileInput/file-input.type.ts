@@ -31,6 +31,8 @@ export type FilePicker = (options: FilePickerOptions) => Promise<PickedFile[] | 
 export interface FileInputProps extends Omit<CommonProps, 'children' | 'scrollable' | 'style'> {
   /** The pressable picker field. Use it to focus() or measure it. */
   ref?: Ref<View>
+  /** Finds the component in end-to-end tests (Detox, Maestro, Playwright). Set on the same element as `ref`; on the web it becomes `data-testid`. */
+  testID?: string
   label?: string
   /**
    * Text shown in the field. When set, FileInput is controlled: it shows this

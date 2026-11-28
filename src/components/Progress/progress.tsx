@@ -69,6 +69,9 @@ const ProgressBase = ({
     <View
       ref={ref}
       testID={testID}
+      // Without it, iOS and Android don't treat the bar as one element, so
+      // VoiceOver and TalkBack never stop on it or read its value.
+      accessible
       role='progressbar'
       aria-label={label}
       aria-valuemin={0}

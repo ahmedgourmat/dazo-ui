@@ -1,0 +1,6 @@
+dist
+test-results
+playwright-report
+# Screenshots from Windows and macOS, for local comparisons only. The committed
+# references are the Linux ones directly in tests/__screenshots__.
+tests/__screenshots__/*/

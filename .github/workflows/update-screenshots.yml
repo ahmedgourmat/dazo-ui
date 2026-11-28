@@ -1,0 +1,37 @@
+name: Update screenshots
+
+# For a change that is meant to look different: run this on your branch
+# (Actions → Update screenshots → Run workflow), download the "screenshots"
+# artifact, and commit its PNGs to apps/visual/tests/__screenshots__.
+# With Docker, `pnpm --filter visual test:visual:update` does the same locally.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    container:
+      image: mcr.microsoft.com/playwright:v1.65.1-noble
+      options: --user 1001 --ipc=host
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm turbo run build --filter=dazo-ui
+      - run: npx playwright test --update-snapshots=all
+        working-directory: apps/visual
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: screenshots
+          path: apps/visual/tests/__screenshots__/*.png
+          retention-days: 14

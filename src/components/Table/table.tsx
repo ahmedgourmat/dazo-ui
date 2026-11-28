@@ -77,6 +77,7 @@ const toRenderableNode = (content: unknown): ReactNode => {
 
 const TableBase = <T extends Record<string, unknown>>({
   ref,
+  testID,
   columns,
   data,
   keyExtractor,
@@ -133,6 +134,7 @@ const TableBase = <T extends Record<string, unknown>>({
   const tableContent = (
     <View
       ref={ref}
+      testID={testID}
       style={[
         styles.table,
         // A border rather than a shadow: the table sits on the page, not above it.

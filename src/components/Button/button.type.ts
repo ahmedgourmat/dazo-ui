@@ -5,6 +5,8 @@ import type { CommonProps } from '../../styles/commonStyling.type'
 export interface ButtonProps extends Omit<CommonProps, 'children' | 'scrollable' | 'style'> {
     /** The Pressable (a <button> element on web). Use it to focus() the button. */
     ref?: Ref<View>
+    /** Finds the component in end-to-end tests (Detox, Maestro, Playwright). Set on the same element as `ref`; on the web it becomes `data-testid`. */
+    testID?: string
     label: string;
     leftIcon?: ReactNode;
     rightIcon?: ReactNode;
