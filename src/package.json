@@ -1,6 +1,6 @@
 {
   "name": "dazo-ui",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Minimal, theme-aware UI components for React Native and the web, from one API.",
   "license": "MIT",
   "author": "ahmedgourmat (https://github.com/ahmedgourmat)",

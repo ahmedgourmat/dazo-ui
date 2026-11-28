@@ -65,6 +65,9 @@ jobs:
 
   visual:
     name: Screenshots (Playwright)
+    # Off until the Linux reference screenshots are committed (see CONTRIBUTING.md,
+    # Screenshots). Turn it on with the repository variable VISUAL_TESTS=true.
+    if: vars.VISUAL_TESTS == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     # The reference screenshots come from this image (fonts, Chromium build),

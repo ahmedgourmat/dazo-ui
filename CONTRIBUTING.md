@@ -75,6 +75,8 @@ pnpm turbo run test:visual --filter=visual    # builds dazo-ui and the page, the
 
 The references are made on Linux, in the Docker image CI uses (`mcr.microsoft.com/playwright:v1.65.1-noble`), because fonts and anti-aliasing differ between systems. On Windows and macOS the tests compare against a separate, git-ignored folder (`__screenshots__/win32`, `__screenshots__/darwin`): create it with `npx playwright test --update-snapshots` before your change, then run the tests after it to see what moved.
 
+The CI screenshot job is off until the Linux references are committed. Once they are, set the repository variable `VISUAL_TESTS` to `true` (Settings → Secrets and variables → Actions → Variables) to turn it on.
+
 **When a change is meant to look different,** update the references and commit them with the change:
 
 - **With Docker:** `pnpm --filter visual test:visual:update`.

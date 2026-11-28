@@ -6,6 +6,8 @@ All notable changes to dazo-ui are listed here. The format follows
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-11-28
+
 ### Added
 
 - `Textarea`: a multiline field with Input's look. It grows between `rows` and `maxRows`, and `showCount`
@@ -46,6 +48,8 @@ All notable changes to dazo-ui are listed here. The format follows
 ### Fixed
 
 - Checkbox centers its row in its 44-point touch height, instead of leaving the extra space below it.
+- Table fills its container's width when `horizontalScroll` is on, instead of shrinking to its
+  columns ([#99](https://github.com/ahmedgourmat/dazo-ui/pull/99)).
 - Progress is one accessibility element on iOS and Android, so VoiceOver and TalkBack stop on it and
   read its value. Before, they skipped it ([#81](https://github.com/ahmedgourmat/dazo-ui/issues/81)).
 
@@ -193,7 +197,8 @@ one changes both. They will be removed in a future major version.
   plus `useTheme`, `lightTheme` and `darkTheme`.
 - Style props (`padding="md"`, `backgroundColor="primary"`, …) that resolve theme tokens.
 
-[Unreleased]: https://github.com/ahmedgourmat/dazo-ui/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/ahmedgourmat/dazo-ui/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/ahmedgourmat/dazo-ui/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/ahmedgourmat/dazo-ui/compare/v1.0.2...v2.0.0
 [1.0.2]: https://github.com/ahmedgourmat/dazo-ui/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/ahmedgourmat/dazo-ui/compare/v1.0.0...v1.0.1
